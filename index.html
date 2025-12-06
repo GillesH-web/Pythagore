@@ -1,0 +1,1192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Numérologie de Pythagore v1.8.0</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 10px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 10px;
+            background: white;
+            padding: 10px;
+            border-radius: 6px;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+
+        header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 1.5rem;
+        }
+
+        .version {
+            font-size: 0.5em;
+            color: #7f8c8d;
+            font-weight: normal;
+            background: #ecf0f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-left: 8px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 15px;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .left-panel, .right-panel {
+            background: white;
+            padding: 15px;
+            padding-bottom: 80px; /* Reserve space for absolutely positioned buttons */
+            border-radius: 8px;
+            box-shadow: 0 1px 6px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+
+        .left-panel {
+            position: relative;
+        }
+
+        .left-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'%3E%3Cdefs%3E%3ClinearGradient id='pyramidGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23D4AF37;stop-opacity:0.08'/%3E%3Cstop offset='50%25' style='stop-color:%23DAA520;stop-opacity:0.06'/%3E%3Cstop offset='100%25' style='stop-color:%23B8860B;stop-opacity:0.04'/%3E%3C/linearGradient%3E%3CradialGradient id='sunGradient' cx='50%25' cy='50%25' r='50%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFD700;stop-opacity:0.6'/%3E%3Cstop offset='50%25' style='stop-color:%23FFA500;stop-opacity:0.4'/%3E%3Cstop offset='100%25' style='stop-color:%23FF8C00;stop-opacity:0.3'/%3E%3C/radialGradient%3E%3ClinearGradient id='rayGradient' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23FFD700;stop-opacity:0.4'/%3E%3Cstop offset='100%25' style='stop-color:%23FFA500;stop-opacity:0.2'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpolygon points='200,70 350,320 50,320' fill='url(%23pyramidGradient)' stroke='%23DAA520' stroke-width='1' stroke-opacity='0.1'/%3E%3Cpolygon points='200,70 275,195 125,195' fill='%23F4A460' fill-opacity='0.04' stroke='%23CD853F' stroke-width='0.5' stroke-opacity='0.08'/%3E%3Cg transform='translate(200,45)'%3E%3Cline x1='0' y1='-35' x2='0' y2='-25' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='25' y1='-25' x2='18' y2='-18' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='35' y1='0' x2='25' y2='0' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='25' y1='25' x2='18' y2='18' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='0' y1='35' x2='0' y2='25' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='-25' y1='25' x2='-18' y2='18' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='-35' y1='0' x2='-25' y2='0' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Cline x1='-25' y1='-25' x2='-18' y2='-18' stroke='url(%23rayGradient)' stroke-width='2' stroke-opacity='0.5'/%3E%3Ccircle cx='0' cy='0' r='20' fill='url(%23sunGradient)' stroke='%23FFD700' stroke-width='1' stroke-opacity='0.4'/%3E%3Ccircle cx='0' cy='0' r='12' fill='%23FFD700' fill-opacity='0.3'/%3E%3Ccircle cx='3' cy='-3' r='4' fill='%23ffffff' fill-opacity='0.4'/%3E%3C/g%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: center center;
+            background-size: 75%;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .left-panel > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .left-panel h2, .right-panel h2 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+            border-bottom: 1px solid #ecf0f1;
+            padding-bottom: 8px;
+            flex-shrink: 0;
+        }
+
+        .form-group {
+            margin-bottom: 6px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 0.8rem;
+        }
+
+        .required {
+            color: #e74c3c;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 3px 6px;
+            border: 1px solid #bdc3c7;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            transition: border-color 0.3s ease;
+            height: 24px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .form-group.error input {
+            border-color: #e74c3c;
+        }
+
+        .error-message {
+            margin-top: 5px;
+            color: #e74c3c;
+            font-size: 0.7rem;
+            display: none;
+            font-weight: 500;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .form-actions {
+            position: fixed;
+            bottom: 0;
+            left: 10px;
+            width: calc(33.33% - 22.5px);
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(4px);
+            border-top: 1px solid #ecf0f1;
+            border-radius: 8px 8px 0 0;
+            z-index: 1000;
+        }
+
+        .btn, .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .form-actions .btn {
+            flex: 1;
+        }
+
+        .btn-primary {
+            background-color: #27ae60;
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background-color: #229954;
+        }
+
+        .btn-primary:disabled {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        .btn-secondary {
+            background-color: #95a5a6;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #7f8c8d;
+        }
+
+        .results-area {
+            flex: 1;
+            overflow-y: auto;
+            min-height: 0;
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr auto;
+            gap: 10px;
+            height: 100%;
+        }
+
+        .client-info {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 8px;
+            background: #e8f4fd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .result-item {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 5px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 40px;
+        }
+
+        .result-item.output2 {
+            grid-column: 1 / -1;
+            padding: 8px;
+        }
+
+        .result-item h3 {
+            color: #2c3e50;
+            margin-bottom: 2px;
+            font-size: 0.9rem;
+        }
+
+        .result-item .subtitle {
+            color: #7f8c8d;
+            font-size: 0.6rem;
+            margin-bottom: 4px;
+        }
+
+        .result-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 0;
+        }
+
+        .occurrence-table {
+            width: 70%;
+            margin: 2px auto;
+            border-collapse: collapse;
+            font-size: 0.6rem;
+        }
+
+        .occurrence-table th,
+        .occurrence-table td {
+            border: 1px solid #ddd;
+            padding: 1px;
+            text-align: center;
+            width: 50%;
+            height: 16px;
+            line-height: 14px;
+        }
+
+        .occurrence-table th {
+            background: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Color-coded cells for numbers 1-9 */
+        .occurrence-table .number-1 { background-color: #ff6b6b; color: white; font-weight: bold; }
+        .occurrence-table .number-2 { background-color: #4ecdc4; color: white; font-weight: bold; }
+        .occurrence-table .number-3 { background-color: #45b7d1; color: white; font-weight: bold; }
+        .occurrence-table .number-4 { background-color: #96ceb4; color: white; font-weight: bold; }
+        .occurrence-table .number-5 { background-color: #feca57; color: white; font-weight: bold; }
+        .occurrence-table .number-6 { background-color: #ff9ff3; color: white; font-weight: bold; }
+        .occurrence-table .number-7 { background-color: #a55eea; color: white; font-weight: bold; }
+        .occurrence-table .number-8 { background-color: #fd79a8; color: white; font-weight: bold; }
+        .occurrence-table .number-9 { background-color: #6c5ce7; color: white; font-weight: bold; }
+
+        .zero-count {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            padding: 40px;
+        }
+
+        /* Tab Navigation Styles */
+        .tab-navigation {
+            display: flex;
+            border-bottom: 2px solid #ecf0f1;
+            margin-bottom: 15px;
+        }
+
+        .tab-btn {
+            padding: 10px 20px;
+            border: none;
+            background: #f8f9fa;
+            color: #7f8c8d;
+            cursor: pointer;
+            border-radius: 6px 6px 0 0;
+            margin-right: 5px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .tab-btn.active {
+            background: #3498db;
+            color: white;
+            border-bottom: 2px solid #3498db;
+        }
+
+        /* Tab Content Styles */
+        .tab-content {
+            flex: 1;
+            min-height: 0;
+        }
+
+        .tab-panel {
+            display: none;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .tab-panel.active {
+            display: block;
+        }
+
+        .empty-tab {
+            padding: 20px;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+            border: 2px dashed #ecf0f1;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        /* Client Info Header Styles */
+        .client-info-header {
+            text-align: center;
+            padding: 4px 8px;
+            background: #e8f4fd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+
+        /* Panel Actions Styles */
+        .panel-actions {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(4px);
+            border-top: 1px solid #ecf0f1;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .action-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 120px;
+        }
+
+        .pdf-btn {
+            background-color: #e74c3c;
+            color: white;
+        }
+
+        .pdf-btn:hover {
+            background-color: #c0392b;
+        }
+
+        .print-btn {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .print-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Laptop responsive breakpoints */
+        @media (max-height: 800px) {
+            .container {
+                padding: 8px;
+            }
+            
+            header {
+                padding: 8px;
+                margin-bottom: 8px;
+            }
+            
+            .main-content {
+                gap: 12px;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 12px;
+            }
+            
+            .form-group {
+                margin-bottom: 4px;
+            }
+            
+            .result-item {
+                padding: 4px;
+                min-height: 35px;
+            }
+            
+            .result-value {
+                font-size: 1.3rem;
+            }
+        }
+
+        @media (max-height: 700px) {
+            .form-group {
+                margin-bottom: 3px;
+            }
+            
+            .form-group input {
+                padding: 2px 4px;
+                height: 20px;
+            }
+            
+            .result-item {
+                padding: 3px;
+                min-height: 30px;
+            }
+            
+            .result-item h3 {
+                font-size: 0.8rem;
+                margin-bottom: 1px;
+            }
+            
+            .result-value {
+                font-size: 1.2rem;
+            }
+            
+            .occurrence-table {
+                font-size: 0.5rem;
+            }
+            
+            .action-btn {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+                min-width: 100px;
+            }
+        }
+
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .left-panel, .right-panel {
+                padding: 15px;
+            }
+            
+            .left-panel {
+                padding-bottom: 90px; /* Extra space for mobile buttons */
+            }
+            
+            .form-actions {
+                left: 10px;
+                width: calc(100% - 20px);
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .action-btn {
+                min-width: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Numérologie de Pythagore <span class="version">v1.8.0</span></h1>
+        </header>
+
+        <div class="main-content">
+            <!-- Left Panel - Data Input -->
+            <div class="left-panel">
+                <h2>📝 Données personnelles</h2>
+                
+                <form id="client-form">
+                    <div class="form-group">
+                        <label for="firstName1">Prénom 1 <span class="required">*</span></label>
+                        <input type="text" id="firstName1" name="firstName1" required placeholder="Entrez le premier prénom (obligatoire)">
+                        <div class="error-message" id="firstName1-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="firstName2">Prénom 2</label>
+                        <input type="text" id="firstName2" name="firstName2" placeholder="Entrez le deuxième prénom (optionnel)">
+                        <div class="error-message" id="firstName2-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="firstName3">Prénom 3</label>
+                        <input type="text" id="firstName3" name="firstName3" placeholder="Entrez le troisième prénom (optionnel)">
+                        <div class="error-message" id="firstName3-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="lastName">Nom de famille <span class="required">*</span></label>
+                        <input type="text" id="lastName" name="lastName" required placeholder="Entrez le nom de famille (obligatoire)">
+                        <div class="error-message" id="lastName-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="birthDate">Date de naissance <span class="required">*</span></label>
+                        <input type="date" id="birthDate" name="birthDate" required>
+                        <div class="error-message" id="birthDate-error"></div>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="submit" id="submit-btn" class="btn btn-primary" disabled>
+                            Calculer les résultats
+                        </button>
+                        <button type="button" id="reset-btn" class="btn btn-secondary">
+                            Réinitialiser
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Panel - Tabbed Interface -->
+            <div class="right-panel">
+                <!-- Client Info Section - Common for both tabs -->
+                <div class="client-info-header" id="client-info-header" style="display: none;">
+                    <!-- Client info will be displayed here -->
+                </div>
+                
+                <!-- Tab Navigation -->
+                <div class="tab-navigation">
+                    <button class="tab-btn active" id="tab1-btn" onclick="switchTab('tab1')">Piliers</button>
+                    <button class="tab-btn" id="tab2-btn" onclick="switchTab('tab2')">Cycles et Phases de Réalisation</button>
+                </div>
+                
+                <!-- Tab Content -->
+                <div class="tab-content">
+                    <!-- Tab 1 Content - Results Display -->
+                    <div class="tab-panel active" id="tab1-panel">
+                        <div class="results-area" id="results-area">
+                            <div class="empty-state" id="empty-state">
+                                Remplissez les champs obligatoires (Prénom 1, Nom de famille, Date de naissance) et cliquez sur "Calculer les résultats" pour voir les sorties ici.
+                            </div>
+                            
+                            <div class="results-grid" id="results-container" style="display: none;">
+                                <!-- Results will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Tab 2 Content - Output 4 -->
+                    <div class="tab-panel" id="tab2-panel">
+                        <div class="empty-tab">
+                            <h3>📊 Cycles et Phases de Réalisation</h3>
+                            <p>Cette section sera implémentée dans une version future pour afficher les cycles de vie et phases de réalisation.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Action Buttons - Outside tabs, always visible -->
+                <div class="panel-actions" id="panel-actions" style="display: none;">
+                    <button type="button" id="generate-pdf-btn" class="action-btn pdf-btn">
+                        📄 Générer rapport PDF
+                    </button>
+                    <button type="button" id="print-results-btn" class="action-btn print-btn">
+                        🖨️ Imprimer les résultats
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PDF Generation Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- JavaScript -->
+    <script>
+        console.log('🚀 Numérologie de Pythagore v1.8.0 - Complete Implementation');
+        console.log('📋 Features: French labels, fixed buttons, red error messages, tabbed interface, PDF generation');
+
+        // Tab switching functionality
+        function switchTab(tabName) {
+            // Remove active class from all tabs and panels
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+            
+            // Add active class to selected tab and panel
+            document.getElementById(`${tabName}-btn`).classList.add('active');
+            document.getElementById(`${tabName}-panel`).classList.add('active');
+            
+            console.log(`📋 Switched to ${tabName}`);
+        }
+
+        // Validator Class
+        class Validator {
+            validateName(name) {
+                if (!name || name.trim() === '') {
+                    return { isValid: true, message: '' }; // For optional fields
+                }
+                const nameRegex = /^[a-zA-ZÀ-ÿ\s\-']+$/;
+                if (!nameRegex.test(name.trim())) {
+                    return { isValid: false, message: 'Seules les lettres, espaces, tirets et apostrophes sont autorisés' };
+                }
+                return { isValid: true, message: '' };
+            }
+
+            validateDate(dateString) {
+                if (!dateString || dateString.trim() === '') {
+                    return { isValid: false, message: 'La date de naissance est obligatoire' };
+                }
+                const date = new Date(dateString);
+                const today = new Date();
+                if (isNaN(date.getTime())) {
+                    return { isValid: false, message: 'Veuillez entrer une date valide' };
+                }
+                if (date >= today) {
+                    return { isValid: false, message: 'La date de naissance doit être dans le passé' };
+                }
+                return { isValid: true, message: '' };
+            }
+
+            validateAll(formData) {
+                const errors = {};
+                let isValid = true;
+
+                // Validate first name 1 (required)
+                if (!formData.firstName1 || formData.firstName1.trim() === '') {
+                    errors.firstName1 = 'Le premier prénom est obligatoire';
+                    isValid = false;
+                } else {
+                    const nameValidation = this.validateName(formData.firstName1);
+                    if (!nameValidation.isValid) {
+                        errors.firstName1 = nameValidation.message;
+                        isValid = false;
+                    }
+                }
+
+                // Validate first name 2 (optional)
+                if (formData.firstName2) {
+                    const nameValidation = this.validateName(formData.firstName2);
+                    if (!nameValidation.isValid) {
+                        errors.firstName2 = nameValidation.message;
+                        isValid = false;
+                    }
+                }
+
+                // Validate first name 3 (optional)
+                if (formData.firstName3) {
+                    const nameValidation = this.validateName(formData.firstName3);
+                    if (!nameValidation.isValid) {
+                        errors.firstName3 = nameValidation.message;
+                        isValid = false;
+                    }
+                }
+
+                // Validate last name (required)
+                if (!formData.lastName || formData.lastName.trim() === '') {
+                    errors.lastName = 'Le nom de famille est obligatoire';
+                    isValid = false;
+                } else {
+                    const nameValidation = this.validateName(formData.lastName);
+                    if (!nameValidation.isValid) {
+                        errors.lastName = nameValidation.message;
+                        isValid = false;
+                    }
+                }
+
+                // Validate birth date (required)
+                const dateValidation = this.validateDate(formData.birthDate);
+                if (!dateValidation.isValid) {
+                    errors.birthDate = dateValidation.message;
+                    isValid = false;
+                }
+
+                return { isValid, errors };
+            }
+        }
+
+        // Calculator Class
+        class Calculator {
+            letterToNumber(letter) {
+                if (!letter || typeof letter !== 'string') return 0;
+                const code = letter.toUpperCase().charCodeAt(0);
+                if (code < 65 || code > 90) return 0;
+                return ((code - 65) % 9) + 1;
+            }
+
+            calculateOutput1(birthDate) {
+                const date = new Date(birthDate);
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear().toString();
+                
+                // Combine all digits: dd mm yyyy
+                const allDigits = day + month + year;
+                let sum = allDigits.split('').reduce((sum, digit) => sum + parseInt(digit), 0);
+                
+                // Reduce to single digit between 1-9
+                return this.reduceToSingleDigit(sum);
+            }
+
+            reduceToSingleDigit(number) {
+                if (number <= 0) return 1;
+                
+                while (number > 9) {
+                    let sum = 0;
+                    const numberString = number.toString();
+                    for (let digit of numberString) {
+                        sum += parseInt(digit, 10);
+                    }
+                    number = sum;
+                }
+                
+                return number === 0 ? 9 : number;
+            }
+
+            calculateOutput2(firstNames, lastName) {
+                let allLetters = '';
+                
+                // Combine all first names
+                if (firstNames.firstName1) allLetters += firstNames.firstName1;
+                if (firstNames.firstName2) allLetters += firstNames.firstName2;
+                if (firstNames.firstName3) allLetters += firstNames.firstName3;
+                
+                // Add last name
+                if (lastName) allLetters += lastName;
+
+                const occurrences = {};
+                for (let i = 1; i <= 9; i++) occurrences[i] = 0;
+
+                for (let letter of allLetters.toUpperCase()) {
+                    const number = this.letterToNumber(letter);
+                    if (number >= 1 && number <= 9) {
+                        occurrences[number]++;
+                    }
+                }
+
+                const result = [];
+                for (let i = 1; i <= 9; i++) {
+                    result.push({
+                        number: i,
+                        count: occurrences[i],
+                        display: occurrences[i] === 0 ? 'ô' : occurrences[i].toString()
+                    });
+                }
+                return result;
+            }
+
+            calculateOutput3(firstNames, lastName) {
+                let allLetters = '';
+                
+                // Only use first name 1 and last name for Output 3
+                if (firstNames.firstName1) allLetters += firstNames.firstName1;
+                if (lastName) allLetters += lastName;
+
+                let sum = 0;
+                for (let letter of allLetters.toUpperCase()) {
+                    const number = this.letterToNumber(letter);
+                    if (number >= 1 && number <= 9) {
+                        sum += number;
+                    }
+                }
+
+                return this.reduceToSingleDigit(sum);
+            }
+        }
+
+        // Results Display Class
+        class ResultsDisplay {
+            displayResults(output1, output2, output3, clientData) {
+                console.log('🎯 Displaying results:', { output1, output2, output3, clientData });
+                
+                // Clear previous results
+                this.clearResults();
+                
+                // Show client info
+                this.showClientInfo(clientData);
+                
+                // Create results container
+                const resultsContainer = document.getElementById('results-container');
+                resultsContainer.innerHTML = '';
+                
+                // Create Output 1 section
+                const output1Section = this.createOutputSection('Output 1', 'Chemin de vie', output1, 'output1');
+                resultsContainer.appendChild(output1Section);
+                
+                // Create Output 3 section
+                const output3Section = this.createOutputSection('Output 3', 'Nombre d\'expression', output3, 'output3');
+                resultsContainer.appendChild(output3Section);
+                
+                // Create Output 2 section (spans full width)
+                const output2Section = this.createOutput2Section(output2);
+                resultsContainer.appendChild(output2Section);
+                
+                // Show results container and hide empty state
+                document.getElementById('empty-state').style.display = 'none';
+                resultsContainer.style.display = 'grid';
+                
+                // Show action buttons
+                document.getElementById('panel-actions').style.display = 'flex';
+                
+                console.log('✅ Results displayed successfully');
+            }
+
+            createOutputSection(title, subtitle, value, className) {
+                const section = document.createElement('div');
+                section.className = `result-item ${className}`;
+                
+                section.innerHTML = `
+                    <h3>${title}</h3>
+                    <div class="subtitle">${subtitle}</div>
+                    <div class="result-value">${value}</div>
+                `;
+                
+                return section;
+            }
+
+            createOutput2Section(output2Data) {
+                const section = document.createElement('div');
+                section.className = 'result-item output2';
+                
+                const tableHTML = this.formatOutput2Table(output2Data);
+                
+                section.innerHTML = `
+                    <h3>Output 2</h3>
+                    <div class="subtitle">Grille d'inclusion</div>
+                    ${tableHTML}
+                `;
+                
+                return section;
+            }
+
+            formatOutput2Table(occurrenceData) {
+                let tableHTML = '<table class="occurrence-table"><thead><tr><th>Nombre</th><th>Occurrences</th></tr></thead><tbody>';
+                
+                occurrenceData.forEach(item => {
+                    const displayValue = item.count === 0 ? '<span class="zero-count">ô</span>' : item.display;
+                    tableHTML += `<tr><td class="number-${item.number}">${item.number}</td><td>${displayValue}</td></tr>`;
+                });
+                
+                tableHTML += '</tbody></table>';
+                return tableHTML;
+            }
+
+            showClientInfo(clientData) {
+                const clientInfoHeader = document.getElementById('client-info-header');
+                const names = [clientData.firstName1, clientData.firstName2, clientData.firstName3].filter(Boolean).join(' ');
+                const fullName = `${names} ${clientData.lastName}`;
+                const formattedDate = new Date(clientData.birthDate).toLocaleDateString('fr-FR');
+                
+                clientInfoHeader.innerHTML = `<strong>${fullName}</strong> - Né(e) le ${formattedDate}`;
+                clientInfoHeader.style.display = 'block';
+            }
+
+            clearResults() {
+                const resultsContainer = document.getElementById('results-container');
+                resultsContainer.innerHTML = '';
+                resultsContainer.style.display = 'none';
+                
+                document.getElementById('empty-state').style.display = 'block';
+                document.getElementById('client-info-header').style.display = 'none';
+                document.getElementById('panel-actions').style.display = 'none';
+            }
+        }
+
+        // Form Handler Class
+        class FormHandler {
+            constructor() {
+                this.validator = new Validator();
+                this.calculator = new Calculator();
+                this.resultsDisplay = new ResultsDisplay();
+                this.initializeEventListeners();
+            }
+
+            initializeEventListeners() {
+                const form = document.getElementById('client-form');
+                const submitBtn = document.getElementById('submit-btn');
+                const resetBtn = document.getElementById('reset-btn');
+
+                // Form submission
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSubmit();
+                });
+
+                // Reset button
+                resetBtn.addEventListener('click', () => {
+                    this.resetForm();
+                });
+
+                // Real-time validation
+                const inputs = form.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('input', () => {
+                        this.validateForm();
+                        this.validateField(input.name, input.value);
+                    });
+                    input.addEventListener('blur', () => {
+                        this.validateField(input.name, input.value);
+                    });
+                });
+
+                // PDF generation
+                document.addEventListener('click', (e) => {
+                    if (e.target.id === 'generate-pdf-btn') {
+                        this.generatePDF();
+                    }
+                    if (e.target.id === 'print-results-btn') {
+                        window.print();
+                    }
+                });
+            }
+
+            validateField(fieldName, value) {
+                const fieldGroup = document.querySelector(`#${fieldName}`).closest('.form-group');
+                const errorElement = document.getElementById(`${fieldName}-error`);
+
+                let validation;
+                if (fieldName === 'birthDate') {
+                    validation = this.validator.validateDate(value);
+                } else if (fieldName === 'firstName1' || fieldName === 'lastName') {
+                    if (!value.trim()) {
+                        validation = { 
+                            isValid: false, 
+                            message: fieldName === 'firstName1' ? 'Le premier prénom est obligatoire' : 'Le nom de famille est obligatoire' 
+                        };
+                    } else {
+                        validation = this.validator.validateName(value);
+                    }
+                } else {
+                    validation = this.validator.validateName(value);
+                }
+
+                if (!validation.isValid) {
+                    fieldGroup.classList.add('error');
+                    errorElement.textContent = validation.message;
+                    errorElement.classList.add('show');
+                } else {
+                    fieldGroup.classList.remove('error');
+                    errorElement.classList.remove('show');
+                }
+            }
+
+            validateForm() {
+                const formData = this.getFormData();
+                const validation = this.validator.validateAll(formData);
+                const submitBtn = document.getElementById('submit-btn');
+
+                // Update submit button state
+                submitBtn.disabled = !validation.isValid;
+
+                return validation;
+            }
+
+            getFormData() {
+                return {
+                    firstName1: document.getElementById('firstName1').value.trim(),
+                    firstName2: document.getElementById('firstName2').value.trim(),
+                    firstName3: document.getElementById('firstName3').value.trim(),
+                    lastName: document.getElementById('lastName').value.trim(),
+                    birthDate: document.getElementById('birthDate').value
+                };
+            }
+
+            handleSubmit() {
+                const formData = this.getFormData();
+                const validation = this.validateForm();
+
+                if (!validation.isValid) {
+                    // Show validation errors in red
+                    Object.keys(validation.errors).forEach(fieldName => {
+                        this.showValidationError(fieldName, validation.errors[fieldName]);
+                    });
+                    return;
+                }
+
+                try {
+                    // Calculate outputs
+                    const output1 = this.calculator.calculateOutput1(formData.birthDate);
+                    const output2 = this.calculator.calculateOutput2(formData, formData.lastName);
+                    const output3 = this.calculator.calculateOutput3(formData, formData.lastName);
+
+                    // Display results
+                    this.resultsDisplay.displayResults(output1, output2, output3, formData);
+
+                    console.log('📊 Calculation completed:', { output1, output2, output3 });
+                } catch (error) {
+                    console.error('❌ Calculation error:', error);
+                    alert('Une erreur est survenue lors du calcul. Veuillez réessayer.');
+                }
+            }
+
+            showValidationError(fieldName, message) {
+                const fieldGroup = document.querySelector(`#${fieldName}`).closest('.form-group');
+                const errorElement = document.getElementById(`${fieldName}-error`);
+
+                fieldGroup.classList.add('error');
+                errorElement.textContent = message;
+                errorElement.classList.add('show');
+            }
+
+            resetForm() {
+                const form = document.getElementById('client-form');
+                form.reset();
+                
+                // Clear all validation errors
+                document.querySelectorAll('.form-group').forEach(group => {
+                    group.classList.remove('error');
+                });
+                document.querySelectorAll('.error-message').forEach(error => {
+                    error.classList.remove('show');
+                });
+
+                // Clear results
+                this.resultsDisplay.clearResults();
+
+                // Disable submit button
+                document.getElementById('submit-btn').disabled = true;
+
+                console.log('🔄 Form reset completed');
+            }
+
+            generatePDF() {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+
+                    // Get current data
+                    const formData = this.getFormData();
+                    const output1 = this.calculator.calculateOutput1(formData.birthDate);
+                    const output2 = this.calculator.calculateOutput2(formData, formData.lastName);
+                    const output3 = this.calculator.calculateOutput3(formData, formData.lastName);
+
+                    // PDF Header
+                    doc.setFontSize(20);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Rapport de Numérologie de Pythagore', 20, 30);
+
+                    // Client Information
+                    doc.setFontSize(12);
+                    doc.setTextColor(0, 0, 0);
+                    const names = [formData.firstName1, formData.firstName2, formData.firstName3].filter(Boolean).join(' ');
+                    const fullName = `${names} ${formData.lastName}`;
+                    const formattedDate = new Date(formData.birthDate).toLocaleDateString('fr-FR');
+                    
+                    doc.text(`Client: ${fullName}`, 20, 50);
+                    doc.text(`Date de naissance: ${formattedDate}`, 20, 60);
+                    doc.text(`Date de génération: ${new Date().toLocaleDateString('fr-FR')}`, 20, 70);
+
+                    // Results in three columns
+                    const startY = 90;
+                    const colWidth = 60;
+
+                    // Output 1
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Output 1', 20, startY);
+                    doc.setFontSize(10);
+                    doc.setTextColor(127, 140, 141);
+                    doc.text('Chemin de vie', 20, startY + 8);
+                    doc.setFontSize(24);
+                    doc.setTextColor(39, 174, 96);
+                    doc.text(output1.toString(), 20, startY + 25);
+
+                    // Output 3
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Output 3', 20 + colWidth, startY);
+                    doc.setFontSize(10);
+                    doc.setTextColor(127, 140, 141);
+                    doc.text('Nombre d\'expression', 20 + colWidth, startY + 8);
+                    doc.setFontSize(24);
+                    doc.setTextColor(39, 174, 96);
+                    doc.text(output3.toString(), 20 + colWidth, startY + 25);
+
+                    // Output 2 - Occurrence Table
+                    doc.setFontSize(14);
+                    doc.setTextColor(44, 62, 80);
+                    doc.text('Output 2 - Grille d\'inclusion', 20 + colWidth * 2, startY);
+
+                    // Create 3x3 grid for Output 2
+                    const gridStartX = 20 + colWidth * 2;
+                    const gridStartY = startY + 15;
+                    const cellSize = 15;
+
+                    output2.forEach((item, index) => {
+                        const row = Math.floor(index / 3);
+                        const col = index % 3;
+                        const x = gridStartX + col * cellSize;
+                        const y = gridStartY + row * cellSize;
+
+                        // Color-coded backgrounds
+                        const colors = {
+                            1: [255, 107, 107], 2: [78, 205, 196], 3: [69, 183, 209],
+                            4: [150, 206, 180], 5: [254, 202, 87], 6: [255, 159, 243],
+                            7: [165, 94, 234], 8: [253, 121, 168], 9: [108, 92, 231]
+                        };
+
+                        const color = colors[item.number];
+                        if (color) {
+                            doc.setFillColor(color[0], color[1], color[2]);
+                            doc.rect(x, y, cellSize, cellSize, 'F');
+                        }
+
+                        // Number and count
+                        doc.setTextColor(255, 255, 255);
+                        doc.setFontSize(8);
+                        doc.text(item.number.toString(), x + 2, y + 6);
+                        doc.text(item.display, x + 2, y + 12);
+                    });
+
+                    // Save PDF
+                    const fileName = `numerologie_${fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
+                    doc.save(fileName);
+
+                    console.log('📄 PDF generated successfully:', fileName);
+                } catch (error) {
+                    console.error('❌ PDF generation error:', error);
+                    alert('Erreur lors de la génération du PDF. Veuillez réessayer.');
+                }
+            }
+        }
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Initializing Numérologie de Pythagore application...');
+            new FormHandler();
+            console.log('✅ Application initialized successfully');
+        });
+    </script>
+</body>
+</html>
