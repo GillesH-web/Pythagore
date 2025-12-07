@@ -508,11 +508,124 @@ header h1 {
 
 /* ===== RESPONSIVE DESIGN ===== */
 @media (max-width: 768px) {
-    .main-content { 
-        grid-template-columns: 1fr; 
+    .container {
+        height: 100vh;
+        height: -webkit-fill-available;
+        padding: 5px;
     }
+    
+    .main-content { 
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    
+    .left-panel, .right-panel {
+        padding: 10px;
+        padding-bottom: 60px;
+    }
+    
     .form-actions { 
-        left: 10px; 
-        width: calc(100% - 20px); 
+        left: 5px; 
+        width: calc(100% - 10px);
+        padding: 10px;
+    }
+    
+    .form-actions .btn {
+        flex: 1;
+        min-width: 140px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+    
+    .tab-btn {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .results-grid {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+    
+    .cycles-grid {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+    
+    .realization-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 5px;
+        padding: 0 5px;
+    }
+    
+    .result-item, .cycle-item, .realization-item {
+        min-height: 60px;
+        padding: 8px;
+    }
+    
+    .panel-actions {
+        margin: 0 5px;
+        padding: 10px;
+    }
+    
+    .panel-actions .action-btn {
+        flex: 1;
+        min-width: 120px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+    }
+}
+
+/* ===== IPHONE SAFARI SPECIFIC FIXES ===== */
+@media screen and (max-width: 480px) {
+    body {
+        -webkit-text-size-adjust: 100%;
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        user-select: none;
+    }
+    
+    input, button, select, textarea {
+        -webkit-appearance: none;
+        border-radius: 8px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    .container {
+        height: 100vh;
+        height: -webkit-fill-available;
+        overflow: hidden;
+    }
+    
+    .main-content {
+        height: calc(100vh - 80px);
+        height: calc(-webkit-fill-available - 80px);
+    }
+    
+    .left-panel, .right-panel {
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .form-group input {
+        height: 40px;
+        padding: 8px 12px;
+        font-size: 16px;
+    }
+    
+    .btn, .action-btn {
+        min-height: 44px;
+        font-size: 16px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .tab-btn {
+        min-height: 44px;
+        font-size: 16px;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .realization-grid {
+        grid-template-columns: 1fr;
     }
 }
