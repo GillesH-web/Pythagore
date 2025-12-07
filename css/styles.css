@@ -638,23 +638,73 @@ header h1 {
         grid-template-columns: 1fr;
     }
     
-    /* Fix form actions visibility for iPhone Safari */
+    /* ULTRA-AGGRESSIVE iPhone Safari button fixes */
     .form-actions {
-        bottom: env(safe-area-inset-bottom, 20px);
-        left: 5px;
-        width: calc(100% - 10px);
-        padding: 10px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(8px);
-        border-radius: 12px 12px 0 0;
-        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        position: fixed !important;
+        bottom: 0px !important;
+        left: 0px !important;
+        right: 0px !important;
+        width: 100vw !important;
+        margin: 0 !important;
+        padding: 20px 10px calc(env(safe-area-inset-bottom, 0px) + 20px) 10px !important;
+        background: #ffffff !important;
+        border: none !important;
+        border-radius: 0 !important;
+        box-shadow: 0 -8px 32px rgba(0,0,0,0.3) !important;
+        z-index: 999999 !important;
+        transform: translateZ(0) !important;
+        -webkit-transform: translateZ(0) !important;
+        will-change: transform !important;
     }
     
     .form-actions .btn {
-        flex: 1;
-        min-width: 120px;
-        font-size: 16px;
-        padding: 12px 16px;
-        height: 48px;
+        display: block !important;
+        width: calc(50% - 5px) !important;
+        min-width: 120px !important;
+        font-size: 18px !important;
+        padding: 16px 12px !important;
+        height: 56px !important;
+        border-radius: 8px !important;
+        font-weight: 700 !important;
+        border: 2px solid #333 !important;
+        margin: 0 2.5px !important;
+        float: left !important;
+        -webkit-appearance: none !important;
+        appearance: none !important;
+        -webkit-tap-highlight-color: rgba(0,0,0,0.1) !important;
+    }
+    
+    .form-actions .btn-primary {
+        background: #27ae60 !important;
+        color: #ffffff !important;
+        border-color: #27ae60 !important;
+    }
+    
+    .form-actions .btn-secondary {
+        background: #95a5a6 !important;
+        color: #ffffff !important;
+        border-color: #95a5a6 !important;
+    }
+    
+    /* Force container adjustments for iPhone Safari */
+    .container {
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 120px) !important;
+        height: calc(100vh - env(safe-area-inset-bottom, 0px) - 120px) !important;
+        height: calc(100dvh - env(safe-area-inset-bottom, 0px) - 120px) !important;
+    }
+    
+    .left-panel {
+        padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 140px) !important;
+        margin-bottom: 0 !important;
+    }
+    
+    /* Alternative positioning for extreme cases */
+    @supports not (env(safe-area-inset-bottom)) {
+        .form-actions {
+            bottom: 80px !important;
+        }
+        .container {
+            padding-bottom: 200px !important;
+        }
     }
 }
