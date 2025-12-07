@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tests - Numérologie de Pythagore</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-controls {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 0 10px;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .btn.success {
+            background: #27ae60;
+        }
+        .btn.danger {
+            background: #e74c3c;
+        }
+        .test-results {
+            margin-top: 20px;
+        }
+        .test-summary {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        .test-item {
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .test-item.pass {
+            background: #d5f4e6;
+            border-left: 4px solid #27ae60;
+        }
+        .test-item.fail {
+            background: #fdf2f2;
+            border-left: 4px solid #e74c3c;
+        }
+        .test-item.error {
+            background: #fff3cd;
+            border-left: 4px solid #f39c12;
+        }
+        .status {
+            font-weight: bold;
+            padding: 4px 8px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .status.pass {
+            background: #27ae60;
+            color: white;
+        }
+        .status.fail {
+            background: #e74c3c;
+            color: white;
+        }
+        .status.error {
+            background: #f39c12;
+            color: white;
+        }
+        .console-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .demo-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 6px;
+        }
+        .demo-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .form-group input {
+            padding: 8px;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+        }
+        .demo-results {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Tests - Numérologie de Pythagore v1.8.0</h1>
+        
+        <div class="test-controls">
+            <button class="btn" onclick="runTests()">▶️ Exécuter tous les tests</button>
+            <button class="btn success" onclick="runQuickDemo()">⚡ Démo rapide</button>
+            <button class="btn danger" onclick="clearResults()">🗑️ Effacer</button>
+        </div>
+
+        <div class="test-results" id="test-results" style="display: none;">
+            <div class="test-summary" id="test-summary"></div>
+            <div id="test-details"></div>
+        </div>
+
+        <div class="console-output" id="console-output" style="display: none;"></div>
+
+        <div class="demo-section">
+            <h3>🎯 Test Manuel</h3>
+            <div class="demo-form">
+                <div class="form-group">
+                    <label>Prénom 1:</label>
+                    <input type="text" id="demo-firstName1" value="Jean-Pierre" placeholder="Prénom principal">
+                </div>
+                <div class="form-group">
+                    <label>Prénom 2:</label>
+                    <input type="text" id="demo-firstName2" value="" placeholder="Deuxième prénom (optionnel)">
+                </div>
+                <div class="form-group">
+                    <label>Prénom 3:</label>
+                    <input type="text" id="demo-firstName3" value="" placeholder="Troisième prénom (optionnel)">
+                </div>
+                <div class="form-group">
+                    <label>Nom de famille:</label>
+                    <input type="text" id="demo-lastName" value="Martin" placeholder="Nom de famille">
+                </div>
+                <div class="form-group">
+                    <label>Date de naissance:</label>
+                    <input type="date" id="demo-birthDate" value="1985-03-15">
+                </div>
+                <div class="form-group">
+                    <button class="btn" onclick="calculateDemo()" style="margin-top: 25px;">📊 Calculer</button>
+                </div>
+            </div>
+            <div class="demo-results" id="demo-results" style="display: none;"></div>
+        </div>
+    </div>
+
+    <!-- Include all application modules -->
+    <script src="js/calculator.js"></script>
+    <script src="js/validator.js"></script>
+    <script src="js/results-display.js"></script>
+    <script src="js/test-suite.js"></script>
+
+    <script>
+        let consoleOutput = [];
+        let originalConsoleLog = console.log;
+        
+        // Capture console output
+        console.log = function(...args) {
+            consoleOutput.push(args.join(' '));
+            originalConsoleLog.apply(console, args);
+            updateConsoleDisplay();
+        };
+
+        function updateConsoleDisplay() {
+            const consoleDiv = document.getElementById('console-output');
+            consoleDiv.textContent = consoleOutput.join('\n');
+            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+        }
+
+        function runTests() {
+            consoleOutput = [];
+            document.getElementById('console-output').style.display = 'block';
+            
+            const testSuite = new TestSuite();
+            const results = testSuite.runAllTests();
+            
+            displayTestResults(results);
+        }
+
+        function displayTestResults(results) {
+            const resultsDiv = document.getElementById('test-results');
+            const summaryDiv = document.getElementById('test-summary');
+            const detailsDiv = document.getElementById('test-details');
+            
+            resultsDiv.style.display = 'block';
+            
+            // Summary
+            summaryDiv.innerHTML = `
+                <h3>📋 Résumé des Tests</h3>
+                <p><strong>Total:</strong> ${results.total} tests</p>
+                <p><strong>✅ Réussis:</strong> ${results.passed}</p>
+                <p><strong>❌ Échoués:</strong> ${results.failed}</p>
+                <p><strong>📊 Taux de réussite:</strong> ${results.successRate}%</p>
+            `;
+            
+            // Details
+            detailsDiv.innerHTML = '<h3>📝 Détails des Tests</h3>';
+            results.details.forEach(test => {
+                const div = document.createElement('div');
+                div.className = `test-item ${test.status.toLowerCase()}`;
+                div.innerHTML = `
+                    <span>${test.description}</span>
+                    <span class="status ${test.status.toLowerCase()}">${test.status}</span>
+                `;
+                if (test.error) {
+                    div.innerHTML += `<div style="font-size: 12px; color: #666; margin-top: 5px;">${test.error}</div>`;
+                }
+                detailsDiv.appendChild(div);
+            });
+        }
+
+        function runQuickDemo() {
+            consoleOutput = [];
+            document.getElementById('console-output').style.display = 'block';
+            
+            console.log('⚡ Démo rapide - Test des calculs de base');
+            
+            const calculator = new Calculator();
+            const validator = new Validator();
+            
+            // Test rapide
+            const testData = {
+                firstName1: 'Jean',
+                firstName2: '',
+                firstName3: '',
+                lastName: 'Martin',
+                birthDate: '1985-03-15'
+            };
+            
+            console.log('📊 Données de test:', testData);
+            
+            const output1 = calculator.calculateOutput1(testData.birthDate);
+            const output2 = calculator.calculateOutput2(testData, testData.lastName);
+            const output3 = calculator.calculateOutput3(testData, testData.lastName);
+            const cycles = calculator.calculateCycles(testData.birthDate, output1);
+            
+            console.log('✅ Output 1 (Chemin de vie):', output1);
+            console.log('✅ Output 2 (Grille d\'inclusion):', output2);
+            console.log('✅ Output 3 (Nombre d\'expression):', output3);
+            console.log('✅ Cycles:', cycles);
+            
+            console.log('🎉 Démo rapide terminée avec succès!');
+        }
+
+        function calculateDemo() {
+            const formData = {
+                firstName1: document.getElementById('demo-firstName1').value,
+                firstName2: document.getElementById('demo-firstName2').value,
+                firstName3: document.getElementById('demo-firstName3').value,
+                lastName: document.getElementById('demo-lastName').value,
+                birthDate: document.getElementById('demo-birthDate').value
+            };
+            
+            const calculator = new Calculator();
+            const validator = new Validator();
+            
+            // Validate
+            const validation = validator.validateAll(formData);
+            if (!validation.isValid) {
+                alert('Erreurs de validation: ' + Object.values(validation.errors).join(', '));
+                return;
+            }
+            
+            // Calculate
+            const output1 = calculator.calculateOutput1(formData.birthDate);
+            const output2 = calculator.calculateOutput2(formData, formData.lastName);
+            const output3 = calculator.calculateOutput3(formData, formData.lastName);
+            const cycles = calculator.calculateCycles(formData.birthDate, output1);
+            
+            // Display results
+            const resultsDiv = document.getElementById('demo-results');
+            resultsDiv.style.display = 'block';
+            resultsDiv.innerHTML = `
+                <h4>📊 Résultats pour ${formData.firstName1} ${formData.lastName}</h4>
+                <p><strong>Chemin de vie:</strong> ${output1}</p>
+                <p><strong>Nombre d'expression:</strong> ${output3}</p>
+                <p><strong>Grille d'inclusion:</strong></p>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0;">
+                    ${output2.map(item => `<div style="text-align: center; padding: 5px; background: #f0f0f0; border-radius: 3px;">${item.number}: ${item.display}</div>`).join('')}
+                </div>
+                <p><strong>Cycles:</strong></p>
+                <ul>
+                    <li>Cycle 1: ${cycles.cycle1.ageRange} - ${cycles.cycle1.value}</li>
+                    <li>Cycle 2: ${cycles.cycle2.ageRange} - ${cycles.cycle2.value}</li>
+                    <li>Cycle 3: ${cycles.cycle3.ageRange} - ${cycles.cycle3.value}</li>
+                </ul>
+            `;
+        }
+
+        function clearResults() {
+            document.getElementById('test-results').style.display = 'none';
+            document.getElementById('console-output').style.display = 'none';
+            document.getElementById('demo-results').style.display = 'none';
+            consoleOutput = [];
+        }
+    </script>
+</body>
+</html>

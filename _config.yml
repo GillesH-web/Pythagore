@@ -1,0 +1,52 @@
+# GitHub Pages Configuration for Pythagore Numerology Application
+# This file configures Jekyll settings for GitHub Pages deployment
+
+# Site settings
+title: "Numérologie de Pythagore"
+description: "Application de calcul numérologique basée sur les méthodes de Pythagore"
+baseurl: "" # the subpath of your site, e.g. /blog
+url: "" # the base hostname & protocol for your site
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# GitHub Pages specific settings
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - .gitignore
+  - node_modules/
+  - vendor/
+
+# Include files that start with underscore
+include:
+  - _config.yml
+
+# Collections and defaults
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+
+# Site metadata
+author: "Numérologie de Pythagore"
+lang: fr
+timezone: Europe/Paris
+
+# Social and SEO
+social:
+  name: "Numérologie de Pythagore"
+  links: []
+
+# Theme (using default GitHub Pages theme)
+theme: minima
+
+# Custom variables
+version: "1.8.0"
+app_name: "Numérologie de Pythagore"
