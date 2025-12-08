@@ -12,7 +12,7 @@
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
     <title>Numérologie de Pythagore v1.9.1</title>
-    <!-- Updated: 2025-12-08 10:56 - Nuclear Button Fix + Frame2 Content Visibility -->
+    <!-- Updated: 2025-12-08 11:01 - Nuclear Tab Content Visibility Fix -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 10:56</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:01</span></h1>
         </header>
 
         <div class="main-content">
@@ -323,6 +323,161 @@
         document.addEventListener('DOMContentLoaded', createNuclearButtons);
         window.addEventListener('load', createNuclearButtons);
         window.addEventListener('resize', createNuclearButtons);
+        
+        // NUCLEAR TAB CONTENT FIX
+        function forceTabContentVisibility() {
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('🚨 NUCLEAR: Forcing tab content visibility on iPhone');
+                
+                // Force right panel layout
+                const rightPanel = document.querySelector('.right-panel');
+                if (rightPanel) {
+                    rightPanel.style.cssText = `
+                        display: flex !important;
+                        flex-direction: column !important;
+                        height: 100% !important;
+                        overflow: hidden !important;
+                        background: white !important;
+                        padding: 10px !important;
+                    `;
+                }
+                
+                // Force tab navigation visibility
+                const tabNavigation = document.querySelector('.tab-navigation');
+                if (tabNavigation) {
+                    tabNavigation.style.cssText = `
+                        display: flex !important;
+                        flex-shrink: 0 !important;
+                        margin-bottom: 10px !important;
+                        border-bottom: 2px solid #ecf0f1 !important;
+                        background: white !important;
+                    `;
+                }
+                
+                // Force tab buttons visibility
+                const tabButtons = document.querySelectorAll('.tab-btn');
+                tabButtons.forEach(btn => {
+                    btn.style.cssText = `
+                        padding: 12px 16px !important;
+                        border: none !important;
+                        background: #f8f9fa !important;
+                        color: #7f8c8d !important;
+                        cursor: pointer !important;
+                        border-radius: 6px 6px 0 0 !important;
+                        margin-right: 5px !important;
+                        font-weight: 600 !important;
+                        font-size: 16px !important;
+                        min-height: 44px !important;
+                        -webkit-tap-highlight-color: transparent !important;
+                    `;
+                    
+                    if (btn.classList.contains('active')) {
+                        btn.style.background = '#3498db !important';
+                        btn.style.color = 'white !important';
+                    }
+                });
+                
+                // Force tab content container
+                const tabContent = document.querySelector('.tab-content');
+                if (tabContent) {
+                    tabContent.style.cssText = `
+                        flex: 1 !important;
+                        overflow: hidden !important;
+                        min-height: 0 !important;
+                        background: white !important;
+                        position: relative !important;
+                    `;
+                }
+                
+                // Force all tab panels
+                const tabPanels = document.querySelectorAll('.tab-panel');
+                tabPanels.forEach((panel, index) => {
+                    panel.style.cssText = `
+                        height: 100% !important;
+                        overflow-y: auto !important;
+                        -webkit-overflow-scrolling: touch !important;
+                        padding: 15px 10px !important;
+                        background: white !important;
+                        position: absolute !important;
+                        top: 0 !important;
+                        left: 0 !important;
+                        right: 0 !important;
+                        bottom: 0 !important;
+                        display: ${panel.classList.contains('active') ? 'block' : 'none'} !important;
+                    `;
+                });
+                
+                // Force results areas
+                const resultsAreas = document.querySelectorAll('.results-area, .cycles-area, .realization-area');
+                resultsAreas.forEach(area => {
+                    area.style.cssText = `
+                        height: 100% !important;
+                        overflow-y: auto !important;
+                        -webkit-overflow-scrolling: touch !important;
+                        padding: 10px !important;
+                        background: white !important;
+                    `;
+                });
+                
+                // Force empty states to be visible
+                const emptyStates = document.querySelectorAll('.empty-state');
+                emptyStates.forEach(state => {
+                    state.style.cssText = `
+                        text-align: center !important;
+                        color: #7f8c8d !important;
+                        font-style: italic !important;
+                        padding: 30px 15px !important;
+                        font-size: 16px !important;
+                        line-height: 1.4 !important;
+                        background: #f8f9fa !important;
+                        border-radius: 8px !important;
+                        margin: 10px 0 !important;
+                        display: block !important;
+                    `;
+                });
+                
+                // Force result containers
+                const resultContainers = document.querySelectorAll('.results-grid, .cycles-grid, .realization-grid');
+                resultContainers.forEach(container => {
+                    container.style.cssText = `
+                        display: grid !important;
+                        gap: 10px !important;
+                        padding: 10px !important;
+                        background: white !important;
+                        min-height: auto !important;
+                        height: auto !important;
+                        overflow: visible !important;
+                    `;
+                });
+                
+                // Force result items
+                const resultItems = document.querySelectorAll('.result-item, .cycle-item, .realization-item');
+                resultItems.forEach(item => {
+                    item.style.cssText = `
+                        background: #f8f9fa !important;
+                        border: 2px solid #e9ecef !important;
+                        border-radius: 8px !important;
+                        padding: 15px !important;
+                        text-align: center !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        justify-content: center !important;
+                        min-height: 80px !important;
+                        margin-bottom: 10px !important;
+                    `;
+                });
+                
+                console.log('✅ NUCLEAR: Tab content forced to be visible');
+            }
+        }
+        
+        // Run tab content fix
+        forceTabContentVisibility();
+        document.addEventListener('DOMContentLoaded', forceTabContentVisibility);
+        window.addEventListener('load', forceTabContentVisibility);
+        window.addEventListener('resize', forceTabContentVisibility);
     </script>
     
     <!-- Application JavaScript Modules -->
