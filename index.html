@@ -12,7 +12,7 @@
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
     <title>Numérologie de Pythagore v1.9.1</title>
-    <!-- Updated: 2025-12-08 10:35 - iPhone Safari Optimized + Auto-Versioning + Systematic Timestamp -->
+    <!-- Updated: 2025-12-08 10:40 - iPhone Safari Button Fix + Emergency Mobile Optimization -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 10:35</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 10:40</span></h1>
         </header>
 
         <div class="main-content">
@@ -132,6 +132,114 @@
 
     <!-- External JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Emergency Mobile Fix Script -->
+    <script>
+        // EMERGENCY: Force FAB visibility on mobile devices
+        function forceMobileFAB() {
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            const fabContainer = document.getElementById('mobile-fab-container');
+            const formActions = document.querySelector('.form-actions');
+            
+            if (isMobile && fabContainer) {
+                console.log('🚨 EMERGENCY: Forcing FAB visibility on mobile');
+                
+                // Force show FAB container
+                fabContainer.style.display = 'block';
+                fabContainer.style.position = 'fixed';
+                fabContainer.style.bottom = '0';
+                fabContainer.style.left = '0';
+                fabContainer.style.right = '0';
+                fabContainer.style.zIndex = '999999999';
+                fabContainer.style.pointerEvents = 'none';
+                
+                // Force hide original form actions
+                if (formActions) {
+                    formActions.style.display = 'none';
+                }
+                
+                // Style FAB buttons
+                const fabs = fabContainer.querySelectorAll('.fab');
+                fabs.forEach(fab => {
+                    fab.style.position = 'absolute';
+                    fab.style.width = '80px';
+                    fab.style.height = '80px';
+                    fab.style.borderRadius = '50%';
+                    fab.style.border = '4px solid white';
+                    fab.style.pointerEvents = 'auto';
+                    fab.style.display = 'flex';
+                    fab.style.flexDirection = 'column';
+                    fab.style.alignItems = 'center';
+                    fab.style.justifyContent = 'center';
+                    fab.style.fontSize = '12px';
+                    fab.style.fontWeight = '800';
+                    fab.style.textAlign = 'center';
+                    fab.style.boxShadow = '0 12px 40px rgba(0,0,0,0.8)';
+                    fab.style.transition = 'all 0.2s ease';
+                    fab.style.webkitTapHighlightColor = 'transparent';
+                    fab.style.transform = 'translateZ(0)';
+                    fab.style.webkitTransform = 'translateZ(0)';
+                    fab.style.willChange = 'transform';
+                    fab.style.webkitAppearance = 'none';
+                    fab.style.appearance = 'none';
+                });
+                
+                // Style primary FAB (green)
+                const primaryFab = document.getElementById('mobile-submit-btn');
+                if (primaryFab) {
+                    primaryFab.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
+                    primaryFab.style.color = 'white';
+                    primaryFab.style.bottom = '30px';
+                    primaryFab.style.right = '30px';
+                }
+                
+                // Style secondary FAB (red)
+                const secondaryFab = document.getElementById('mobile-reset-btn');
+                if (secondaryFab) {
+                    secondaryFab.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
+                    secondaryFab.style.color = 'white';
+                    secondaryFab.style.bottom = '30px';
+                    secondaryFab.style.right = '130px';
+                }
+                
+                // Style FAB icons
+                const fabIcons = fabContainer.querySelectorAll('.fab-icon');
+                fabIcons.forEach(icon => {
+                    icon.style.fontSize = '32px';
+                    icon.style.lineHeight = '1';
+                    icon.style.marginBottom = '2px';
+                });
+                
+                // Style FAB text
+                const fabTexts = fabContainer.querySelectorAll('.fab-text');
+                fabTexts.forEach(text => {
+                    text.style.fontSize = '11px';
+                    text.style.lineHeight = '1';
+                    text.style.fontWeight = '700';
+                });
+                
+                // Style backdrop
+                const backdrop = fabContainer.querySelector('.fab-backdrop');
+                if (backdrop) {
+                    backdrop.style.position = 'absolute';
+                    backdrop.style.bottom = '0';
+                    backdrop.style.left = '0';
+                    backdrop.style.right = '0';
+                    backdrop.style.height = '140px';
+                    backdrop.style.background = 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)';
+                    backdrop.style.pointerEvents = 'none';
+                }
+                
+                console.log('✅ FAB forced to be visible');
+            }
+        }
+        
+        // Run immediately and on load
+        forceMobileFAB();
+        document.addEventListener('DOMContentLoaded', forceMobileFAB);
+        window.addEventListener('load', forceMobileFAB);
+        window.addEventListener('resize', forceMobileFAB);
+    </script>
     
     <!-- Application JavaScript Modules -->
     <script src="js/version-manager.js"></script>
