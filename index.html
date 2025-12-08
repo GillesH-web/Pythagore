@@ -12,7 +12,7 @@
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
     <title>Numérologie de Pythagore v1.9.1</title>
-    <!-- Updated: 2025-12-08 11:08 - Ultra Compact Form + Optimized iPhone Layout -->
+    <!-- Updated: 2025-12-08 11:15 - Nuclear Output Visibility Fix + Regression Testing -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:08</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:15</span></h1>
         </header>
 
         <div class="main-content">
@@ -411,49 +411,8 @@
                     `;
                 });
                 
-                // STEP 2.5: Hide optional fields on mobile to save space
-                const optionalFields = leftPanel.querySelectorAll('#firstName2, #firstName3');
-                optionalFields.forEach(field => {
-                    const fieldGroup = field.closest('.form-group');
-                    if (fieldGroup) {
-                        fieldGroup.style.display = 'none !important';
-                    }
-                });
-                
-                // STEP 2.6: Add toggle button for optional fields
-                const toggleBtn = document.createElement('button');
-                toggleBtn.type = 'button';
-                toggleBtn.innerHTML = '+ Prénoms supplémentaires';
-                toggleBtn.style.cssText = `
-                    width: 100% !important;
-                    padding: 8px !important;
-                    background: #ecf0f1 !important;
-                    border: 1px solid #bdc3c7 !important;
-                    border-radius: 6px !important;
-                    color: #7f8c8d !important;
-                    font-size: 14px !important;
-                    margin-bottom: 8px !important;
-                    cursor: pointer !important;
-                    -webkit-tap-highlight-color: transparent !important;
-                `;
-                
-                let optionalVisible = false;
-                toggleBtn.addEventListener('click', function() {
-                    optionalVisible = !optionalVisible;
-                    optionalFields.forEach(field => {
-                        const fieldGroup = field.closest('.form-group');
-                        if (fieldGroup) {
-                            fieldGroup.style.display = optionalVisible ? 'block !important' : 'none !important';
-                        }
-                    });
-                    this.innerHTML = optionalVisible ? '- Masquer prénoms supplémentaires' : '+ Prénoms supplémentaires';
-                });
-                
-                // Insert toggle button after first name field
-                const firstName1Group = leftPanel.querySelector('#firstName1').closest('.form-group');
-                if (firstName1Group && firstName1Group.nextElementSibling) {
-                    firstName1Group.parentNode.insertBefore(toggleBtn, firstName1Group.nextElementSibling);
-                }
+                // STEP 2.5: Keep all fields visible but compact
+                // All form fields remain visible with compact styling
                 
                 // STEP 3: Make right panel (results) take most of the space
                 const rightPanel = document.querySelector('.right-panel');
@@ -616,6 +575,155 @@
         document.addEventListener('DOMContentLoaded', createUltraMobileLayout);
         window.addEventListener('load', createUltraMobileLayout);
         window.addEventListener('resize', createUltraMobileLayout);
+        
+        // NUCLEAR OUTPUT VISIBILITY FIX
+        function forceOutputVisibility() {
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('🚨 NUCLEAR: Forcing output visibility on iPhone');
+                
+                // Force show all result containers when they have content
+                const resultContainers = document.querySelectorAll('#results-container, #cycles-container, #realization-container');
+                resultContainers.forEach(container => {
+                    if (container && container.children.length > 0) {
+                        container.style.cssText = `
+                            display: block !important;
+                            visibility: visible !important;
+                            opacity: 1 !important;
+                            position: relative !important;
+                            z-index: 1000 !important;
+                            background: white !important;
+                            padding: 15px !important;
+                            margin: 10px 0 !important;
+                            border: 2px solid #3498db !important;
+                            border-radius: 8px !important;
+                            min-height: 200px !important;
+                            overflow: visible !important;
+                        `;
+                    }
+                });
+                
+                // Force show all result items
+                const resultItems = document.querySelectorAll('.result-item, .cycle-item, .realization-item');
+                resultItems.forEach(item => {
+                    item.style.cssText = `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        background: #f8f9fa !important;
+                        border: 2px solid #e9ecef !important;
+                        border-radius: 8px !important;
+                        padding: 20px !important;
+                        margin: 10px 0 !important;
+                        text-align: center !important;
+                        min-height: 80px !important;
+                        font-size: 16px !important;
+                        line-height: 1.4 !important;
+                        color: #2c3e50 !important;
+                        position: relative !important;
+                        z-index: 1001 !important;
+                    `;
+                });
+                
+                // Force show result values
+                const resultValues = document.querySelectorAll('.result-value, .cycle-value, .realization-value');
+                resultValues.forEach(value => {
+                    value.style.cssText = `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        font-size: 24px !important;
+                        font-weight: bold !important;
+                        color: #27ae60 !important;
+                        margin: 10px 0 !important;
+                        text-align: center !important;
+                        line-height: 1.2 !important;
+                    `;
+                });
+                
+                // Force show result titles
+                const resultTitles = document.querySelectorAll('.result-item h3, .cycle-item h3, .realization-item h3');
+                resultTitles.forEach(title => {
+                    title.style.cssText = `
+                        display: block !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        color: #2c3e50 !important;
+                        font-size: 16px !important;
+                        font-weight: bold !important;
+                        margin-bottom: 10px !important;
+                        text-align: center !important;
+                    `;
+                });
+                
+                // Force show occurrence tables
+                const occurrenceTables = document.querySelectorAll('.occurrence-table');
+                occurrenceTables.forEach(table => {
+                    table.style.cssText = `
+                        display: table !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        width: 100% !important;
+                        margin: 10px auto !important;
+                        border-collapse: collapse !important;
+                        font-size: 14px !important;
+                        background: white !important;
+                    `;
+                });
+                
+                // Force show table cells
+                const tableCells = document.querySelectorAll('.occurrence-table th, .occurrence-table td');
+                tableCells.forEach(cell => {
+                    cell.style.cssText = `
+                        display: table-cell !important;
+                        visibility: visible !important;
+                        opacity: 1 !important;
+                        border: 1px solid #ddd !important;
+                        padding: 8px !important;
+                        text-align: center !important;
+                        font-size: 14px !important;
+                        line-height: 1.2 !important;
+                    `;
+                });
+                
+                // Hide empty states when results are present
+                const emptyStates = document.querySelectorAll('.empty-state');
+                emptyStates.forEach(state => {
+                    const parentArea = state.closest('.results-area, .cycles-area, .realization-area');
+                    if (parentArea) {
+                        const resultContainer = parentArea.querySelector('[id$="-container"]');
+                        if (resultContainer && resultContainer.children.length > 0) {
+                            state.style.display = 'none !important';
+                        }
+                    }
+                });
+                
+                console.log('✅ NUCLEAR: Output visibility forced');
+            }
+        }
+        
+        // Run output visibility fix
+        forceOutputVisibility();
+        document.addEventListener('DOMContentLoaded', forceOutputVisibility);
+        window.addEventListener('load', forceOutputVisibility);
+        
+        // Also run after any DOM changes (when results are added)
+        const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                    setTimeout(forceOutputVisibility, 100);
+                }
+            });
+        });
+        
+        // Start observing
+        document.addEventListener('DOMContentLoaded', function() {
+            observer.observe(document.body, {
+                childList: true,
+                subtree: true
+            });
+        });
     </script>
     
     <!-- Application JavaScript Modules -->

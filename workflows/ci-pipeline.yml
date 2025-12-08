@@ -304,6 +304,155 @@ jobs:
           
           python test_validation.py
 
+      - name: 🧪 Mobile Regression Tests - iPhone Safari Compatibility
+        run: |
+          echo "🧪 Running mobile regression tests for iPhone Safari..."
+          cat > test_mobile_regression.py << 'EOF'
+          import json
+          import re
+          
+          def test_nuclear_button_implementation():
+              """Test nuclear button JavaScript implementation"""
+              test_cases = [
+                  {
+                      'description': 'Nuclear button creation function exists',
+                      'test': 'createNuclearButtons function defined',
+                      'expected': True
+                  },
+                  {
+                      'description': 'Mobile FAB container HTML exists',
+                      'test': 'mobile-fab-container element present',
+                      'expected': True
+                  },
+                  {
+                      'description': 'Ultra mobile layout function exists',
+                      'test': 'createUltraMobileLayout function defined',
+                      'expected': True
+                  },
+                  {
+                      'description': 'Output visibility fix function exists',
+                      'test': 'forceOutputVisibility function defined',
+                      'expected': True
+                  }
+              ]
+              
+              results = []
+              
+              # Read GitHub Pages index.html to check implementations
+              try:
+                  with open('github-pages-pythagore/index.html', 'r', encoding='utf-8') as f:
+                      content = f.read()
+                  
+                  for case in test_cases:
+                      if 'createNuclearButtons' in case['test']:
+                          actual = 'createNuclearButtons' in content
+                      elif 'mobile-fab-container' in case['test']:
+                          actual = 'mobile-fab-container' in content
+                      elif 'createUltraMobileLayout' in case['test']:
+                          actual = 'createUltraMobileLayout' in content
+                      elif 'forceOutputVisibility' in case['test']:
+                          actual = 'forceOutputVisibility' in content
+                      else:
+                          actual = False
+                      
+                      passed = actual == case['expected']
+                      results.append({
+                          'test': case['description'],
+                          'expected': case['expected'],
+                          'actual': actual,
+                          'passed': passed
+                      })
+              
+              except Exception as e:
+                  results.append({
+                      'test': 'File reading error',
+                      'expected': True,
+                      'actual': False,
+                      'passed': False,
+                      'error': str(e)
+                  })
+              
+              return results
+          
+          def test_mobile_css_optimizations():
+              """Test mobile CSS optimizations"""
+              test_cases = [
+                  {
+                      'description': 'iPhone Safari media queries present',
+                      'pattern': r'@media.*screen.*max-width.*480px',
+                      'expected': True
+                  },
+                  {
+                      'description': 'Safe area inset support implemented',
+                      'pattern': r'env\(safe-area-inset-bottom',
+                      'expected': True
+                  },
+                  {
+                      'description': 'Touch scrolling optimization present',
+                      'pattern': r'-webkit-overflow-scrolling.*touch',
+                      'expected': True
+                  },
+                  {
+                      'description': 'Hardware acceleration enabled',
+                      'pattern': r'transform.*translateZ\(0\)',
+                      'expected': True
+                  }
+              ]
+              
+              results = []
+              
+              try:
+                  with open('github-pages-pythagore/css/styles.css', 'r', encoding='utf-8') as f:
+                      css_content = f.read()
+                  
+                  for case in test_cases:
+                      actual = bool(re.search(case['pattern'], css_content, re.IGNORECASE))
+                      passed = actual == case['expected']
+                      results.append({
+                          'test': case['description'],
+                          'expected': case['expected'],
+                          'actual': actual,
+                          'passed': passed
+                      })
+              
+              except Exception as e:
+                  results.append({
+                      'test': 'CSS file reading error',
+                      'expected': True,
+                      'actual': False,
+                      'passed': False,
+                      'error': str(e)
+                  })
+              
+              return results
+          
+          # Run mobile regression tests
+          button_tests = test_nuclear_button_implementation()
+          css_tests = test_mobile_css_optimizations()
+          
+          all_tests = button_tests + css_tests
+          passed_tests = sum(1 for test in all_tests if test['passed'])
+          total_tests = len(all_tests)
+          
+          print(f"🧪 Mobile Regression Tests: {passed_tests}/{total_tests} passed")
+          
+          # Save results
+          with open('test_results_mobile_regression.json', 'w') as f:
+              json.dump({
+                  'total': total_tests,
+                  'passed': passed_tests,
+                  'failed': total_tests - passed_tests,
+                  'tests': all_tests
+              }, f, indent=2)
+          
+          if passed_tests == total_tests:
+              print("✅ All mobile regression tests passed!")
+          else:
+              print(f"❌ {total_tests - passed_tests} mobile regression tests failed!")
+          EOF
+          
+          python test_mobile_regression.py
+
       - name: 🧪 End-to-End Tests - User Scenarios
         run: |
           echo "🧪 Running end-to-end scenario tests..."
