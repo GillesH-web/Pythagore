@@ -12,7 +12,7 @@
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
     <title>Numérologie de Pythagore v1.9.1</title>
-    <!-- Updated: 2025-12-08 10:40 - iPhone Safari Button Fix + Emergency Mobile Optimization -->
+    <!-- Updated: 2025-12-08 10:49 - Nuclear iPhone Safari Button Fix -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 10:40</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 10:49</span></h1>
         </header>
 
         <div class="main-content">
@@ -133,112 +133,196 @@
     <!-- External JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- Emergency Mobile Fix Script -->
+    <!-- NUCLEAR OPTION: Create buttons from scratch with JavaScript -->
     <script>
-        // EMERGENCY: Force FAB visibility on mobile devices
-        function forceMobileFAB() {
+        // NUCLEAR: Create completely new buttons that bypass all CSS issues
+        function createNuclearButtons() {
             const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            const fabContainer = document.getElementById('mobile-fab-container');
-            const formActions = document.querySelector('.form-actions');
             
-            if (isMobile && fabContainer) {
-                console.log('🚨 EMERGENCY: Forcing FAB visibility on mobile');
+            if (isMobile) {
+                console.log('🚨 NUCLEAR: Creating buttons from scratch for iPhone');
                 
-                // Force show FAB container
-                fabContainer.style.display = 'block';
-                fabContainer.style.position = 'fixed';
-                fabContainer.style.bottom = '0';
-                fabContainer.style.left = '0';
-                fabContainer.style.right = '0';
-                fabContainer.style.zIndex = '999999999';
-                fabContainer.style.pointerEvents = 'none';
+                // Remove any existing mobile buttons
+                const existingNuclear = document.getElementById('nuclear-buttons');
+                if (existingNuclear) {
+                    existingNuclear.remove();
+                }
                 
-                // Force hide original form actions
+                // Hide original form actions completely
+                const formActions = document.querySelector('.form-actions');
                 if (formActions) {
-                    formActions.style.display = 'none';
+                    formActions.style.display = 'none !important';
                 }
                 
-                // Style FAB buttons
-                const fabs = fabContainer.querySelectorAll('.fab');
-                fabs.forEach(fab => {
-                    fab.style.position = 'absolute';
-                    fab.style.width = '80px';
-                    fab.style.height = '80px';
-                    fab.style.borderRadius = '50%';
-                    fab.style.border = '4px solid white';
-                    fab.style.pointerEvents = 'auto';
-                    fab.style.display = 'flex';
-                    fab.style.flexDirection = 'column';
-                    fab.style.alignItems = 'center';
-                    fab.style.justifyContent = 'center';
-                    fab.style.fontSize = '12px';
-                    fab.style.fontWeight = '800';
-                    fab.style.textAlign = 'center';
-                    fab.style.boxShadow = '0 12px 40px rgba(0,0,0,0.8)';
-                    fab.style.transition = 'all 0.2s ease';
-                    fab.style.webkitTapHighlightColor = 'transparent';
-                    fab.style.transform = 'translateZ(0)';
-                    fab.style.webkitTransform = 'translateZ(0)';
-                    fab.style.willChange = 'transform';
-                    fab.style.webkitAppearance = 'none';
-                    fab.style.appearance = 'none';
+                // Create nuclear button container
+                const nuclearContainer = document.createElement('div');
+                nuclearContainer.id = 'nuclear-buttons';
+                nuclearContainer.style.cssText = `
+                    position: fixed !important;
+                    bottom: 0px !important;
+                    left: 0px !important;
+                    right: 0px !important;
+                    width: 100vw !important;
+                    height: 120px !important;
+                    z-index: 2147483647 !important;
+                    pointer-events: none !important;
+                    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%) !important;
+                `;
+                
+                // Create CALCULATE button
+                const calculateBtn = document.createElement('button');
+                calculateBtn.id = 'nuclear-calculate';
+                calculateBtn.innerHTML = '⚙️<br>CALCULER';
+                calculateBtn.disabled = true;
+                calculateBtn.style.cssText = `
+                    position: absolute !important;
+                    bottom: 20px !important;
+                    right: 20px !important;
+                    width: 90px !important;
+                    height: 90px !important;
+                    border-radius: 50% !important;
+                    border: 5px solid #ffffff !important;
+                    background: #27ae60 !important;
+                    color: #ffffff !important;
+                    font-size: 14px !important;
+                    font-weight: 900 !important;
+                    text-align: center !important;
+                    line-height: 1.2 !important;
+                    box-shadow: 0 15px 50px rgba(0,0,0,0.9) !important;
+                    cursor: pointer !important;
+                    pointer-events: auto !important;
+                    -webkit-tap-highlight-color: transparent !important;
+                    -webkit-appearance: none !important;
+                    appearance: none !important;
+                    transform: translateZ(0) !important;
+                    -webkit-transform: translateZ(0) !important;
+                    will-change: transform !important;
+                `;
+                
+                // Create RESET button
+                const resetBtn = document.createElement('button');
+                resetBtn.id = 'nuclear-reset';
+                resetBtn.innerHTML = '🔄<br>RESET';
+                resetBtn.style.cssText = `
+                    position: absolute !important;
+                    bottom: 20px !important;
+                    right: 130px !important;
+                    width: 90px !important;
+                    height: 90px !important;
+                    border-radius: 50% !important;
+                    border: 5px solid #ffffff !important;
+                    background: #e74c3c !important;
+                    color: #ffffff !important;
+                    font-size: 14px !important;
+                    font-weight: 900 !important;
+                    text-align: center !important;
+                    line-height: 1.2 !important;
+                    box-shadow: 0 15px 50px rgba(0,0,0,0.9) !important;
+                    cursor: pointer !important;
+                    pointer-events: auto !important;
+                    -webkit-tap-highlight-color: transparent !important;
+                    -webkit-appearance: none !important;
+                    appearance: none !important;
+                    transform: translateZ(0) !important;
+                    -webkit-transform: translateZ(0) !important;
+                    will-change: transform !important;
+                `;
+                
+                // Add touch feedback
+                [calculateBtn, resetBtn].forEach(btn => {
+                    btn.addEventListener('touchstart', function() {
+                        this.style.transform = 'translateZ(0) scale(0.95) !important';
+                        this.style.webkitTransform = 'translateZ(0) scale(0.95) !important';
+                    });
+                    
+                    btn.addEventListener('touchend', function() {
+                        this.style.transform = 'translateZ(0) scale(1) !important';
+                        this.style.webkitTransform = 'translateZ(0) scale(1) !important';
+                    });
                 });
                 
-                // Style primary FAB (green)
-                const primaryFab = document.getElementById('mobile-submit-btn');
-                if (primaryFab) {
-                    primaryFab.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%)';
-                    primaryFab.style.color = 'white';
-                    primaryFab.style.bottom = '30px';
-                    primaryFab.style.right = '30px';
-                }
+                // Add buttons to container
+                nuclearContainer.appendChild(calculateBtn);
+                nuclearContainer.appendChild(resetBtn);
                 
-                // Style secondary FAB (red)
-                const secondaryFab = document.getElementById('mobile-reset-btn');
-                if (secondaryFab) {
-                    secondaryFab.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%)';
-                    secondaryFab.style.color = 'white';
-                    secondaryFab.style.bottom = '30px';
-                    secondaryFab.style.right = '130px';
-                }
+                // Add container to body
+                document.body.appendChild(nuclearContainer);
                 
-                // Style FAB icons
-                const fabIcons = fabContainer.querySelectorAll('.fab-icon');
-                fabIcons.forEach(icon => {
-                    icon.style.fontSize = '32px';
-                    icon.style.lineHeight = '1';
-                    icon.style.marginBottom = '2px';
+                // Connect to form functionality
+                const form = document.getElementById('client-form');
+                
+                // Calculate button functionality
+                calculateBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🚨 NUCLEAR: Calculate button clicked');
+                    if (form && !this.disabled) {
+                        const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                        form.dispatchEvent(submitEvent);
+                    }
                 });
                 
-                // Style FAB text
-                const fabTexts = fabContainer.querySelectorAll('.fab-text');
-                fabTexts.forEach(text => {
-                    text.style.fontSize = '11px';
-                    text.style.lineHeight = '1';
-                    text.style.fontWeight = '700';
+                // Reset button functionality
+                resetBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🚨 NUCLEAR: Reset button clicked');
+                    if (form) {
+                        form.reset();
+                        // Trigger reset event
+                        const resetEvent = new Event('reset', { bubbles: true });
+                        form.dispatchEvent(resetEvent);
+                        
+                        // Clear any error states
+                        document.querySelectorAll('.form-group').forEach(group => {
+                            group.classList.remove('error');
+                        });
+                        document.querySelectorAll('.error-message').forEach(error => {
+                            error.classList.remove('show');
+                        });
+                        
+                        // Disable calculate button
+                        calculateBtn.disabled = true;
+                        calculateBtn.style.background = '#95a5a6 !important';
+                        calculateBtn.style.opacity = '0.7 !important';
+                    }
                 });
                 
-                // Style backdrop
-                const backdrop = fabContainer.querySelector('.fab-backdrop');
-                if (backdrop) {
-                    backdrop.style.position = 'absolute';
-                    backdrop.style.bottom = '0';
-                    backdrop.style.left = '0';
-                    backdrop.style.right = '0';
-                    backdrop.style.height = '140px';
-                    backdrop.style.background = 'linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)';
-                    backdrop.style.pointerEvents = 'none';
+                // Form validation to enable/disable calculate button
+                function updateCalculateButton() {
+                    const firstName1 = document.getElementById('firstName1').value.trim();
+                    const lastName = document.getElementById('lastName').value.trim();
+                    const birthDate = document.getElementById('birthDate').value;
+                    
+                    const isValid = firstName1 && lastName && birthDate;
+                    
+                    calculateBtn.disabled = !isValid;
+                    if (isValid) {
+                        calculateBtn.style.background = '#27ae60 !important';
+                        calculateBtn.style.opacity = '1 !important';
+                    } else {
+                        calculateBtn.style.background = '#95a5a6 !important';
+                        calculateBtn.style.opacity = '0.7 !important';
+                    }
                 }
                 
-                console.log('✅ FAB forced to be visible');
+                // Listen for form changes
+                const inputs = form.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.addEventListener('input', updateCalculateButton);
+                    input.addEventListener('change', updateCalculateButton);
+                });
+                
+                // Initial validation
+                updateCalculateButton();
+                
+                console.log('✅ NUCLEAR: Buttons created and functional');
             }
         }
         
-        // Run immediately and on load
-        forceMobileFAB();
-        document.addEventListener('DOMContentLoaded', forceMobileFAB);
-        window.addEventListener('load', forceMobileFAB);
-        window.addEventListener('resize', forceMobileFAB);
+        // Run nuclear option immediately
+        createNuclearButtons();
+        document.addEventListener('DOMContentLoaded', createNuclearButtons);
+        window.addEventListener('load', createNuclearButtons);
+        window.addEventListener('resize', createNuclearButtons);
     </script>
     
     <!-- Application JavaScript Modules -->
