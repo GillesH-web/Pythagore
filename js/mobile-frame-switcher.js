@@ -198,14 +198,16 @@ class MobileFrameSwitcher {
                 calculateBtn.style.pointerEvents = 'none !important';
             }
             if (resetBtn) {
-                // Apply exact same styling as Reset button has in Frame 1
+                // CENTER the Reset button in Frame 2 for maximum visibility
                 resetBtn.style.display = 'block !important';
                 resetBtn.style.visibility = 'visible !important';
                 resetBtn.style.opacity = '1 !important';
                 resetBtn.style.pointerEvents = 'auto !important';
-                resetBtn.style.position = 'absolute !important';
-                resetBtn.style.right = '104px !important';
+                resetBtn.style.position = 'fixed !important';
+                resetBtn.style.left = '50% !important';
                 resetBtn.style.bottom = '20px !important';
+                resetBtn.style.transform = 'translateX(-50%) translateZ(0) !important';
+                resetBtn.style.webkitTransform = 'translateX(-50%) translateZ(0) !important';
                 resetBtn.style.width = '72px !important';
                 resetBtn.style.height = '72px !important';
                 resetBtn.style.borderRadius = '50% !important';
@@ -218,14 +220,13 @@ class MobileFrameSwitcher {
                 resetBtn.style.lineHeight = '1.2 !important';
                 resetBtn.style.boxShadow = '0 12px 40px rgba(0,0,0,0.9) !important';
                 resetBtn.style.cursor = 'pointer !important';
-                resetBtn.style.zIndex = '2147483647 !important';
+                resetBtn.style.zIndex = '2147483648 !important';
                 resetBtn.style.webkitTapHighlightColor = 'transparent !important';
                 resetBtn.style.webkitAppearance = 'none !important';
                 resetBtn.style.appearance = 'none !important';
-                resetBtn.style.transform = 'translateZ(0) !important';
-                resetBtn.style.webkitTransform = 'translateZ(0) !important';
                 resetBtn.style.willChange = 'transform !important';
-                console.log('📱 Reset button styled for Frame 2');
+                resetBtn.style.margin = '0 !important';
+                console.log('📱 Reset button CENTERED for Frame 2');
             }
             
             // AGGRESSIVELY ensure nuclear container is visible and positioned correctly
