@@ -30,7 +30,15 @@ class ResultsDisplay {
         
         document.getElementById('empty-state').style.display = 'none';
         resultsContainer.style.display = 'grid';
-        document.getElementById('panel-actions').style.display = 'flex';
+        
+        // Only show panel actions on desktop (hide on mobile)
+        const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+        const panelActions = document.getElementById('panel-actions');
+        if (panelActions && !isMobile) {
+            panelActions.style.display = 'flex';
+        } else if (panelActions && isMobile) {
+            panelActions.style.display = 'none';
+        }
         
         console.log('✅ Results displayed successfully');
     }

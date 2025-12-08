@@ -179,10 +179,13 @@ class StateSyncManager {
             const emptyStates = document.querySelectorAll('.empty-state');
             emptyStates.forEach(state => state.style.display = 'none');
             
-            // Show panel actions
+            // Show panel actions (only on desktop, hide on mobile)
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             const panelActions = document.getElementById('panel-actions');
-            if (panelActions) {
+            if (panelActions && !isMobile) {
                 panelActions.style.display = 'flex';
+            } else if (panelActions && isMobile) {
+                panelActions.style.display = 'none';
             }
             
             // Restore active tab

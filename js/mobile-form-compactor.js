@@ -19,7 +19,7 @@ function compactMobileForm() {
     
     // Calculate available space (viewport - header - buttons)
     const headerHeight = 60; // Approximate header height
-    const buttonHeight = 120; // Fixed button area height
+    const buttonHeight = 100; // Reduced button area height for tighter spacing
     const availableHeight = viewportHeight - headerHeight - buttonHeight;
     
     console.log(`📱 Available height for form: ${availableHeight}px`);
@@ -40,7 +40,7 @@ function compactMobileForm() {
         max-height: ${availableHeight}px !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        padding: 8px 12px 5px 12px !important;
+        padding: 8px 12px 2px 12px !important;
         margin-bottom: 0 !important;
     `;
     
@@ -105,15 +105,43 @@ function compactMobileForm() {
     const formActions = document.querySelector('.form-actions');
     if (formActions) {
         formActions.style.display = 'none !important';
+        formActions.style.visibility = 'hidden !important';
+        formActions.style.opacity = '0 !important';
+        formActions.style.pointerEvents = 'none !important';
     }
     
-    // HIDE panel action buttons (PDF, Print) on mobile
+    // HIDE panel action buttons (PDF, Print) on mobile - AGGRESSIVE
     const panelActions = document.querySelector('.panel-actions');
     if (panelActions) {
         panelActions.style.display = 'none !important';
+        panelActions.style.visibility = 'hidden !important';
+        panelActions.style.opacity = '0 !important';
+        panelActions.style.pointerEvents = 'none !important';
+        panelActions.style.height = '0 !important';
+        panelActions.style.overflow = 'hidden !important';
     }
     
-    // Ensure the round floating buttons (nuclear buttons) are visible
+    // HIDE individual PDF and Print buttons by ID
+    const pdfBtn = document.getElementById('generate-pdf-btn');
+    if (pdfBtn) {
+        pdfBtn.style.display = 'none !important';
+        pdfBtn.style.visibility = 'hidden !important';
+    }
+    
+    const printBtn = document.getElementById('print-results-btn');
+    if (printBtn) {
+        printBtn.style.display = 'none !important';
+        printBtn.style.visibility = 'hidden !important';
+    }
+    
+    // HIDE all action buttons in right panel
+    const actionButtons = document.querySelectorAll('.action-btn, .pdf-btn, .print-btn');
+    actionButtons.forEach(btn => {
+        btn.style.display = 'none !important';
+        btn.style.visibility = 'hidden !important';
+    });
+    
+    // Ensure the round floating buttons (nuclear buttons) are visible with minimal padding
     const nuclearButtons = document.getElementById('nuclear-buttons');
     if (nuclearButtons) {
         nuclearButtons.style.cssText = `
@@ -129,7 +157,7 @@ function compactMobileForm() {
             display: flex !important;
             align-items: flex-end !important;
             justify-content: flex-end !important;
-            padding: 15px !important;
+            padding: 10px !important;
         `;
     }
     
@@ -156,7 +184,7 @@ function compactMobileForm() {
         `;
     }
     
-    // Optimize right panel (Frame 2) spacing
+    // Optimize right panel (Frame 2) spacing - minimal bottom padding
     const rightPanel = document.querySelector('.right-panel');
     if (rightPanel) {
         rightPanel.style.cssText = `
@@ -164,7 +192,7 @@ function compactMobileForm() {
             max-height: ${availableHeight}px !important;
             overflow-y: auto !important;
             -webkit-overflow-scrolling: touch !important;
-            padding: 8px 12px 5px 12px !important;
+            padding: 8px 12px 2px 12px !important;
             margin-bottom: 0 !important;
         `;
     }
