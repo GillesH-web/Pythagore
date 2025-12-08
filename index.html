@@ -12,7 +12,7 @@
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
     <title>Numérologie de Pythagore v1.9.1</title>
-    <!-- Updated: 2025-12-08 11:15 - Nuclear Output Visibility Fix + Regression Testing -->
+    <!-- Updated: 2025-12-08 11:32 - Mobile Frame Switching Implementation -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:15</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:20</span></h1>
         </header>
 
         <div class="main-content">
@@ -576,6 +576,466 @@
         window.addEventListener('load', createUltraMobileLayout);
         window.addEventListener('resize', createUltraMobileLayout);
         
+        // FINAL NUCLEAR: Complete Mobile Interface Replacement
+        function createMobileOnlyInterface() {
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('🚨 FINAL NUCLEAR: Creating complete mobile-only interface');
+                
+                // STEP 1: Hide the entire right panel
+                const rightPanel = document.querySelector('.right-panel');
+                if (rightPanel) {
+                    rightPanel.style.display = 'none !important';
+                }
+                
+                // STEP 2: Create a brand new mobile results container
+                let mobileResults = document.getElementById('mobile-results-interface');
+                if (mobileResults) {
+                    mobileResults.remove();
+                }
+                
+                mobileResults = document.createElement('div');
+                mobileResults.id = 'mobile-results-interface';
+                mobileResults.style.cssText = `
+                    position: fixed !important;
+                    top: 50vh !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    bottom: 120px !important;
+                    background: white !important;
+                    border: 3px solid #3498db !important;
+                    border-radius: 12px 12px 0 0 !important;
+                    z-index: 1000000 !important;
+                    overflow-y: auto !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    padding: 20px !important;
+                    box-shadow: 0 -10px 30px rgba(0,0,0,0.3) !important;
+                `;
+                
+                // STEP 3: Create mobile tab navigation
+                const mobileTabNav = document.createElement('div');
+                mobileTabNav.style.cssText = `
+                    display: flex !important;
+                    margin-bottom: 20px !important;
+                    border-bottom: 2px solid #ecf0f1 !important;
+                    padding-bottom: 10px !important;
+                `;
+                
+                const tabs = [
+                    { id: 'mobile-tab1', label: 'Piliers', active: true },
+                    { id: 'mobile-tab2', label: 'Cycles', active: false },
+                    { id: 'mobile-tab3', label: 'Réalisation', active: false }
+                ];
+                
+                tabs.forEach(tab => {
+                    const tabBtn = document.createElement('button');
+                    tabBtn.id = tab.id;
+                    tabBtn.textContent = tab.label;
+                    tabBtn.style.cssText = `
+                        flex: 1 !important;
+                        padding: 15px 10px !important;
+                        border: none !important;
+                        background: ${tab.active ? '#3498db' : '#f8f9fa'} !important;
+                        color: ${tab.active ? 'white' : '#7f8c8d'} !important;
+                        font-size: 16px !important;
+                        font-weight: 700 !important;
+                        border-radius: 8px !important;
+                        margin: 0 3px !important;
+                        cursor: pointer !important;
+                        -webkit-tap-highlight-color: transparent !important;
+                    `;
+                    
+                    tabBtn.addEventListener('click', function() {
+                        // Update tab states
+                        mobileTabNav.querySelectorAll('button').forEach(btn => {
+                            btn.style.background = '#f8f9fa !important';
+                            btn.style.color = '#7f8c8d !important';
+                        });
+                        this.style.background = '#3498db !important';
+                        this.style.color = 'white !important';
+                        
+                        // Show corresponding content
+                        showMobileTabContent(tab.id);
+                    });
+                    
+                    mobileTabNav.appendChild(tabBtn);
+                });
+                
+                // STEP 4: Create mobile content area
+                const mobileContent = document.createElement('div');
+                mobileContent.id = 'mobile-content-area';
+                mobileContent.style.cssText = `
+                    min-height: 300px !important;
+                    background: white !important;
+                    padding: 10px !important;
+                `;
+                
+                // STEP 5: Add initial empty state
+                mobileContent.innerHTML = `
+                    <div id="mobile-empty-state" style="
+                        text-align: center !important;
+                        color: #7f8c8d !important;
+                        font-size: 18px !important;
+                        padding: 40px 20px !important;
+                        background: #f8f9fa !important;
+                        border-radius: 12px !important;
+                        border: 2px dashed #bdc3c7 !important;
+                        line-height: 1.5 !important;
+                    ">
+                        Remplissez le formulaire et appuyez sur CALCULER pour voir vos résultats ici.
+                    </div>
+                `;
+                
+                // STEP 6: Assemble mobile interface
+                mobileResults.appendChild(mobileTabNav);
+                mobileResults.appendChild(mobileContent);
+                document.body.appendChild(mobileResults);
+                
+                console.log('✅ FINAL NUCLEAR: Mobile-only interface created');
+                
+                // STEP 7: Create mobile results display function
+                window.displayMobileResults = function(results) {
+                    console.log('📱 Displaying results in mobile interface:', results);
+                    
+                    const contentArea = document.getElementById('mobile-content-area');
+                    if (!contentArea) return;
+                    
+                    // Hide empty state
+                    const emptyState = document.getElementById('mobile-empty-state');
+                    if (emptyState) {
+                        emptyState.style.display = 'none';
+                    }
+                    
+                    // Create results HTML
+                    contentArea.innerHTML = `
+                        <div id="mobile-tab1-content" style="display: block;">
+                            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 20px;">📊 Piliers de Numérologie</h3>
+                            
+                            <div style="background: #e8f5e8; border: 2px solid #27ae60; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                                <h4 style="color: #2c3e50; margin-bottom: 10px;">Chemin de vie</h4>
+                                <div style="font-size: 36px; font-weight: bold; color: #27ae60;">${results.output1 || 'N/A'}</div>
+                            </div>
+                            
+                            <div style="background: #e8f4fd; border: 2px solid #3498db; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                                <h4 style="color: #2c3e50; margin-bottom: 10px;">Nombre d'expression</h4>
+                                <div style="font-size: 36px; font-weight: bold; color: #3498db;">${results.output3 || 'N/A'}</div>
+                            </div>
+                            
+                            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px;">
+                                <h4 style="color: #2c3e50; margin-bottom: 15px; text-align: center;">Grille d'inclusion</h4>
+                                <div id="mobile-inclusion-grid"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="mobile-tab2-content" style="display: none;">
+                            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 20px;">🔄 Cycles de Vie</h3>
+                            <div id="mobile-cycles-content"></div>
+                        </div>
+                        
+                        <div id="mobile-tab3-content" style="display: none;">
+                            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 20px;">🎯 Phase de Réalisation</h3>
+                            <div id="mobile-realization-content"></div>
+                        </div>
+                    `;
+                    
+                    // Add inclusion grid if available
+                    if (results.output2 && Array.isArray(results.output2)) {
+                        const gridContainer = document.getElementById('mobile-inclusion-grid');
+                        if (gridContainer) {
+                            let gridHTML = '<table style="width: 100%; border-collapse: collapse; font-size: 16px;">';
+                            gridHTML += '<tr style="background: #3498db; color: white;"><th style="padding: 10px; border: 1px solid #ddd;">Nombre</th><th style="padding: 10px; border: 1px solid #ddd;">Occurrences</th></tr>';
+                            
+                            results.output2.forEach(item => {
+                                gridHTML += `<tr><td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">${item.number}</td><td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.display}</td></tr>`;
+                            });
+                            
+                            gridHTML += '</table>';
+                            gridContainer.innerHTML = gridHTML;
+                        }
+                    }
+                    
+                    // Add cycles if available
+                    if (results.cycles) {
+                        const cyclesContainer = document.getElementById('mobile-cycles-content');
+                        if (cyclesContainer) {
+                            let cyclesHTML = '';
+                            Object.values(results.cycles).forEach(cycle => {
+                                cyclesHTML += `
+                                    <div style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+                                        <h4 style="color: #2c3e50; margin-bottom: 10px;">${cycle.label}</h4>
+                                        <p style="color: #6c757d; margin-bottom: 10px;">${cycle.ageRange}</p>
+                                        <div style="font-size: 32px; font-weight: bold; color: #27ae60; text-align: center;">${cycle.value}</div>
+                                    </div>
+                                `;
+                            });
+                            cyclesContainer.innerHTML = cyclesHTML;
+                        }
+                    }
+                    
+                    // Add realization if available
+                    if (results.realization) {
+                        const realizationContainer = document.getElementById('mobile-realization-content');
+                        if (realizationContainer) {
+                            let realizationHTML = '';
+                            Object.values(results.realization).forEach(item => {
+                                realizationHTML += `
+                                    <div style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+                                        <h4 style="color: #2c3e50; margin-bottom: 10px;">${item.label}</h4>
+                                        <p style="color: #6c757d; margin-bottom: 10px;">${item.description}</p>
+                                        <div style="font-size: 32px; font-weight: bold; color: #27ae60; text-align: center;">${item.value}</div>
+                                    </div>
+                                `;
+                            });
+                            realizationContainer.innerHTML = realizationHTML;
+                        }
+                    }
+                };
+                
+                // STEP 8: Create tab switching function
+                window.showMobileTabContent = function(activeTabId) {
+                    const contents = ['mobile-tab1-content', 'mobile-tab2-content', 'mobile-tab3-content'];
+                    contents.forEach(contentId => {
+                        const content = document.getElementById(contentId);
+                        if (content) {
+                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content' ? 'block' : 'none';
+                        }
+                    });
+                };
+            }
+        }
+        
+        // Run mobile interface replacement
+        createMobileOnlyInterface();
+        document.addEventListener('DOMContentLoaded', createMobileOnlyInterface);
+        window.addEventListener('load', createMobileOnlyInterface);
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('🚨 FINAL NUCLEAR: Creating complete mobile-only interface');
+                
+                // STEP 1: Hide the entire right panel
+                const rightPanel = document.querySelector('.right-panel');
+                if (rightPanel) {
+                    rightPanel.style.display = 'none !important';
+                }
+                
+                // STEP 2: Create a brand new mobile results container
+                let mobileResults = document.getElementById('mobile-results-interface');
+                if (mobileResults) {
+                    mobileResults.remove();
+                }
+                
+                mobileResults = document.createElement('div');
+                mobileResults.id = 'mobile-results-interface';
+                mobileResults.style.cssText = `
+                    position: fixed !important;
+                    top: 50vh !important;
+                    left: 0 !important;
+                    right: 0 !important;
+                    bottom: 120px !important;
+                    background: white !important;
+                    border: 3px solid #3498db !important;
+                    border-radius: 12px 12px 0 0 !important;
+                    z-index: 1000000 !important;
+                    overflow-y: auto !important;
+                    -webkit-overflow-scrolling: touch !important;
+                    padding: 20px !important;
+                    box-shadow: 0 -10px 30px rgba(0,0,0,0.3) !important;
+                `;
+                
+                // STEP 3: Create mobile tab navigation
+                const mobileTabNav = document.createElement('div');
+                mobileTabNav.style.cssText = `
+                    display: flex !important;
+                    margin-bottom: 20px !important;
+                    border-bottom: 2px solid #ecf0f1 !important;
+                    padding-bottom: 10px !important;
+                `;
+                
+                const tabs = [
+                    { id: 'mobile-tab1', label: 'Piliers', active: true },
+                    { id: 'mobile-tab2', label: 'Cycles', active: false },
+                    { id: 'mobile-tab3', label: 'Réalisation', active: false }
+                ];
+                
+                tabs.forEach(tab => {
+                    const tabBtn = document.createElement('button');
+                    tabBtn.id = tab.id;
+                    tabBtn.textContent = tab.label;
+                    tabBtn.style.cssText = `
+                        flex: 1 !important;
+                        padding: 15px 10px !important;
+                        border: none !important;
+                        background: ${tab.active ? '#3498db' : '#f8f9fa'} !important;
+                        color: ${tab.active ? 'white' : '#7f8c8d'} !important;
+                        font-size: 16px !important;
+                        font-weight: 700 !important;
+                        border-radius: 8px !important;
+                        margin: 0 3px !important;
+                        cursor: pointer !important;
+                        -webkit-tap-highlight-color: transparent !important;
+                    `;
+                    
+                    tabBtn.addEventListener('click', function() {
+                        // Update tab states
+                        mobileTabNav.querySelectorAll('button').forEach(btn => {
+                            btn.style.background = '#f8f9fa !important';
+                            btn.style.color = '#7f8c8d !important';
+                        });
+                        this.style.background = '#3498db !important';
+                        this.style.color = 'white !important';
+                        
+                        // Show corresponding content
+                        showMobileTabContent(tab.id);
+                    });
+                    
+                    mobileTabNav.appendChild(tabBtn);
+                });
+                
+                // STEP 4: Create mobile content area
+                const mobileContent = document.createElement('div');
+                mobileContent.id = 'mobile-content-area';
+                mobileContent.style.cssText = `
+                    min-height: 300px !important;
+                    background: white !important;
+                    padding: 10px !important;
+                `;
+                
+                // STEP 5: Add initial empty state
+                mobileContent.innerHTML = `
+                    <div id="mobile-empty-state" style="
+                        text-align: center !important;
+                        color: #7f8c8d !important;
+                        font-size: 18px !important;
+                        padding: 40px 20px !important;
+                        background: #f8f9fa !important;
+                        border-radius: 12px !important;
+                        border: 2px dashed #bdc3c7 !important;
+                        line-height: 1.5 !important;
+                    ">
+                        Remplissez le formulaire et appuyez sur CALCULER pour voir vos résultats ici.
+                    </div>
+                `;
+                
+                // STEP 6: Assemble mobile interface
+                mobileResults.appendChild(mobileTabNav);
+                mobileResults.appendChild(mobileContent);
+                document.body.appendChild(mobileResults);
+                
+                console.log('✅ FINAL NUCLEAR: Mobile-only interface created');
+                
+                // STEP 7: Create mobile results display function
+                window.displayMobileResults = function(results) {
+                    console.log('📱 Displaying results in mobile interface:', results);
+                    
+                    const contentArea = document.getElementById('mobile-content-area');
+                    if (!contentArea) return;
+                    
+                    // Hide empty state
+                    const emptyState = document.getElementById('mobile-empty-state');
+                    if (emptyState) {
+                        emptyState.style.display = 'none';
+                    }
+                    
+                    // Create results HTML
+                    contentArea.innerHTML = `
+                        <div id="mobile-tab1-content" style="display: block;">
+                            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 20px;">📊 Piliers de Numérologie</h3>
+                            
+                            <div style="background: #e8f5e8; border: 2px solid #27ae60; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                                <h4 style="color: #2c3e50; margin-bottom: 10px;">Chemin de vie</h4>
+                                <div style="font-size: 36px; font-weight: bold; color: #27ae60;">${results.output1 || 'N/A'}</div>
+                            </div>
+                            
+                            <div style="background: #e8f4fd; border: 2px solid #3498db; border-radius: 12px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                                <h4 style="color: #2c3e50; margin-bottom: 10px;">Nombre d'expression</h4>
+                                <div style="font-size: 36px; font-weight: bold; color: #3498db;">${results.output3 || 'N/A'}</div>
+                            </div>
+                            
+                            <div style="background: #fff3cd; border: 2px solid #ffc107; border-radius: 12px; padding: 20px;">
+                                <h4 style="color: #2c3e50; margin-bottom: 15px; text-align: center;">Grille d'inclusion</h4>
+                                <div id="mobile-inclusion-grid"></div>
+                            </div>
+                        </div>
+                        
+                        <div id="mobile-tab2-content" style="display: none;">
+                            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 20px;">🔄 Cycles de Vie</h3>
+                            <div id="mobile-cycles-content"></div>
+                        </div>
+                        
+                        <div id="mobile-tab3-content" style="display: none;">
+                            <h3 style="color: #2c3e50; margin-bottom: 20px; text-align: center; font-size: 20px;">🎯 Phase de Réalisation</h3>
+                            <div id="mobile-realization-content"></div>
+                        </div>
+                    `;
+                    
+                    // Add inclusion grid if available
+                    if (results.output2 && Array.isArray(results.output2)) {
+                        const gridContainer = document.getElementById('mobile-inclusion-grid');
+                        if (gridContainer) {
+                            let gridHTML = '<table style="width: 100%; border-collapse: collapse; font-size: 16px;">';
+                            gridHTML += '<tr style="background: #3498db; color: white;"><th style="padding: 10px; border: 1px solid #ddd;">Nombre</th><th style="padding: 10px; border: 1px solid #ddd;">Occurrences</th></tr>';
+                            
+                            results.output2.forEach(item => {
+                                gridHTML += `<tr><td style="padding: 10px; border: 1px solid #ddd; text-align: center; font-weight: bold;">${item.number}</td><td style="padding: 10px; border: 1px solid #ddd; text-align: center;">${item.display}</td></tr>`;
+                            });
+                            
+                            gridHTML += '</table>';
+                            gridContainer.innerHTML = gridHTML;
+                        }
+                    }
+                    
+                    // Add cycles if available
+                    if (results.cycles) {
+                        const cyclesContainer = document.getElementById('mobile-cycles-content');
+                        if (cyclesContainer) {
+                            let cyclesHTML = '';
+                            Object.values(results.cycles).forEach(cycle => {
+                                cyclesHTML += `
+                                    <div style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+                                        <h4 style="color: #2c3e50; margin-bottom: 10px;">${cycle.label}</h4>
+                                        <p style="color: #6c757d; margin-bottom: 10px;">${cycle.ageRange}</p>
+                                        <div style="font-size: 32px; font-weight: bold; color: #27ae60; text-align: center;">${cycle.value}</div>
+                                    </div>
+                                `;
+                            });
+                            cyclesContainer.innerHTML = cyclesHTML;
+                        }
+                    }
+                    
+                    // Add realization if available
+                    if (results.realization) {
+                        const realizationContainer = document.getElementById('mobile-realization-content');
+                        if (realizationContainer) {
+                            let realizationHTML = '';
+                            Object.values(results.realization).forEach(item => {
+                                realizationHTML += `
+                                    <div style="background: #f8f9fa; border: 2px solid #e9ecef; border-radius: 12px; padding: 20px; margin-bottom: 15px;">
+                                        <h4 style="color: #2c3e50; margin-bottom: 10px;">${item.label}</h4>
+                                        <p style="color: #6c757d; margin-bottom: 10px;">${item.description}</p>
+                                        <div style="font-size: 32px; font-weight: bold; color: #27ae60; text-align: center;">${item.value}</div>
+                                    </div>
+                                `;
+                            });
+                            realizationContainer.innerHTML = realizationHTML;
+                        }
+                    }
+                };
+                
+                // STEP 8: Create tab switching function
+                window.showMobileTabContent = function(activeTabId) {
+                    const contents = ['mobile-tab1-content', 'mobile-tab2-content', 'mobile-tab3-content'];
+                    contents.forEach(contentId => {
+                        const content = document.getElementById(contentId);
+                        if (content) {
+                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content' ? 'block' : 'none';
+                        }
+                    });
+                };
+            }
+        }
+        
         // NUCLEAR OUTPUT VISIBILITY FIX
         function forceOutputVisibility() {
             const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -734,5 +1194,8 @@
     <script src="js/form-handler.js"></script>
     <script src="js/test-suite.js"></script>
     <script src="js/app.js"></script>
+    
+    <!-- Mobile Frame Switcher for iPhone Optimization -->
+    <script src="js/mobile-frame-switcher.js"></script>
 </body>
 </html>
