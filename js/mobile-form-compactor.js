@@ -102,57 +102,36 @@ function compactMobileForm() {
         }
     });
     
-    // Ensure buttons are always visible and fixed
+    // HIDE standard form buttons - we only use floating round buttons on mobile
     const formActions = document.querySelector('.form-actions');
     if (formActions) {
-        formActions.style.cssText = `
+        formActions.style.display = 'none !important';
+    }
+    
+    // HIDE panel action buttons (PDF, Print) on mobile
+    const panelActions = document.querySelector('.panel-actions');
+    if (panelActions) {
+        panelActions.style.display = 'none !important';
+    }
+    
+    // Ensure the round floating buttons (nuclear buttons) are visible
+    const nuclearButtons = document.getElementById('nuclear-buttons');
+    if (nuclearButtons) {
+        nuclearButtons.style.cssText = `
             position: fixed !important;
-            bottom: 0 !important;
-            left: 0 !important;
-            right: 0 !important;
+            bottom: 0px !important;
+            left: 0px !important;
+            right: 0px !important;
             width: 100vw !important;
             height: ${buttonHeight}px !important;
-            padding: 12px !important;
-            margin: 0 !important;
-            background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,1) 20%) !important;
-            box-shadow: 0 -4px 20px rgba(0,0,0,0.15) !important;
-            z-index: 10000 !important;
+            z-index: 2147483647 !important;
+            pointer-events: none !important;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.05) 100%) !important;
             display: flex !important;
-            align-items: center !important;
-            justify-content: center !important;
-            gap: 12px !important;
+            align-items: flex-end !important;
+            justify-content: flex-end !important;
+            padding: 15px !important;
         `;
-        
-        // Ensure buttons are visible and touchable
-        const buttons = formActions.querySelectorAll('.btn');
-        buttons.forEach(btn => {
-            btn.style.cssText = `
-                flex: 1 !important;
-                max-width: 160px !important;
-                height: 50px !important;
-                font-size: 15px !important;
-                font-weight: 700 !important;
-                border-radius: 10px !important;
-                border: 2px solid transparent !important;
-                cursor: pointer !important;
-                -webkit-tap-highlight-color: transparent !important;
-                box-shadow: 0 3px 10px rgba(0,0,0,0.2) !important;
-                display: flex !important;
-                align-items: center !important;
-                justify-content: center !important;
-            `;
-            
-            // Style specific button types
-            if (btn.classList.contains('btn-primary')) {
-                btn.style.background = 'linear-gradient(135deg, #27ae60 0%, #2ecc71 100%) !important';
-                btn.style.color = 'white !important';
-                btn.style.borderColor = '#1e8449 !important';
-            } else if (btn.classList.contains('btn-secondary')) {
-                btn.style.background = 'linear-gradient(135deg, #e74c3c 0%, #c0392b 100%) !important';
-                btn.style.color = 'white !important';
-                btn.style.borderColor = '#a93226 !important';
-            }
-        });
     }
     
     // Adjust container to account for fixed buttons
