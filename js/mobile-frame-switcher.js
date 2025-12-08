@@ -188,23 +188,42 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
-            // In Frame 2: Hide Calculate button, show only Reset button
+            // In Frame 2: Hide Calculate button, show ONLY Reset button with same styling as Frame 1
             const calculateBtn = document.getElementById('nuclear-calculate');
             const resetBtn = document.getElementById('nuclear-reset');
             if (calculateBtn) {
                 calculateBtn.style.display = 'none !important';
                 calculateBtn.style.visibility = 'hidden !important';
                 calculateBtn.style.opacity = '0 !important';
+                calculateBtn.style.pointerEvents = 'none !important';
             }
             if (resetBtn) {
+                // Apply exact same styling as Reset button has in Frame 1
                 resetBtn.style.display = 'block !important';
                 resetBtn.style.visibility = 'visible !important';
                 resetBtn.style.opacity = '1 !important';
                 resetBtn.style.pointerEvents = 'auto !important';
-                // Move Reset button to the right position (where Calculate was)
-                resetBtn.style.right = '20px !important';
                 resetBtn.style.position = 'absolute !important';
+                resetBtn.style.right = '130px !important';
                 resetBtn.style.bottom = '20px !important';
+                resetBtn.style.width = '90px !important';
+                resetBtn.style.height = '90px !important';
+                resetBtn.style.borderRadius = '50% !important';
+                resetBtn.style.border = '5px solid #ffffff !important';
+                resetBtn.style.background = '#e74c3c !important';
+                resetBtn.style.color = '#ffffff !important';
+                resetBtn.style.fontSize = '14px !important';
+                resetBtn.style.fontWeight = '900 !important';
+                resetBtn.style.textAlign = 'center !important';
+                resetBtn.style.lineHeight = '1.2 !important';
+                resetBtn.style.boxShadow = '0 15px 50px rgba(0,0,0,0.9) !important';
+                resetBtn.style.cursor = 'pointer !important';
+                resetBtn.style.webkitTapHighlightColor = 'transparent !important';
+                resetBtn.style.webkitAppearance = 'none !important';
+                resetBtn.style.appearance = 'none !important';
+                resetBtn.style.transform = 'translateZ(0) !important';
+                resetBtn.style.webkitTransform = 'translateZ(0) !important';
+                resetBtn.style.willChange = 'transform !important';
             }
             
             // Ensure nuclear container is visible
