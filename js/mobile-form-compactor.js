@@ -34,14 +34,13 @@ function compactMobileForm() {
         return;
     }
     
-    // ULTRA COMPACT: Make form fit in available space
+    // ULTRA COMPACT: Make form fit in available space with minimal padding
     leftPanel.style.cssText = `
         height: ${availableHeight}px !important;
         max-height: ${availableHeight}px !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        padding: 8px 12px !important;
-        padding-bottom: 10px !important;
+        padding: 8px 12px 5px 12px !important;
         margin-bottom: 0 !important;
     `;
     
@@ -134,25 +133,39 @@ function compactMobileForm() {
         `;
     }
     
-    // Adjust container to account for fixed buttons
+    // Adjust container to account for fixed buttons - minimal padding
     const container = document.querySelector('.container');
     if (container) {
         container.style.cssText = `
             height: 100vh !important;
             height: 100dvh !important;
             padding: 5px !important;
-            padding-bottom: ${buttonHeight + 10}px !important;
+            padding-bottom: ${buttonHeight}px !important;
             overflow: hidden !important;
         `;
     }
     
-    // Adjust main content
+    // Adjust main content - maximize space
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
         mainContent.style.cssText = `
             height: calc(100vh - 70px - ${buttonHeight}px) !important;
             height: calc(100dvh - 70px - ${buttonHeight}px) !important;
             overflow: hidden !important;
+            gap: 0 !important;
+        `;
+    }
+    
+    // Optimize right panel (Frame 2) spacing
+    const rightPanel = document.querySelector('.right-panel');
+    if (rightPanel) {
+        rightPanel.style.cssText = `
+            height: ${availableHeight}px !important;
+            max-height: ${availableHeight}px !important;
+            overflow-y: auto !important;
+            -webkit-overflow-scrolling: touch !important;
+            padding: 8px 12px 5px 12px !important;
+            margin-bottom: 0 !important;
         `;
     }
     
