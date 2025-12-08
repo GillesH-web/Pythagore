@@ -143,10 +143,22 @@ class MobileFrameSwitcher {
             const calculateBtn = document.getElementById('nuclear-calculate');
             const resetBtn = document.getElementById('nuclear-reset');
             if (calculateBtn) {
-                calculateBtn.style.display = 'block';
+                calculateBtn.style.display = 'block !important';
+                calculateBtn.style.visibility = 'visible !important';
+                calculateBtn.style.opacity = '1 !important';
+                calculateBtn.style.pointerEvents = 'auto !important';
+                calculateBtn.style.position = 'absolute !important';
+                calculateBtn.style.right = '20px !important';
+                calculateBtn.style.bottom = '20px !important';
             }
             if (resetBtn) {
-                resetBtn.style.display = 'block';
+                resetBtn.style.display = 'block !important';
+                resetBtn.style.visibility = 'visible !important';
+                resetBtn.style.opacity = '1 !important';
+                resetBtn.style.pointerEvents = 'auto !important';
+                resetBtn.style.position = 'absolute !important';
+                resetBtn.style.right = '130px !important';
+                resetBtn.style.bottom = '20px !important';
             }
             
             // Scroll to top
@@ -180,12 +192,26 @@ class MobileFrameSwitcher {
             const calculateBtn = document.getElementById('nuclear-calculate');
             const resetBtn = document.getElementById('nuclear-reset');
             if (calculateBtn) {
-                calculateBtn.style.display = 'none';
+                calculateBtn.style.display = 'none !important';
+                calculateBtn.style.visibility = 'hidden !important';
+                calculateBtn.style.opacity = '0 !important';
             }
             if (resetBtn) {
-                resetBtn.style.display = 'block';
+                resetBtn.style.display = 'block !important';
+                resetBtn.style.visibility = 'visible !important';
+                resetBtn.style.opacity = '1 !important';
+                resetBtn.style.pointerEvents = 'auto !important';
                 // Move Reset button to the right position (where Calculate was)
-                resetBtn.style.right = '20px';
+                resetBtn.style.right = '20px !important';
+                resetBtn.style.position = 'absolute !important';
+                resetBtn.style.bottom = '20px !important';
+            }
+            
+            // Ensure nuclear container is visible
+            const nuclearContainer = document.getElementById('nuclear-buttons');
+            if (nuclearContainer) {
+                nuclearContainer.style.display = 'block !important';
+                nuclearContainer.style.visibility = 'visible !important';
             }
             
             // Scroll to top to show results
