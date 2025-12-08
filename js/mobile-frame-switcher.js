@@ -126,9 +126,14 @@ class MobileFrameSwitcher {
         this.currentFrame = 'frame1';
         
         if (this.leftPanel && this.rightPanel) {
-            // AGGRESSIVELY show form, hide results
-            this.leftPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important;';
-            this.rightPanel.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
+            // Show form, hide results - DON'T use cssText as it overwrites all styles
+            this.leftPanel.style.display = 'flex';
+            this.leftPanel.style.visibility = 'visible';
+            this.leftPanel.style.opacity = '1';
+            
+            this.rightPanel.style.display = 'none';
+            this.rightPanel.style.visibility = 'hidden';
+            this.rightPanel.style.opacity = '0';
             
             // Update main content layout for single column
             const mainContent = document.querySelector('.main-content');
@@ -137,26 +142,28 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
+            // Ensure nuclear container is visible
+            const nuclearContainer = document.getElementById('nuclear-buttons');
+            if (nuclearContainer) {
+                nuclearContainer.style.display = 'block';
+                nuclearContainer.style.visibility = 'visible';
+                nuclearContainer.style.opacity = '1';
+            }
+            
             // Show both Calculate and Reset buttons in Frame 1
             const calculateBtn = document.getElementById('nuclear-calculate');
             const resetBtn = document.getElementById('nuclear-reset');
             if (calculateBtn) {
-                calculateBtn.style.display = 'block !important';
-                calculateBtn.style.visibility = 'visible !important';
-                calculateBtn.style.opacity = '1 !important';
-                calculateBtn.style.pointerEvents = 'auto !important';
-                calculateBtn.style.position = 'absolute !important';
-                calculateBtn.style.right = '20px !important';
-                calculateBtn.style.bottom = '20px !important';
+                calculateBtn.style.display = 'block';
+                calculateBtn.style.visibility = 'visible';
+                calculateBtn.style.opacity = '1';
+                calculateBtn.style.pointerEvents = 'auto';
             }
             if (resetBtn) {
-                resetBtn.style.display = 'block !important';
-                resetBtn.style.visibility = 'visible !important';
-                resetBtn.style.opacity = '1 !important';
-                resetBtn.style.pointerEvents = 'auto !important';
-                resetBtn.style.position = 'absolute !important';
-                resetBtn.style.right = '104px !important';
-                resetBtn.style.bottom = '20px !important';
+                resetBtn.style.display = 'block';
+                resetBtn.style.visibility = 'visible';
+                resetBtn.style.opacity = '1';
+                resetBtn.style.pointerEvents = 'auto';
             }
             
             // Scroll to top
@@ -175,9 +182,14 @@ class MobileFrameSwitcher {
         this.currentFrame = 'frame2';
         
         if (this.leftPanel && this.rightPanel) {
-            // AGGRESSIVELY hide form, show results
-            this.leftPanel.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
-            this.rightPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important;';
+            // Hide form, show results - DON'T use cssText as it overwrites all styles
+            this.leftPanel.style.display = 'none';
+            this.leftPanel.style.visibility = 'hidden';
+            this.leftPanel.style.opacity = '0';
+            
+            this.rightPanel.style.display = 'flex';
+            this.rightPanel.style.visibility = 'visible';
+            this.rightPanel.style.opacity = '1';
             
             // Update main content layout for single column
             const mainContent = document.querySelector('.main-content');
