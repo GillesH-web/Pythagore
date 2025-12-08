@@ -139,10 +139,20 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
+            // Show both Calculate and Reset buttons in Frame 1
+            const calculateBtn = document.getElementById('nuclear-calculate');
+            const resetBtn = document.getElementById('nuclear-reset');
+            if (calculateBtn) {
+                calculateBtn.style.display = 'block';
+            }
+            if (resetBtn) {
+                resetBtn.style.display = 'block';
+            }
+            
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            console.log('📱 Frame 1 (form) displayed');
+            console.log('📱 Frame 1 (form) displayed - both buttons visible');
         }
     }
     
@@ -166,10 +176,22 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
+            // In Frame 2: Hide Calculate button, show only Reset button
+            const calculateBtn = document.getElementById('nuclear-calculate');
+            const resetBtn = document.getElementById('nuclear-reset');
+            if (calculateBtn) {
+                calculateBtn.style.display = 'none';
+            }
+            if (resetBtn) {
+                resetBtn.style.display = 'block';
+                // Move Reset button to the right position (where Calculate was)
+                resetBtn.style.right = '20px';
+            }
+            
             // Scroll to top to show results
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            console.log('📱 Frame 2 (results) displayed');
+            console.log('📱 Frame 2 (results) displayed - only Reset button visible');
         }
     }
     

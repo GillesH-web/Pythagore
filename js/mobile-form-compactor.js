@@ -19,7 +19,7 @@ function compactMobileForm() {
     
     // Calculate available space (viewport - header - buttons)
     const headerHeight = 60; // Approximate header height
-    const buttonHeight = 100; // Reduced button area height for tighter spacing
+    const buttonHeight = 50; // Ultra-reduced button area height for maximum content space
     const availableHeight = viewportHeight - headerHeight - buttonHeight;
     
     console.log(`📱 Available height for form: ${availableHeight}px`);
@@ -40,7 +40,7 @@ function compactMobileForm() {
         max-height: ${availableHeight}px !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        padding: 8px 12px 2px 12px !important;
+        padding: 8px 12px 1px 12px !important;
         margin-bottom: 0 !important;
     `;
     
@@ -157,7 +157,7 @@ function compactMobileForm() {
             display: flex !important;
             align-items: flex-end !important;
             justify-content: flex-end !important;
-            padding: 10px !important;
+            padding: 5px !important;
         `;
     }
     
@@ -192,7 +192,7 @@ function compactMobileForm() {
             max-height: ${availableHeight}px !important;
             overflow-y: auto !important;
             -webkit-overflow-scrolling: touch !important;
-            padding: 8px 12px 2px 12px !important;
+            padding: 8px 12px 1px 12px !important;
             margin-bottom: 0 !important;
         `;
     }
