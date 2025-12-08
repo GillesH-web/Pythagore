@@ -876,7 +876,7 @@ header h1 {
     right: 120px;
 }
 
-/* EMERGENCY: Show FAB on ALL mobile devices */
+/* EMERGENCY: Show FAB on ALL mobile devices + Frame2 Content Fix */
 @media screen and (max-width: 480px) {
     .mobile-fab-container {
         display: block !important;
@@ -958,6 +958,58 @@ header h1 {
         color: white !important;
         bottom: calc(env(safe-area-inset-bottom, 20px) + 30px) !important;
         right: 130px !important;
+    }
+    
+    /* CRITICAL: Fix right panel content visibility */
+    .right-panel {
+        display: flex !important;
+        flex-direction: column !important;
+        height: 100% !important;
+        overflow: hidden !important;
+    }
+    
+    .tab-navigation {
+        flex-shrink: 0 !important;
+        margin-bottom: 10px !important;
+    }
+    
+    .tab-content {
+        flex: 1 !important;
+        overflow: hidden !important;
+        min-height: 0 !important;
+    }
+    
+    .tab-panel {
+        height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 10px 5px !important;
+    }
+    
+    .results-area, .cycles-area, .realization-area {
+        height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding: 5px !important;
+    }
+    
+    .results-grid, .cycles-grid, .realization-grid {
+        min-height: auto !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    /* Enhanced content visibility */
+    .result-item, .cycle-item, .realization-item {
+        margin-bottom: 10px !important;
+        padding: 12px !important;
+        min-height: 80px !important;
+    }
+    
+    .empty-state {
+        padding: 20px 10px !important;
+        font-size: 14px !important;
+        line-height: 1.4 !important;
     }
     
     /* Hide original form actions on mobile */
