@@ -1,0 +1,226 @@
+name: 🚀 Manual Deploy Pipeline
+
+on:
+  workflow_dispatch:
+    inputs:
+      deployment_type:
+        description: 'Type of deployment'
+        required: true
+        default: 'timestamp-only'
+        type: choice
+        options:
+        - timestamp-only
+        - version-increment
+        - hotfix
+      skip_tests:
+        description: 'Skip tests (for hotfixes only)'
+        required: false
+        default: false
+        type: boolean
+      custom_message:
+        description: 'Custom commit message'
+        required: false
+        type: string
+
+jobs:
+  manual-deploy:
+    name: 🚀 Manual Deployment
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🕒 Generate Timestamp
+        id: timestamp
+        run: |
+          TIMESTAMP=$(date '+%Y-%m-%d %H:%M')
+          echo "timestamp=$TIMESTAMP" >> $GITHUB_OUTPUT
+          echo "🕒 Deployment timestamp: $TIMESTAMP"
+
+      - name: 🔢 Handle Version Update
+        id: version
+        run: |
+          CURRENT_VERSION=$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1 | sed 's/v//')
+          
+          case "${{ github.event.inputs.deployment_type }}" in
+            "version-increment")
+              IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+              NEW_PATCH=$((PATCH + 1))
+              NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+              echo "🔢 Version incremented: $CURRENT_VERSION → $NEW_VERSION"
+              ;;
+            "hotfix")
+              IFS='.' read -r MAJOR MINOR PATCH <<< "$CURRENT_VERSION"
+              NEW_PATCH=$((PATCH + 1))
+              NEW_VERSION="$MAJOR.$MINOR.$NEW_PATCH"
+              echo "🔥 Hotfix version: $CURRENT_VERSION → $NEW_VERSION"
+              ;;
+            *)
+              NEW_VERSION="$CURRENT_VERSION"
+              echo "🕒 Timestamp-only deployment, version unchanged: $NEW_VERSION"
+              ;;
+          esac
+          
+          echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
+
+      - name: 🔄 Synchronize Root to GitHub Pages Directory
+        run: |
+          echo "🔄 Synchronizing files from root to GitHub Pages directory..."
+          
+          # Sync CSS files
+          if [ -f "styles.css" ]; then
+            cp "styles.css" "github-pages-pythagore/css/styles.css"
+            echo "✅ Synchronized styles.css"
+          fi
+          
+          # Sync JavaScript files
+          if [ -d "js" ]; then
+            for js_file in js/*.js; do
+              if [ -f "$js_file" ]; then
+                cp "$js_file" "github-pages-pythagore/$js_file"
+                echo "✅ Synchronized $js_file"
+              fi
+            done
+          fi
+          
+          # Sync HTML file (preserve GitHub Pages specific elements)
+          if [ -f "index.html" ]; then
+            # Extract version and build info from root index.html
+            ROOT_VERSION=$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1)
+            ROOT_BUILD_INFO=$(grep -o 'Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}' index.html | head -1)
+            
+            # Update GitHub Pages version if root has newer info
+            if [ -n "$ROOT_VERSION" ]; then
+              sed -i "s/v[0-9]\+\.[0-9]\+\.[0-9]\+/$ROOT_VERSION/g" github-pages-pythagore/index.html
+              echo "✅ Synchronized version: $ROOT_VERSION"
+            fi
+            
+            if [ -n "$ROOT_BUILD_INFO" ]; then
+              sed -i "s/Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$ROOT_BUILD_INFO/g" github-pages-pythagore/index.html
+              echo "✅ Synchronized build info: $ROOT_BUILD_INFO"
+            fi
+          fi
+          
+          echo "🔄 File synchronization completed"
+
+      - name: 📝 Update Files
+        run: |
+          TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
+          NEW_VERSION="${{ steps.version.outputs.new_version }}"
+          
+          # Update timestamps in both versions
+          sed -i "s/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$TIMESTAMP/g" github-pages-pythagore/index.html
+          sed -i "s/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$TIMESTAMP/g" index.html
+          
+          # Update versions if needed
+          if [ "${{ github.event.inputs.deployment_type }}" != "timestamp-only" ]; then
+            CURRENT_VERSION=$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1 | sed 's/v//')
+            sed -i "s/v$CURRENT_VERSION/v$NEW_VERSION/g" github-pages-pythagore/index.html
+            sed -i "s/v$CURRENT_VERSION/v$NEW_VERSION/g" index.html
+          fi
+
+      - name: 🧪 Run Quick Tests (if not skipped)
+        if: ${{ !github.event.inputs.skip_tests }}
+        run: |
+          echo "🧪 Running quick validation tests..."
+          
+          # Basic HTML validation
+          if command -v tidy >/dev/null 2>&1; then
+            tidy -q -e index.html || echo "⚠️ HTML validation warnings (non-critical)"
+          fi
+          
+          # Check for required elements
+          if grep -q "form-actions" index.html && grep -q "iPhone Safari" index.html; then
+            echo "✅ Required elements found"
+          else
+            echo "❌ Missing required elements"
+            exit 1
+          fi
+
+      - name: 📝 Commit and Push Changes
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+          git add .
+          
+          if git diff --staged --quiet; then
+            echo "📝 No changes to commit"
+          else
+            # Determine commit message
+            if [ -n "${{ github.event.inputs.custom_message }}" ]; then
+              COMMIT_MSG="${{ github.event.inputs.custom_message }}"
+            else
+              case "${{ github.event.inputs.deployment_type }}" in
+                "version-increment")
+                  COMMIT_MSG="Deploy: v${{ steps.version.outputs.new_version }} - ${{ steps.timestamp.outputs.timestamp }}"
+                  ;;
+                "hotfix")
+                  COMMIT_MSG="Hotfix: v${{ steps.version.outputs.new_version }} - ${{ steps.timestamp.outputs.timestamp }}"
+                  ;;
+                *)
+                  COMMIT_MSG="Update: Timestamp ${{ steps.timestamp.outputs.timestamp }}"
+                  ;;
+              esac
+            fi
+            
+            git commit -m "$COMMIT_MSG"
+            git push
+            echo "✅ Changes committed and pushed"
+          fi
+
+      - name: 🚀 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./github-pages-pythagore
+          publish_branch: gh-pages
+          commit_message: "Manual Deploy: v${{ steps.version.outputs.new_version }} - ${{ steps.timestamp.outputs.timestamp }}"
+
+      - name: 📊 Generate Deployment Summary
+        run: |
+          cat > MANUAL_DEPLOY_SUMMARY.md << EOF
+          # 🚀 Manual Deployment Summary
+          
+          **Deployment Type:** ${{ github.event.inputs.deployment_type }}  
+          **Timestamp:** ${{ steps.timestamp.outputs.timestamp }}  
+          **Version:** v${{ steps.version.outputs.new_version }}  
+          **Tests Skipped:** ${{ github.event.inputs.skip_tests }}  
+          **Custom Message:** ${{ github.event.inputs.custom_message || 'None' }}
+          
+          ## ✅ Deployment Completed Successfully
+          
+          - ✅ Files updated with current timestamp
+          - ✅ Version management applied
+          - ✅ Changes committed to repository
+          - ✅ GitHub Pages deployment triggered
+          
+          ## 🌐 Live Site
+          
+          **URL:** https://$(echo $GITHUB_REPOSITORY | cut -d'/' -f1).github.io/$(echo $GITHUB_REPOSITORY | cut -d'/' -f2)/
+          
+          **Note:** Changes may take 5-10 minutes to appear on the live site.
+          
+          ## 📱 iPhone Safari Testing
+          
+          After deployment:
+          1. Clear Safari cache on iPhone
+          2. Visit the live URL
+          3. Verify button visibility at bottom of screen
+          4. Test form functionality
+          
+          ---
+          **Deployed by:** GitHub Actions Manual Deploy  
+          **Deploy Time:** $(date '+%Y-%m-%d %H:%M:%S UTC')
+          EOF
+          
+          echo "📊 Manual deployment summary generated"
+          cat MANUAL_DEPLOY_SUMMARY.md
+
+      - name: 📊 Upload Deployment Summary
+        uses: actions/upload-artifact@v4
+        with:
+          name: manual-deploy-summary
+          path: MANUAL_DEPLOY_SUMMARY.md
