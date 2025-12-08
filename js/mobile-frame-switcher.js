@@ -157,7 +157,7 @@ class MobileFrameSwitcher {
                 resetBtn.style.opacity = '1 !important';
                 resetBtn.style.pointerEvents = 'auto !important';
                 resetBtn.style.position = 'absolute !important';
-                resetBtn.style.right = '130px !important';
+                resetBtn.style.right = '104px !important';
                 resetBtn.style.bottom = '20px !important';
             }
             
@@ -204,19 +204,19 @@ class MobileFrameSwitcher {
                 resetBtn.style.opacity = '1 !important';
                 resetBtn.style.pointerEvents = 'auto !important';
                 resetBtn.style.position = 'absolute !important';
-                resetBtn.style.right = '130px !important';
+                resetBtn.style.right = '104px !important';
                 resetBtn.style.bottom = '20px !important';
-                resetBtn.style.width = '90px !important';
-                resetBtn.style.height = '90px !important';
+                resetBtn.style.width = '72px !important';
+                resetBtn.style.height = '72px !important';
                 resetBtn.style.borderRadius = '50% !important';
-                resetBtn.style.border = '5px solid #ffffff !important';
+                resetBtn.style.border = '4px solid #ffffff !important';
                 resetBtn.style.background = '#e74c3c !important';
                 resetBtn.style.color = '#ffffff !important';
-                resetBtn.style.fontSize = '14px !important';
+                resetBtn.style.fontSize = '12px !important';
                 resetBtn.style.fontWeight = '900 !important';
                 resetBtn.style.textAlign = 'center !important';
                 resetBtn.style.lineHeight = '1.2 !important';
-                resetBtn.style.boxShadow = '0 15px 50px rgba(0,0,0,0.9) !important';
+                resetBtn.style.boxShadow = '0 12px 40px rgba(0,0,0,0.9) !important';
                 resetBtn.style.cursor = 'pointer !important';
                 resetBtn.style.webkitTapHighlightColor = 'transparent !important';
                 resetBtn.style.webkitAppearance = 'none !important';
