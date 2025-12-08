@@ -29,6 +29,23 @@ class FormHandler {
             this.resetForm();
         });
 
+        // Mobile FAB buttons (iPhone Safari alternative)
+        const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
+        const mobileResetBtn = document.getElementById('mobile-reset-btn');
+        
+        if (mobileSubmitBtn) {
+            mobileSubmitBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleSubmit();
+            });
+        }
+        
+        if (mobileResetBtn) {
+            mobileResetBtn.addEventListener('click', () => {
+                this.resetForm();
+            });
+        }
+
         // Input validation on type and blur
         const inputs = form.querySelectorAll('input');
         inputs.forEach(input => {
@@ -95,8 +112,14 @@ class FormHandler {
         const formData = this.getFormData();
         const validation = this.validator.validateAll(formData);
         const submitBtn = document.getElementById('submit-btn');
+        const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
 
+        // Update both desktop and mobile submit buttons
         submitBtn.disabled = !validation.isValid;
+        if (mobileSubmitBtn) {
+            mobileSubmitBtn.disabled = !validation.isValid;
+        }
+        
         return validation;
     }
 

@@ -65,7 +65,23 @@ jobs:
           
           echo "new_version=$NEW_VERSION" >> $GITHUB_OUTPUT
 
-      - name: 🔄 Synchronize Root to GitHub Pages Directory
+      - name: 📝 Update Files
+        run: |
+          TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
+          NEW_VERSION="${{ steps.version.outputs.new_version }}"
+          
+          # Update timestamps in both versions with Build: prefix
+          sed -i "s/Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/Build: $TIMESTAMP/g" index.html
+          sed -i "s/Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/Build: $TIMESTAMP/g" github-pages-pythagore/index.html
+          
+          # Update versions if needed
+          if [ "${{ github.event.inputs.deployment_type }}" != "timestamp-only" ]; then
+            CURRENT_VERSION=$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1 | sed 's/v//')
+            sed -i "s/v$CURRENT_VERSION/v$NEW_VERSION/g" index.html
+            sed -i "s/v$CURRENT_VERSION/v$NEW_VERSION/g" github-pages-pythagore/index.html
+          fi
+
+      - name: 🔄 Synchronize and Verify Files
         run: |
           echo "🔄 Synchronizing files from root to GitHub Pages directory..."
           
@@ -85,41 +101,22 @@ jobs:
             done
           fi
           
-          # Sync HTML file (preserve GitHub Pages specific elements)
-          if [ -f "index.html" ]; then
-            # Extract version and build info from root index.html
-            ROOT_VERSION=$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1)
-            ROOT_BUILD_INFO=$(grep -o 'Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}' index.html | head -1)
-            
-            # Update GitHub Pages version if root has newer info
-            if [ -n "$ROOT_VERSION" ]; then
-              sed -i "s/v[0-9]\+\.[0-9]\+\.[0-9]\+/$ROOT_VERSION/g" github-pages-pythagore/index.html
-              echo "✅ Synchronized version: $ROOT_VERSION"
-            fi
-            
-            if [ -n "$ROOT_BUILD_INFO" ]; then
-              sed -i "s/Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$ROOT_BUILD_INFO/g" github-pages-pythagore/index.html
-              echo "✅ Synchronized build info: $ROOT_BUILD_INFO"
-            fi
+          # Verify timestamp synchronization between files
+          ROOT_TIMESTAMP=$(grep -o 'Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}' index.html | head -1)
+          PAGES_TIMESTAMP=$(grep -o 'Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}' github-pages-pythagore/index.html | head -1)
+          
+          if [ "$ROOT_TIMESTAMP" = "$PAGES_TIMESTAMP" ]; then
+            echo "✅ Timestamp synchronization verified: $ROOT_TIMESTAMP"
+          else
+            echo "⚠️ Timestamp mismatch detected!"
+            echo "   Root: $ROOT_TIMESTAMP"
+            echo "   Pages: $PAGES_TIMESTAMP"
+            # Force synchronization
+            sed -i "s/Build: [0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$ROOT_TIMESTAMP/g" github-pages-pythagore/index.html
+            echo "✅ Forced timestamp synchronization"
           fi
           
           echo "🔄 File synchronization completed"
-
-      - name: 📝 Update Files
-        run: |
-          TIMESTAMP="${{ steps.timestamp.outputs.timestamp }}"
-          NEW_VERSION="${{ steps.version.outputs.new_version }}"
-          
-          # Update timestamps in both versions
-          sed -i "s/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$TIMESTAMP/g" github-pages-pythagore/index.html
-          sed -i "s/[0-9]\{4\}-[0-9]\{2\}-[0-9]\{2\} [0-9]\{2\}:[0-9]\{2\}/$TIMESTAMP/g" index.html
-          
-          # Update versions if needed
-          if [ "${{ github.event.inputs.deployment_type }}" != "timestamp-only" ]; then
-            CURRENT_VERSION=$(grep -o 'v[0-9]\+\.[0-9]\+\.[0-9]\+' index.html | head -1 | sed 's/v//')
-            sed -i "s/v$CURRENT_VERSION/v$NEW_VERSION/g" github-pages-pythagore/index.html
-            sed -i "s/v$CURRENT_VERSION/v$NEW_VERSION/g" index.html
-          fi
 
       - name: 🧪 Run Quick Tests (if not skipped)
         if: ${{ !github.event.inputs.skip_tests }}
