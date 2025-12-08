@@ -23,15 +23,21 @@ class MobileFrameSwitcher {
         }
         
         console.log('Mobile detected - initializing frame switcher');
+        console.log('📱 Viewport width:', window.innerWidth);
+        console.log('📱 User agent:', navigator.userAgent);
         
-        // Set initial state - show only form
-        this.showFrame1();
+        // Add mobile-specific CSS classes first
+        this.addMobileClasses();
         
         // Set up event listeners
         this.setupEventListeners();
         
-        // Add mobile-specific CSS classes
-        this.addMobileClasses();
+        // CRITICAL: Set initial state - show only form, hide results
+        // Use setTimeout to ensure DOM is fully ready
+        setTimeout(() => {
+            this.showFrame1();
+            console.log('📱 Initial frame state set - Frame 1 visible, Frame 2 hidden');
+        }, 100);
     }
     
     /**
@@ -120,9 +126,9 @@ class MobileFrameSwitcher {
         this.currentFrame = 'frame1';
         
         if (this.leftPanel && this.rightPanel) {
-            // Show form, hide results
-            this.leftPanel.style.display = 'flex';
-            this.rightPanel.style.display = 'none';
+            // AGGRESSIVELY show form, hide results
+            this.leftPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important;';
+            this.rightPanel.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
             
             // Update main content layout for single column
             const mainContent = document.querySelector('.main-content');
@@ -169,9 +175,9 @@ class MobileFrameSwitcher {
         this.currentFrame = 'frame2';
         
         if (this.leftPanel && this.rightPanel) {
-            // Hide form, show results
-            this.leftPanel.style.display = 'none';
-            this.rightPanel.style.display = 'flex';
+            // AGGRESSIVELY hide form, show results
+            this.leftPanel.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
+            this.rightPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important;';
             
             // Update main content layout for single column
             const mainContent = document.querySelector('.main-content');
