@@ -70,17 +70,9 @@ class MobileFrameSwitcher {
             }
         });
         
-        // Listen for calculate button clicks (switch to results after calculation)
-        document.addEventListener('click', (event) => {
-            const calculateBtn = event.target.closest('#submit-btn, #mobile-submit-btn, #nuclear-calculate');
-            if (calculateBtn && !calculateBtn.disabled) {
-                console.log('📱 Calculate clicked - will switch to results after calculation');
-                // Delay switching to allow calculation to complete
-                setTimeout(() => {
-                    this.showFrame2();
-                }, 1000);
-            }
-        });
+        // NOTE: Frame switching to results is handled by the 'formSubmitted' event above
+        // We don't need to listen for Calculate button clicks because the form submission
+        // event is dispatched after successful validation and calculation
         
         // Listen for window resize to re-evaluate mobile state
         window.addEventListener('resize', () => {
