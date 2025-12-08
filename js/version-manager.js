@@ -5,8 +5,8 @@
 
 class VersionManager {
     constructor() {
-        this.currentVersion = '1.9.1';
-        this.buildTimestamp = '2025-12-08 16:45';
+        this.currentVersion = '1.9.2';
+        this.buildTimestamp = '2025-12-08 18:09';
         this.init();
     }
 
