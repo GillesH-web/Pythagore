@@ -306,10 +306,21 @@ const mobileFrameControllerCSS = `
 
 /* Mobile frame specific styles */
 @media screen and (max-width: 480px) {
+    /* Ensure main content takes full available height minus buttons */
+    .mobile-frame-active {
+        height: calc(100vh - 140px) !important;
+        height: calc(100dvh - 140px) !important;
+        overflow: hidden !important;
+    }
+    
     .mobile-frame-active .left-panel,
     .mobile-frame-active .right-panel {
         width: 100% !important;
         height: 100% !important;
+        max-height: 100% !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        padding-bottom: 20px !important;
     }
     
     .form-frame-active .left-panel {
@@ -326,6 +337,16 @@ const mobileFrameControllerCSS = `
     
     .results-frame-active .right-panel {
         display: flex !important;
+    }
+    
+    /* Ensure buttons stay fixed at bottom and always visible */
+    .form-actions {
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        z-index: 9999 !important;
+        pointer-events: auto !important;
     }
 }
 `;
