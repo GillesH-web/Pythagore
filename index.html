@@ -12,7 +12,7 @@
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
     <title>Numérologie de Pythagore v1.9.1</title>
-    <!-- Updated: 2025-12-08 11:01 - Nuclear Tab Content Visibility Fix -->
+    <!-- Updated: 2025-12-08 11:08 - Ultra Compact Form + Optimized iPhone Layout -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:01</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.1</span> <span class="build-info" id="build-info">Build: 2025-12-08 11:08</span></h1>
         </header>
 
         <div class="main-content">
@@ -324,62 +324,192 @@
         window.addEventListener('load', createNuclearButtons);
         window.addEventListener('resize', createNuclearButtons);
         
-        // NUCLEAR TAB CONTENT FIX
-        function forceTabContentVisibility() {
+        // ULTRA NUCLEAR MOBILE LAYOUT FIX
+        function createUltraMobileLayout() {
             const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
             if (isMobile) {
-                console.log('🚨 NUCLEAR: Forcing tab content visibility on iPhone');
+                console.log('🚨 ULTRA NUCLEAR: Creating mobile-first layout for iPhone');
                 
-                // Force right panel layout
-                const rightPanel = document.querySelector('.right-panel');
-                if (rightPanel) {
-                    rightPanel.style.cssText = `
+                // STEP 1: Force single-column layout on mobile
+                const mainContent = document.querySelector('.main-content');
+                if (mainContent) {
+                    mainContent.style.cssText = `
                         display: flex !important;
                         flex-direction: column !important;
-                        height: 100% !important;
+                        height: calc(100vh - 140px) !important;
                         overflow: hidden !important;
-                        background: white !important;
-                        padding: 10px !important;
+                        gap: 0 !important;
                     `;
                 }
                 
-                // Force tab navigation visibility
+                // STEP 2: Make left panel (form) ULTRA COMPACT
+                const leftPanel = document.querySelector('.left-panel');
+                if (leftPanel) {
+                    leftPanel.style.cssText = `
+                        flex: 0 0 auto !important;
+                        max-height: 25vh !important;
+                        overflow-y: auto !important;
+                        -webkit-overflow-scrolling: touch !important;
+                        padding: 8px !important;
+                        background: white !important;
+                        border-bottom: 3px solid #3498db !important;
+                        margin-bottom: 5px !important;
+                        border-radius: 8px 8px 0 0 !important;
+                    `;
+                }
+                
+                // STEP 2.1: Compact form header
+                const formHeader = leftPanel.querySelector('h2');
+                if (formHeader) {
+                    formHeader.style.cssText = `
+                        font-size: 16px !important;
+                        margin-bottom: 8px !important;
+                        margin-top: 0 !important;
+                        padding-bottom: 4px !important;
+                        border-bottom: 1px solid #ecf0f1 !important;
+                        color: #2c3e50 !important;
+                    `;
+                }
+                
+                // STEP 2.2: Ultra compact form groups
+                const formGroups = leftPanel.querySelectorAll('.form-group');
+                formGroups.forEach(group => {
+                    group.style.cssText = `
+                        margin-bottom: 8px !important;
+                        padding: 0 !important;
+                    `;
+                });
+                
+                // STEP 2.3: Compact labels
+                const labels = leftPanel.querySelectorAll('label');
+                labels.forEach(label => {
+                    label.style.cssText = `
+                        display: block !important;
+                        margin-bottom: 3px !important;
+                        font-weight: 600 !important;
+                        color: #2c3e50 !important;
+                        font-size: 14px !important;
+                        line-height: 1.2 !important;
+                    `;
+                });
+                
+                // STEP 2.4: Compact input fields
+                const inputs = leftPanel.querySelectorAll('input');
+                inputs.forEach(input => {
+                    input.style.cssText = `
+                        width: 100% !important;
+                        padding: 8px 10px !important;
+                        border: 1px solid #bdc3c7 !important;
+                        border-radius: 6px !important;
+                        font-size: 16px !important;
+                        height: 40px !important;
+                        transition: border-color 0.3s ease !important;
+                        -webkit-appearance: none !important;
+                        appearance: none !important;
+                        background: white !important;
+                    `;
+                });
+                
+                // STEP 2.5: Hide optional fields on mobile to save space
+                const optionalFields = leftPanel.querySelectorAll('#firstName2, #firstName3');
+                optionalFields.forEach(field => {
+                    const fieldGroup = field.closest('.form-group');
+                    if (fieldGroup) {
+                        fieldGroup.style.display = 'none !important';
+                    }
+                });
+                
+                // STEP 2.6: Add toggle button for optional fields
+                const toggleBtn = document.createElement('button');
+                toggleBtn.type = 'button';
+                toggleBtn.innerHTML = '+ Prénoms supplémentaires';
+                toggleBtn.style.cssText = `
+                    width: 100% !important;
+                    padding: 8px !important;
+                    background: #ecf0f1 !important;
+                    border: 1px solid #bdc3c7 !important;
+                    border-radius: 6px !important;
+                    color: #7f8c8d !important;
+                    font-size: 14px !important;
+                    margin-bottom: 8px !important;
+                    cursor: pointer !important;
+                    -webkit-tap-highlight-color: transparent !important;
+                `;
+                
+                let optionalVisible = false;
+                toggleBtn.addEventListener('click', function() {
+                    optionalVisible = !optionalVisible;
+                    optionalFields.forEach(field => {
+                        const fieldGroup = field.closest('.form-group');
+                        if (fieldGroup) {
+                            fieldGroup.style.display = optionalVisible ? 'block !important' : 'none !important';
+                        }
+                    });
+                    this.innerHTML = optionalVisible ? '- Masquer prénoms supplémentaires' : '+ Prénoms supplémentaires';
+                });
+                
+                // Insert toggle button after first name field
+                const firstName1Group = leftPanel.querySelector('#firstName1').closest('.form-group');
+                if (firstName1Group && firstName1Group.nextElementSibling) {
+                    firstName1Group.parentNode.insertBefore(toggleBtn, firstName1Group.nextElementSibling);
+                }
+                
+                // STEP 3: Make right panel (results) take most of the space
+                const rightPanel = document.querySelector('.right-panel');
+                if (rightPanel) {
+                    rightPanel.style.cssText = `
+                        flex: 1 !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        overflow: hidden !important;
+                        background: white !important;
+                        padding: 10px !important;
+                        min-height: 50vh !important;
+                    `;
+                }
+                
+                // STEP 4: Force tab navigation to be prominent
                 const tabNavigation = document.querySelector('.tab-navigation');
                 if (tabNavigation) {
                     tabNavigation.style.cssText = `
                         display: flex !important;
                         flex-shrink: 0 !important;
-                        margin-bottom: 10px !important;
-                        border-bottom: 2px solid #ecf0f1 !important;
+                        margin-bottom: 15px !important;
+                        border-bottom: 3px solid #ecf0f1 !important;
                         background: white !important;
+                        padding: 5px 0 !important;
                     `;
                 }
                 
-                // Force tab buttons visibility
+                // STEP 5: Make tab buttons larger and more touch-friendly
                 const tabButtons = document.querySelectorAll('.tab-btn');
                 tabButtons.forEach(btn => {
                     btn.style.cssText = `
-                        padding: 12px 16px !important;
+                        flex: 1 !important;
+                        padding: 15px 8px !important;
                         border: none !important;
                         background: #f8f9fa !important;
                         color: #7f8c8d !important;
                         cursor: pointer !important;
-                        border-radius: 6px 6px 0 0 !important;
-                        margin-right: 5px !important;
-                        font-weight: 600 !important;
-                        font-size: 16px !important;
-                        min-height: 44px !important;
+                        border-radius: 8px !important;
+                        margin: 0 3px !important;
+                        font-weight: 700 !important;
+                        font-size: 14px !important;
+                        min-height: 50px !important;
+                        text-align: center !important;
                         -webkit-tap-highlight-color: transparent !important;
+                        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
                     `;
                     
                     if (btn.classList.contains('active')) {
                         btn.style.background = '#3498db !important';
                         btn.style.color = 'white !important';
+                        btn.style.boxShadow = '0 4px 8px rgba(52, 152, 219, 0.3) !important';
                     }
                 });
                 
-                // Force tab content container
+                // STEP 6: Make tab content area much larger
                 const tabContent = document.querySelector('.tab-content');
                 if (tabContent) {
                     tabContent.style.cssText = `
@@ -388,96 +518,104 @@
                         min-height: 0 !important;
                         background: white !important;
                         position: relative !important;
+                        border: 2px solid #ecf0f1 !important;
+                        border-radius: 8px !important;
                     `;
                 }
                 
-                // Force all tab panels
+                // STEP 7: Force tab panels to use full available space
                 const tabPanels = document.querySelectorAll('.tab-panel');
                 tabPanels.forEach((panel, index) => {
                     panel.style.cssText = `
-                        height: 100% !important;
-                        overflow-y: auto !important;
-                        -webkit-overflow-scrolling: touch !important;
-                        padding: 15px 10px !important;
-                        background: white !important;
                         position: absolute !important;
                         top: 0 !important;
                         left: 0 !important;
                         right: 0 !important;
                         bottom: 0 !important;
+                        overflow-y: auto !important;
+                        -webkit-overflow-scrolling: touch !important;
+                        padding: 20px !important;
+                        background: white !important;
                         display: ${panel.classList.contains('active') ? 'block' : 'none'} !important;
                     `;
                 });
                 
-                // Force results areas
+                // STEP 8: Make results areas fully scrollable
                 const resultsAreas = document.querySelectorAll('.results-area, .cycles-area, .realization-area');
                 resultsAreas.forEach(area => {
                     area.style.cssText = `
                         height: 100% !important;
                         overflow-y: auto !important;
                         -webkit-overflow-scrolling: touch !important;
-                        padding: 10px !important;
-                        background: white !important;
+                        padding: 0 !important;
+                        background: transparent !important;
                     `;
                 });
                 
-                // Force empty states to be visible
+                // STEP 9: Make empty states more prominent
                 const emptyStates = document.querySelectorAll('.empty-state');
                 emptyStates.forEach(state => {
                     state.style.cssText = `
                         text-align: center !important;
                         color: #7f8c8d !important;
                         font-style: italic !important;
-                        padding: 30px 15px !important;
-                        font-size: 16px !important;
-                        line-height: 1.4 !important;
+                        padding: 40px 20px !important;
+                        font-size: 18px !important;
+                        line-height: 1.5 !important;
                         background: #f8f9fa !important;
-                        border-radius: 8px !important;
-                        margin: 10px 0 !important;
+                        border-radius: 12px !important;
+                        margin: 20px 0 !important;
                         display: block !important;
+                        border: 2px dashed #bdc3c7 !important;
                     `;
                 });
                 
-                // Force result containers
+                // STEP 10: Optimize result containers for mobile
                 const resultContainers = document.querySelectorAll('.results-grid, .cycles-grid, .realization-grid');
                 resultContainers.forEach(container => {
                     container.style.cssText = `
-                        display: grid !important;
-                        gap: 10px !important;
-                        padding: 10px !important;
-                        background: white !important;
+                        display: block !important;
+                        padding: 0 !important;
+                        background: transparent !important;
                         min-height: auto !important;
                         height: auto !important;
                         overflow: visible !important;
                     `;
                 });
                 
-                // Force result items
+                // STEP 11: Make result items larger and more readable
                 const resultItems = document.querySelectorAll('.result-item, .cycle-item, .realization-item');
                 resultItems.forEach(item => {
                     item.style.cssText = `
                         background: #f8f9fa !important;
                         border: 2px solid #e9ecef !important;
-                        border-radius: 8px !important;
-                        padding: 15px !important;
+                        border-radius: 12px !important;
+                        padding: 20px !important;
                         text-align: center !important;
-                        display: flex !important;
-                        flex-direction: column !important;
-                        justify-content: center !important;
-                        min-height: 80px !important;
-                        margin-bottom: 10px !important;
+                        display: block !important;
+                        min-height: 100px !important;
+                        margin-bottom: 15px !important;
+                        font-size: 16px !important;
+                        line-height: 1.4 !important;
+                        box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
                     `;
                 });
                 
-                console.log('✅ NUCLEAR: Tab content forced to be visible');
+                // STEP 12: Hide form panel actions on mobile (they interfere)
+                const panelActions = document.querySelector('.panel-actions');
+                if (panelActions) {
+                    panelActions.style.display = 'none !important';
+                }
+                
+                console.log('✅ ULTRA NUCLEAR: Mobile layout created with large content area');
             }
         }
         
-        // Run tab content fix
-        forceTabContentVisibility();
-        document.addEventListener('DOMContentLoaded', forceTabContentVisibility);
-        window.addEventListener('load', forceTabContentVisibility);
-        window.addEventListener('resize', forceTabContentVisibility);
+        // Run ultra mobile layout fix
+        createUltraMobileLayout();
+        document.addEventListener('DOMContentLoaded', createUltraMobileLayout);
+        window.addEventListener('load', createUltraMobileLayout);
+        window.addEventListener('resize', createUltraMobileLayout);
     </script>
     
     <!-- Application JavaScript Modules -->
