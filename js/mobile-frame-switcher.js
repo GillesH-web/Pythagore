@@ -218,20 +218,47 @@ class MobileFrameSwitcher {
                 resetBtn.style.lineHeight = '1.2 !important';
                 resetBtn.style.boxShadow = '0 12px 40px rgba(0,0,0,0.9) !important';
                 resetBtn.style.cursor = 'pointer !important';
+                resetBtn.style.zIndex = '2147483647 !important';
                 resetBtn.style.webkitTapHighlightColor = 'transparent !important';
                 resetBtn.style.webkitAppearance = 'none !important';
                 resetBtn.style.appearance = 'none !important';
                 resetBtn.style.transform = 'translateZ(0) !important';
                 resetBtn.style.webkitTransform = 'translateZ(0) !important';
                 resetBtn.style.willChange = 'transform !important';
+                console.log('📱 Reset button styled for Frame 2');
             }
             
-            // Ensure nuclear container is visible
+            // AGGRESSIVELY ensure nuclear container is visible and positioned correctly
             const nuclearContainer = document.getElementById('nuclear-buttons');
             if (nuclearContainer) {
-                nuclearContainer.style.display = 'block !important';
-                nuclearContainer.style.visibility = 'visible !important';
+                nuclearContainer.style.cssText = `
+                    position: fixed !important;
+                    bottom: 0px !important;
+                    left: 0px !important;
+                    right: 0px !important;
+                    width: 100vw !important;
+                    height: 120px !important;
+                    z-index: 2147483647 !important;
+                    pointer-events: none !important;
+                    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%) !important;
+                    display: block !important;
+                    visibility: visible !important;
+                    opacity: 1 !important;
+                `;
+                console.log('📱 Nuclear container forced visible in Frame 2');
             }
+            
+            // Double-check Reset button is visible after a short delay
+            setTimeout(() => {
+                const resetBtnCheck = document.getElementById('nuclear-reset');
+                if (resetBtnCheck) {
+                    resetBtnCheck.style.display = 'block !important';
+                    resetBtnCheck.style.visibility = 'visible !important';
+                    resetBtnCheck.style.opacity = '1 !important';
+                    resetBtnCheck.style.zIndex = '2147483647 !important';
+                    console.log('📱 Reset button double-checked and forced visible');
+                }
+            }, 100);
             
             // Scroll to top to show results
             window.scrollTo({ top: 0, behavior: 'smooth' });
