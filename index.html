@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v1.9.7</title>
-    <!-- Updated: 2025-12-09 17:30 - Fix: All Round Buttons Always Visible on Mobile -->
+    <title>Numérologie de Pythagore v1.9.8</title>
+    <!-- Updated: 2025-12-09 17:45 - Fix: Force All Buttons Visible on iPhone with Ultra Aggressive CSS + JS -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.7</span> <span class="build-info" id="build-info">Build: 2025-12-09 17:30</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.8</span> <span class="build-info" id="build-info">Build: 2025-12-09 17:45</span></h1>
         </header>
 
         <div class="main-content">
@@ -331,6 +331,64 @@
         document.addEventListener('DOMContentLoaded', createNuclearButtons);
         window.addEventListener('load', createNuclearButtons);
         window.addEventListener('resize', createNuclearButtons);
+        
+        // ULTRA FORCE: Make ALL buttons visible on iPhone
+        function forceAllButtonsVisible() {
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('🚨 ULTRA FORCE: Making all buttons visible on iPhone');
+                
+                // Force FAB container visible
+                const fabContainer = document.getElementById('mobile-fab-container');
+                if (fabContainer) {
+                    fabContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 2147483647 !important; pointer-events: none !important;';
+                    console.log('✅ FAB container forced visible');
+                }
+                
+                // Force FAB buttons visible
+                const fabPrimary = document.getElementById('mobile-submit-btn');
+                const fabSecondary = document.getElementById('mobile-reset-btn');
+                if (fabPrimary) {
+                    fabPrimary.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
+                    console.log('✅ FAB primary button forced visible');
+                }
+                if (fabSecondary) {
+                    fabSecondary.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
+                    console.log('✅ FAB secondary button forced visible');
+                }
+                
+                // Force Frame 2 Reset button visible
+                const frame2Container = document.getElementById('mobile-frame2-reset-container');
+                const frame2Btn = document.getElementById('mobile-frame2-reset-btn');
+                if (frame2Container) {
+                    frame2Container.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 2147483646 !important; pointer-events: none !important; height: 140px !important;';
+                    console.log('✅ Frame 2 container forced visible');
+                }
+                if (frame2Btn) {
+                    frame2Btn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; position: absolute !important; bottom: calc(env(safe-area-inset-bottom, 20px) + 30px) !important; left: 50% !important; transform: translateX(-50%) !important;';
+                    console.log('✅ Frame 2 button forced visible');
+                }
+                
+                // Force Nuclear buttons visible
+                const nuclearContainer = document.getElementById('nuclear-buttons');
+                if (nuclearContainer) {
+                    nuclearContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0px !important; left: 0px !important; right: 0px !important; width: 100vw !important; height: 120px !important; z-index: 2147483647 !important; pointer-events: none !important; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%) !important;';
+                    console.log('✅ Nuclear container forced visible');
+                }
+                
+                console.log('✅ ULTRA FORCE: All buttons visibility forced');
+            }
+        }
+        
+        // Run force visibility multiple times to ensure it works
+        forceAllButtonsVisible();
+        setTimeout(forceAllButtonsVisible, 100);
+        setTimeout(forceAllButtonsVisible, 500);
+        setTimeout(forceAllButtonsVisible, 1000);
+        document.addEventListener('DOMContentLoaded', forceAllButtonsVisible);
+        window.addEventListener('load', forceAllButtonsVisible);
+        window.addEventListener('resize', forceAllButtonsVisible);
         
         // ULTRA NUCLEAR MOBILE LAYOUT FIX
         function createUltraMobileLayout() {
