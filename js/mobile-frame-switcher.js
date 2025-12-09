@@ -112,15 +112,19 @@ class MobileFrameSwitcher {
         setTimeout(() => {
             const frame2ResetBtn = document.getElementById('mobile-frame2-reset-btn');
             if (frame2ResetBtn) {
+                console.log('📱 Found Frame 2 reset button, attaching direct listener');
                 frame2ResetBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
-                    console.log('📱 Frame 2 Reset button clicked directly - navigating to Frame 1');
+                    console.log('📱 ===== FRAME 2 RESET BUTTON CLICKED =====');
+                    console.log('📱 Event target:', e.target);
+                    console.log('📱 Current frame before reset:', self.currentFrame);
                     
                     // Clean up the form
                     const form = document.getElementById('client-form');
                     if (form) {
                         form.reset();
+                        console.log('📱 Form reset complete');
                     }
                     
                     // Clear error messages
@@ -130,10 +134,12 @@ class MobileFrameSwitcher {
                     document.querySelectorAll('.error-message').forEach(error => {
                         error.classList.remove('show');
                     });
+                    console.log('📱 Error messages cleared');
                     
                     // Clear results
                     if (window.formHandler && window.formHandler.resultsDisplay) {
                         window.formHandler.resultsDisplay.clearResults();
+                        console.log('📱 Results cleared');
                     }
                     
                     // Disable submit button
@@ -145,43 +151,35 @@ class MobileFrameSwitcher {
                     if (mobileSubmitBtn) {
                         mobileSubmitBtn.disabled = true;
                     }
-                    
-                    // FORCE Frame 1 to display
-                    const leftPanel = document.querySelector('.left-panel');
-                    const rightPanel = document.querySelector('.right-panel');
-                    
-                    if (leftPanel && rightPanel) {
-                        console.log('📱 Forcing Frame 1 display...');
-                        
-                        // Show Frame 1
-                        leftPanel.style.display = 'flex';
-                        leftPanel.style.visibility = 'visible';
-                        leftPanel.style.opacity = '1';
-                        
-                        // Hide Frame 2
-                        rightPanel.style.display = 'none';
-                        rightPanel.style.visibility = 'hidden';
-                        rightPanel.style.opacity = '0';
-                        
-                        // Hide Frame 2 reset button
-                        const frame2Container = document.getElementById('mobile-frame2-reset-container');
-                        if (frame2Container) {
-                            frame2Container.style.display = 'none';
-                        }
-                        
-                        // Show Frame 1 FAB buttons
-                        const mobileFabContainer = document.getElementById('mobile-fab-container');
-                        if (mobileFabContainer) {
-                            mobileFabContainer.style.display = 'block';
-                        }
-                        
-                        console.log('📱 Frame 1 should now be visible');
+                    const nuclearCalculate = document.getElementById('nuclear-calculate');
+                    if (nuclearCalculate) {
+                        nuclearCalculate.disabled = true;
                     }
+                    console.log('📱 Submit buttons disabled');
                     
-                    // Also call the method
+                    // Call showFrame1 method
+                    console.log('📱 Calling showFrame1()...');
                     self.showFrame1();
+                    
+                    // Double-check after a short delay
+                    setTimeout(() => {
+                        const leftPanel = document.querySelector('.left-panel');
+                        const rightPanel = document.querySelector('.right-panel');
+                        console.log('📱 ===== POST-RESET CHECK =====');
+                        console.log('📱 Left panel display:', leftPanel ? leftPanel.style.display : 'not found');
+                        console.log('📱 Right panel display:', rightPanel ? rightPanel.style.display : 'not found');
+                        console.log('📱 Current frame:', self.currentFrame);
+                        
+                        // If still not showing, force it again
+                        if (leftPanel && leftPanel.style.display === 'none') {
+                            console.log('📱 WARNING: Frame 1 still hidden, forcing again...');
+                            self.showFrame1();
+                        }
+                    }, 100);
                 }, { passive: false });
                 console.log('📱 Direct event listener attached to Frame 2 reset button');
+            } else {
+                console.log('📱 WARNING: Frame 2 reset button not found in DOM');
             }
         }, 500);
         
@@ -243,14 +241,11 @@ class MobileFrameSwitcher {
         this.currentFrame = 'frame1';
         
         if (this.leftPanel && this.rightPanel) {
-            // Show form, hide results - DON'T use cssText as it overwrites all styles
-            this.leftPanel.style.display = 'flex';
-            this.leftPanel.style.visibility = 'visible';
-            this.leftPanel.style.opacity = '1';
+            console.log('📱 showFrame1() called - switching to form');
             
-            this.rightPanel.style.display = 'none';
-            this.rightPanel.style.visibility = 'hidden';
-            this.rightPanel.style.opacity = '0';
+            // FORCE show form, hide results with !important-level specificity
+            this.leftPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; width: 100% !important; height: auto !important;';
+            this.rightPanel.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
             
             // Update main content layout for single column
             const mainContent = document.querySelector('.main-content');
@@ -262,28 +257,28 @@ class MobileFrameSwitcher {
             // Show Frame 1 FAB buttons
             const mobileFabContainer = document.getElementById('mobile-fab-container');
             if (mobileFabContainer) {
-                mobileFabContainer.style.display = 'block';
+                mobileFabContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
             }
             
             // Hide Frame 2 Reset Button
             const frame2ResetContainer = document.getElementById('mobile-frame2-reset-container');
             if (frame2ResetContainer) {
-                frame2ResetContainer.style.display = 'none';
+                frame2ResetContainer.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
                 console.log('📱 Frame 2 Reset button container hidden');
             }
             
             // Show nuclear buttons if they exist
             const nuclearContainer = document.getElementById('nuclear-buttons');
             if (nuclearContainer) {
-                nuclearContainer.style.display = 'block';
-                nuclearContainer.style.visibility = 'visible';
-                nuclearContainer.style.opacity = '1';
+                nuclearContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
             }
             
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
             console.log('📱 Frame 1 (form) displayed - FAB buttons visible');
+            console.log('📱 Left panel display:', this.leftPanel.style.display);
+            console.log('📱 Right panel display:', this.rightPanel.style.display);
         }
     }
     
