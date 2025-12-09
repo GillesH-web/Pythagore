@@ -129,7 +129,7 @@
                 
                 <!-- Mobile Reset Button for Frame 2 (Results) -->
                 <div class="mobile-frame2-reset-container" id="mobile-frame2-reset-container" style="display: none;">
-                    <button type="button" id="mobile-frame2-reset-btn" class="mobile-frame2-reset-btn">
+                    <button type="button" id="mobile-frame2-reset-btn" class="mobile-frame2-reset-btn" onclick="if(window.mobileFrameSwitcher){window.mobileFrameSwitcher.showFrame1();} console.log('Button clicked!');">
                         <span class="reset-icon">🔄</span>
                         <span class="reset-text">Nouveau<br>Calcul</span>
                     </button>
