@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v1.9.8</title>
-    <!-- Updated: 2025-12-09 17:45 - Fix: Force All Buttons Visible on iPhone with Ultra Aggressive CSS + JS -->
+    <title>Numérologie de Pythagore v1.9.9</title>
+    <!-- Updated: 2025-12-09 18:00 - Fix: Super Simple Inline-Style Buttons for iPhone (Bypass All CSS) -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.8</span> <span class="build-info" id="build-info">Build: 2025-12-09 17:45</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.9</span> <span class="build-info" id="build-info">Build: 2025-12-09 18:00</span></h1>
         </header>
 
         <div class="main-content">
@@ -138,8 +138,149 @@
         </div>
     </div>
 
+    <!-- SUPER SIMPLE MOBILE BUTTONS - ALWAYS VISIBLE -->
+    <div id="super-simple-mobile-buttons" style="display: none;">
+        <button id="simple-calculate" style="position: fixed; bottom: 30px; right: 20px; width: 80px; height: 80px; border-radius: 50%; background: #27ae60; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;" disabled>
+            <span style="font-size: 28px;">⚙️</span>
+            <span style="font-size: 11px;">CALCULER</span>
+        </button>
+        <button id="simple-reset" style="position: fixed; bottom: 30px; right: 120px; width: 80px; height: 80px; border-radius: 50%; background: #e74c3c; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
+            <span style="font-size: 28px;">🔄</span>
+            <span style="font-size: 11px;">RESET</span>
+        </button>
+        <button id="simple-nouveau" style="position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); width: 80px; height: 80px; border-radius: 50%; background: #ff9800; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
+            <span style="font-size: 28px;">🔄</span>
+            <span style="font-size: 10px; text-align: center;">NOUVEAU<br>CALCUL</span>
+        </button>
+    </div>
+
     <!-- External JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- SUPER SIMPLE MOBILE BUTTONS ACTIVATION -->
+    <script>
+        // Activate super simple buttons on mobile
+        (function() {
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+                console.log('📱 ACTIVATING SUPER SIMPLE MOBILE BUTTONS');
+                
+                const container = document.getElementById('super-simple-mobile-buttons');
+                if (container) {
+                    container.style.display = 'block';
+                    console.log('✅ Super simple buttons container shown');
+                }
+                
+                const calculateBtn = document.getElementById('simple-calculate');
+                const resetBtn = document.getElementById('simple-reset');
+                const nouveauBtn = document.getElementById('simple-nouveau');
+                
+                const form = document.getElementById('client-form');
+                
+                // Calculate button
+                if (calculateBtn && form) {
+                    calculateBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('📱 Simple Calculate clicked');
+                        if (!this.disabled) {
+                            const submitEvent = new Event('submit', { bubbles: true, cancelable: true });
+                            form.dispatchEvent(submitEvent);
+                        }
+                    });
+                    
+                    // Enable/disable based on form validity
+                    function updateCalculateBtn() {
+                        const firstName1 = document.getElementById('firstName1').value.trim();
+                        const lastName = document.getElementById('lastName').value.trim();
+                        const birthDate = document.getElementById('birthDate').value;
+                        
+                        const isValid = firstName1 && lastName && birthDate;
+                        calculateBtn.disabled = !isValid;
+                        calculateBtn.style.background = isValid ? '#27ae60' : '#95a5a6';
+                        calculateBtn.style.opacity = isValid ? '1' : '0.7';
+                    }
+                    
+                    form.querySelectorAll('input').forEach(input => {
+                        input.addEventListener('input', updateCalculateBtn);
+                        input.addEventListener('change', updateCalculateBtn);
+                    });
+                    
+                    updateCalculateBtn();
+                    console.log('✅ Calculate button activated');
+                }
+                
+                // Reset button
+                if (resetBtn && form) {
+                    resetBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('📱 Simple Reset clicked');
+                        form.reset();
+                        
+                        // Clear errors
+                        document.querySelectorAll('.form-group').forEach(group => {
+                            group.classList.remove('error');
+                        });
+                        document.querySelectorAll('.error-message').forEach(error => {
+                            error.classList.remove('show');
+                        });
+                        
+                        // Clear results
+                        if (window.formHandler && window.formHandler.resultsDisplay) {
+                            window.formHandler.resultsDisplay.clearResults();
+                        }
+                        
+                        // Switch to Frame 1 if frame switcher exists
+                        if (window.mobileFrameSwitcher) {
+                            window.mobileFrameSwitcher.showFrame1();
+                        }
+                    });
+                    console.log('✅ Reset button activated');
+                }
+                
+                // Nouveau Calcul button
+                if (nouveauBtn && form) {
+                    nouveauBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('📱 Simple Nouveau Calcul clicked');
+                        form.reset();
+                        
+                        // Clear errors
+                        document.querySelectorAll('.form-group').forEach(group => {
+                            group.classList.remove('error');
+                        });
+                        document.querySelectorAll('.error-message').forEach(error => {
+                            error.classList.remove('show');
+                        });
+                        
+                        // Clear results
+                        if (window.formHandler && window.formHandler.resultsDisplay) {
+                            window.formHandler.resultsDisplay.clearResults();
+                        }
+                        
+                        // Switch to Frame 1
+                        if (window.mobileFrameSwitcher) {
+                            window.mobileFrameSwitcher.showFrame1();
+                        }
+                    });
+                    console.log('✅ Nouveau Calcul button activated');
+                }
+                
+                // Hide all other button systems
+                const fabContainer = document.getElementById('mobile-fab-container');
+                const frame2Container = document.getElementById('mobile-frame2-reset-container');
+                const nuclearContainer = document.getElementById('nuclear-buttons');
+                const formActions = document.querySelector('.form-actions');
+                
+                if (fabContainer) fabContainer.style.display = 'none';
+                if (frame2Container) frame2Container.style.display = 'none';
+                if (nuclearContainer) nuclearContainer.style.display = 'none';
+                if (formActions) formActions.style.display = 'none';
+                
+                console.log('✅ SUPER SIMPLE MOBILE BUTTONS FULLY ACTIVATED');
+            }
+        })();
+    </script>
     
     <!-- NUCLEAR OPTION: Create buttons from scratch with JavaScript -->
     <script>
