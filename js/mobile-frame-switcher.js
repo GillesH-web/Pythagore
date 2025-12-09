@@ -108,10 +108,11 @@ class MobileFrameSwitcher {
         });
         
         // DIRECT listener for Frame 2 reset button (backup in case event bubbling fails)
+        const self = this; // Store reference to this
         setTimeout(() => {
             const frame2ResetBtn = document.getElementById('mobile-frame2-reset-btn');
             if (frame2ResetBtn) {
-                frame2ResetBtn.addEventListener('click', (e) => {
+                frame2ResetBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     e.stopPropagation();
                     console.log('📱 Frame 2 Reset button clicked directly - navigating to Frame 1');
@@ -145,8 +146,40 @@ class MobileFrameSwitcher {
                         mobileSubmitBtn.disabled = true;
                     }
                     
-                    // Switch to Frame 1
-                    this.showFrame1();
+                    // FORCE Frame 1 to display
+                    const leftPanel = document.querySelector('.left-panel');
+                    const rightPanel = document.querySelector('.right-panel');
+                    
+                    if (leftPanel && rightPanel) {
+                        console.log('📱 Forcing Frame 1 display...');
+                        
+                        // Show Frame 1
+                        leftPanel.style.display = 'flex';
+                        leftPanel.style.visibility = 'visible';
+                        leftPanel.style.opacity = '1';
+                        
+                        // Hide Frame 2
+                        rightPanel.style.display = 'none';
+                        rightPanel.style.visibility = 'hidden';
+                        rightPanel.style.opacity = '0';
+                        
+                        // Hide Frame 2 reset button
+                        const frame2Container = document.getElementById('mobile-frame2-reset-container');
+                        if (frame2Container) {
+                            frame2Container.style.display = 'none';
+                        }
+                        
+                        // Show Frame 1 FAB buttons
+                        const mobileFabContainer = document.getElementById('mobile-fab-container');
+                        if (mobileFabContainer) {
+                            mobileFabContainer.style.display = 'block';
+                        }
+                        
+                        console.log('📱 Frame 1 should now be visible');
+                    }
+                    
+                    // Also call the method
+                    self.showFrame1();
                 }, { passive: false });
                 console.log('📱 Direct event listener attached to Frame 2 reset button');
             }
