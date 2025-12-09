@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v1.9.2</title>
-    <!-- Updated: 2025-12-08 18:09 - Mobile Frame 2 Reset Button & Spacing Optimization -->
+    <title>Numérologie de Pythagore v1.9.3</title>
+    <!-- Updated: 2025-12-09 - Mobile Frame Switching & Frame 2 Reset Button + Hide PDF/Print on Mobile -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.2</span> <span class="build-info" id="build-info">Build: 2025-12-08 18:09</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v1.9.3</span> <span class="build-info" id="build-info">Build: 2025-12-09 15:30</span></h1>
         </header>
 
         <div class="main-content">
@@ -125,6 +125,14 @@
                 <div class="panel-actions" id="panel-actions" style="display: none;">
                     <button type="button" id="generate-pdf-btn" class="action-btn pdf-btn">📄 Générer rapport PDF</button>
                     <button type="button" id="print-results-btn" class="action-btn print-btn">🖨️ Imprimer les résultats</button>
+                </div>
+                
+                <!-- Mobile Reset Button for Frame 2 (Results) -->
+                <div class="mobile-frame2-reset-container" id="mobile-frame2-reset-container" style="display: none;">
+                    <button type="button" id="mobile-frame2-reset-btn" class="mobile-frame2-reset-btn">
+                        <span class="reset-icon">🔄</span>
+                        <span class="reset-text">Nouveau<br>Calcul</span>
+                    </button>
                 </div>
             </div>
         </div>

@@ -67,11 +67,42 @@ class MobileFrameSwitcher {
             this.showFrame2();
         });
         
-        // Listen for form reset (switch to form)
+        // Listen for form reset (switch to form) - includes Frame 2 reset button
         document.addEventListener('click', (event) => {
-            const resetBtn = event.target.closest('#reset-btn, #mobile-reset-btn, #nuclear-reset');
+            const resetBtn = event.target.closest('#reset-btn, #mobile-reset-btn, #nuclear-reset, #mobile-frame2-reset-btn');
             if (resetBtn) {
-                console.log('📱 Reset clicked - switching to form frame');
+                console.log('📱 Reset clicked - switching to form frame and cleaning up');
+                
+                // Clean up the form
+                const form = document.getElementById('client-form');
+                if (form) {
+                    form.reset();
+                }
+                
+                // Clear error messages
+                document.querySelectorAll('.form-group').forEach(group => {
+                    group.classList.remove('error');
+                });
+                document.querySelectorAll('.error-message').forEach(error => {
+                    error.classList.remove('show');
+                });
+                
+                // Clear results
+                if (window.formHandler && window.formHandler.resultsDisplay) {
+                    window.formHandler.resultsDisplay.clearResults();
+                }
+                
+                // Disable submit button
+                const submitBtn = document.getElementById('submit-btn');
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+                const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
+                if (mobileSubmitBtn) {
+                    mobileSubmitBtn.disabled = true;
+                }
+                
+                // Switch to Frame 1
                 this.showFrame1();
             }
         });
@@ -150,7 +181,20 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
-            // Ensure nuclear container is visible
+            // Show Frame 1 FAB buttons
+            const mobileFabContainer = document.getElementById('mobile-fab-container');
+            if (mobileFabContainer) {
+                mobileFabContainer.style.display = 'block';
+            }
+            
+            // Hide Frame 2 Reset Button
+            const frame2ResetContainer = document.getElementById('mobile-frame2-reset-container');
+            if (frame2ResetContainer) {
+                frame2ResetContainer.style.display = 'none';
+                console.log('📱 Frame 2 Reset button container hidden');
+            }
+            
+            // Show nuclear buttons if they exist
             const nuclearContainer = document.getElementById('nuclear-buttons');
             if (nuclearContainer) {
                 nuclearContainer.style.display = 'block';
@@ -158,26 +202,10 @@ class MobileFrameSwitcher {
                 nuclearContainer.style.opacity = '1';
             }
             
-            // Show both Calculate and Reset buttons in Frame 1
-            const calculateBtn = document.getElementById('nuclear-calculate');
-            const resetBtn = document.getElementById('nuclear-reset');
-            if (calculateBtn) {
-                calculateBtn.style.display = 'block';
-                calculateBtn.style.visibility = 'visible';
-                calculateBtn.style.opacity = '1';
-                calculateBtn.style.pointerEvents = 'auto';
-            }
-            if (resetBtn) {
-                resetBtn.style.display = 'block';
-                resetBtn.style.visibility = 'visible';
-                resetBtn.style.opacity = '1';
-                resetBtn.style.pointerEvents = 'auto';
-            }
-            
             // Scroll to top
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            console.log('📱 Frame 1 (form) displayed - both buttons visible');
+            console.log('📱 Frame 1 (form) displayed - FAB buttons visible');
         }
     }
     
@@ -206,83 +234,41 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
-            // In Frame 2: Hide Calculate button, show ONLY Reset button with same styling as Frame 1
-            const calculateBtn = document.getElementById('nuclear-calculate');
-            const resetBtn = document.getElementById('nuclear-reset');
-            if (calculateBtn) {
-                calculateBtn.style.display = 'none !important';
-                calculateBtn.style.visibility = 'hidden !important';
-                calculateBtn.style.opacity = '0 !important';
-                calculateBtn.style.pointerEvents = 'none !important';
-            }
-            if (resetBtn) {
-                // CENTER the Reset button in Frame 2 for maximum visibility
-                resetBtn.style.display = 'block !important';
-                resetBtn.style.visibility = 'visible !important';
-                resetBtn.style.opacity = '1 !important';
-                resetBtn.style.pointerEvents = 'auto !important';
-                resetBtn.style.position = 'fixed !important';
-                resetBtn.style.left = '50% !important';
-                resetBtn.style.bottom = '20px !important';
-                resetBtn.style.transform = 'translateX(-50%) translateZ(0) !important';
-                resetBtn.style.webkitTransform = 'translateX(-50%) translateZ(0) !important';
-                resetBtn.style.width = '72px !important';
-                resetBtn.style.height = '72px !important';
-                resetBtn.style.borderRadius = '50% !important';
-                resetBtn.style.border = '4px solid #ffffff !important';
-                resetBtn.style.background = '#e74c3c !important';
-                resetBtn.style.color = '#ffffff !important';
-                resetBtn.style.fontSize = '12px !important';
-                resetBtn.style.fontWeight = '900 !important';
-                resetBtn.style.textAlign = 'center !important';
-                resetBtn.style.lineHeight = '1.2 !important';
-                resetBtn.style.boxShadow = '0 12px 40px rgba(0,0,0,0.9) !important';
-                resetBtn.style.cursor = 'pointer !important';
-                resetBtn.style.zIndex = '2147483648 !important';
-                resetBtn.style.webkitTapHighlightColor = 'transparent !important';
-                resetBtn.style.webkitAppearance = 'none !important';
-                resetBtn.style.appearance = 'none !important';
-                resetBtn.style.willChange = 'transform !important';
-                resetBtn.style.margin = '0 !important';
-                console.log('📱 Reset button CENTERED for Frame 2');
+            // Hide Frame 1 FAB buttons
+            const mobileFabContainer = document.getElementById('mobile-fab-container');
+            if (mobileFabContainer) {
+                mobileFabContainer.style.display = 'none';
             }
             
-            // AGGRESSIVELY ensure nuclear container is visible and positioned correctly
+            // Show Frame 2 Reset Button
+            const frame2ResetContainer = document.getElementById('mobile-frame2-reset-container');
+            if (frame2ResetContainer) {
+                frame2ResetContainer.style.display = 'block';
+                frame2ResetContainer.style.visibility = 'visible';
+                frame2ResetContainer.style.opacity = '1';
+                console.log('📱 Frame 2 Reset button container shown');
+            }
+            
+            // Ensure the reset button itself is visible
+            const frame2ResetBtn = document.getElementById('mobile-frame2-reset-btn');
+            if (frame2ResetBtn) {
+                frame2ResetBtn.style.display = 'flex';
+                frame2ResetBtn.style.visibility = 'visible';
+                frame2ResetBtn.style.opacity = '1';
+                frame2ResetBtn.style.pointerEvents = 'auto';
+                console.log('📱 Frame 2 Reset button shown');
+            }
+            
+            // Hide nuclear buttons if they exist
             const nuclearContainer = document.getElementById('nuclear-buttons');
             if (nuclearContainer) {
-                nuclearContainer.style.cssText = `
-                    position: fixed !important;
-                    bottom: 0px !important;
-                    left: 0px !important;
-                    right: 0px !important;
-                    width: 100vw !important;
-                    height: 120px !important;
-                    z-index: 2147483647 !important;
-                    pointer-events: none !important;
-                    background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%) !important;
-                    display: block !important;
-                    visibility: visible !important;
-                    opacity: 1 !important;
-                `;
-                console.log('📱 Nuclear container forced visible in Frame 2');
+                nuclearContainer.style.display = 'none';
             }
-            
-            // Double-check Reset button is visible after a short delay
-            setTimeout(() => {
-                const resetBtnCheck = document.getElementById('nuclear-reset');
-                if (resetBtnCheck) {
-                    resetBtnCheck.style.display = 'block !important';
-                    resetBtnCheck.style.visibility = 'visible !important';
-                    resetBtnCheck.style.opacity = '1 !important';
-                    resetBtnCheck.style.zIndex = '2147483647 !important';
-                    console.log('📱 Reset button double-checked and forced visible');
-                }
-            }, 100);
             
             // Scroll to top to show results
             window.scrollTo({ top: 0, behavior: 'smooth' });
             
-            console.log('📱 Frame 2 (results) displayed - only Reset button visible');
+            console.log('📱 Frame 2 (results) displayed - Reset button visible');
         }
     }
     
