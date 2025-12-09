@@ -2,6 +2,12 @@
  * MobileFrameSwitcher class manages frame switching for optimal mobile display
  * Shows only frame1 (form) initially, switches to frame2 (results) on calculate,
  * and back to frame1 (form) on reset
+ * 
+ * IMPORTANT: ALL ROUND BUTTONS ARE ALWAYS VISIBLE ON MOBILE
+ * - FAB buttons (Calculer + Reset) - always visible
+ * - "Nouveau Calcul" button - always visible
+ * - Nuclear buttons - always visible
+ * This ensures users can always access all functions regardless of which frame is showing
  */
 class MobileFrameSwitcher {
     constructor() {
@@ -254,20 +260,20 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
-            // Show Frame 1 FAB buttons
+            // ALWAYS SHOW ALL BUTTONS - Frame 1 FAB buttons
             const mobileFabContainer = document.getElementById('mobile-fab-container');
             if (mobileFabContainer) {
                 mobileFabContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
             }
             
-            // Hide Frame 2 Reset Button
+            // ALWAYS SHOW ALL BUTTONS - Frame 2 Reset Button (keep visible)
             const frame2ResetContainer = document.getElementById('mobile-frame2-reset-container');
             if (frame2ResetContainer) {
-                frame2ResetContainer.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
-                console.log('📱 Frame 2 Reset button container hidden');
+                frame2ResetContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
+                console.log('📱 Frame 2 Reset button container ALWAYS VISIBLE');
             }
             
-            // Show nuclear buttons if they exist
+            // ALWAYS SHOW ALL BUTTONS - Nuclear buttons if they exist
             const nuclearContainer = document.getElementById('nuclear-buttons');
             if (nuclearContainer) {
                 nuclearContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
@@ -307,35 +313,30 @@ class MobileFrameSwitcher {
                 mainContent.classList.add('mobile-frame-switching');
             }
             
-            // Hide Frame 1 FAB buttons
+            // ALWAYS SHOW ALL BUTTONS - Frame 1 FAB buttons (keep visible)
             const mobileFabContainer = document.getElementById('mobile-fab-container');
             if (mobileFabContainer) {
-                mobileFabContainer.style.display = 'none';
+                mobileFabContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
             }
             
-            // Show Frame 2 Reset Button
+            // ALWAYS SHOW ALL BUTTONS - Frame 2 Reset Button
             const frame2ResetContainer = document.getElementById('mobile-frame2-reset-container');
             if (frame2ResetContainer) {
-                frame2ResetContainer.style.display = 'block';
-                frame2ResetContainer.style.visibility = 'visible';
-                frame2ResetContainer.style.opacity = '1';
-                console.log('📱 Frame 2 Reset button container shown');
+                frame2ResetContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
+                console.log('📱 Frame 2 Reset button container ALWAYS VISIBLE');
             }
             
-            // Ensure the reset button itself is visible
+            // ALWAYS SHOW ALL BUTTONS - Ensure the reset button itself is visible
             const frame2ResetBtn = document.getElementById('mobile-frame2-reset-btn');
             if (frame2ResetBtn) {
-                frame2ResetBtn.style.display = 'flex';
-                frame2ResetBtn.style.visibility = 'visible';
-                frame2ResetBtn.style.opacity = '1';
-                frame2ResetBtn.style.pointerEvents = 'auto';
-                console.log('📱 Frame 2 Reset button shown');
+                frame2ResetBtn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
+                console.log('📱 Frame 2 Reset button ALWAYS VISIBLE');
             }
             
-            // Hide nuclear buttons if they exist
+            // ALWAYS SHOW ALL BUTTONS - Nuclear buttons if they exist (keep visible)
             const nuclearContainer = document.getElementById('nuclear-buttons');
             if (nuclearContainer) {
-                nuclearContainer.style.display = 'none';
+                nuclearContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
             }
             
             // Scroll to top to show results
