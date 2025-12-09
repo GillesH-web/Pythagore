@@ -107,6 +107,51 @@ class MobileFrameSwitcher {
             }
         });
         
+        // DIRECT listener for Frame 2 reset button (backup in case event bubbling fails)
+        setTimeout(() => {
+            const frame2ResetBtn = document.getElementById('mobile-frame2-reset-btn');
+            if (frame2ResetBtn) {
+                frame2ResetBtn.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    console.log('📱 Frame 2 Reset button clicked directly - navigating to Frame 1');
+                    
+                    // Clean up the form
+                    const form = document.getElementById('client-form');
+                    if (form) {
+                        form.reset();
+                    }
+                    
+                    // Clear error messages
+                    document.querySelectorAll('.form-group').forEach(group => {
+                        group.classList.remove('error');
+                    });
+                    document.querySelectorAll('.error-message').forEach(error => {
+                        error.classList.remove('show');
+                    });
+                    
+                    // Clear results
+                    if (window.formHandler && window.formHandler.resultsDisplay) {
+                        window.formHandler.resultsDisplay.clearResults();
+                    }
+                    
+                    // Disable submit button
+                    const submitBtn = document.getElementById('submit-btn');
+                    if (submitBtn) {
+                        submitBtn.disabled = true;
+                    }
+                    const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
+                    if (mobileSubmitBtn) {
+                        mobileSubmitBtn.disabled = true;
+                    }
+                    
+                    // Switch to Frame 1
+                    this.showFrame1();
+                }, { passive: false });
+                console.log('📱 Direct event listener attached to Frame 2 reset button');
+            }
+        }, 500);
+        
         // Listen for Calculate button clicks for immediate frame switch
         document.addEventListener('click', (event) => {
             const calculateBtn = event.target.closest('#submit-btn, #mobile-submit-btn, #nuclear-calculate');
