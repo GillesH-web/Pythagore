@@ -171,18 +171,18 @@ class FormHandler {
                 },
                 output7: {
                     label: 'Réalisation 2', 
-                    description: 'Deuxième élément de réalisation',
-                    value: Math.abs(output1 - output3) || 1 // Example calculation
+                    description: this.getRealization2AgeRange(output1),
+                    value: this.calculator.calculateRealization2(formData.birthDate) // Day + Year
                 },
                 output8: {
                     label: 'Réalisation 3',
-                    description: 'Troisième élément de réalisation', 
-                    value: (output1 * output3) % 9 || 9 // Example calculation
+                    description: this.getRealization3AgeRange(output1), 
+                    value: this.calculator.calculateRealization3(formData.birthDate) // Réalisation 1 + Réalisation 2
                 },
                 output9: {
                     label: 'Réalisation 4',
-                    description: 'Quatrième élément de réalisation',
-                    value: this.calculator.reduceToSingleDigit(output1 + output3) // New calculation
+                    description: this.getRealization4AgeRange(output1),
+                    value: this.calculator.calculateRealization4(formData.birthDate) // Year + Month
                 }
             };
             this.resultsDisplay.displayRealization(realizationData, formData);
@@ -249,6 +249,66 @@ class FormHandler {
     }
 
     /**
+     * Gets the age range for Réalisation 2 based on Life Path Number
+     * @param {number} output1 - Life path number (1-9)
+     * @returns {string} - Age range description
+     */
+    getRealization2AgeRange(output1) {
+        const realization2Ages = {
+            1: "De 35 à 44 ans",
+            2: "De 34 à 43 ans",
+            3: "De 33 à 42 ans",
+            4: "De 32 à 41 ans",
+            5: "De 31 à 40 ans",
+            6: "De 30 à 39 ans",
+            7: "De 29 à 38 ans",
+            8: "De 28 à 37 ans",
+            9: "De 27 à 36 ans"
+        };
+        return realization2Ages[output1] || "De 35 à 44 ans";
+    }
+
+    /**
+     * Gets the age range for Réalisation 3 based on Life Path Number
+     * @param {number} output1 - Life path number (1-9)
+     * @returns {string} - Age range description
+     */
+    getRealization3AgeRange(output1) {
+        const realization3Ages = {
+            1: "De 44 à 53 ans",
+            2: "De 43 à 52 ans",
+            3: "De 42 à 51 ans",
+            4: "De 41 à 50 ans",
+            5: "De 40 à 49 ans",
+            6: "De 39 à 48 ans",
+            7: "De 38 à 47 ans",
+            8: "De 37 à 46 ans",
+            9: "De 36 à 45 ans"
+        };
+        return realization3Ages[output1] || "De 44 à 53 ans";
+    }
+
+    /**
+     * Gets the age range for Réalisation 4 based on Life Path Number
+     * @param {number} output1 - Life path number (1-9)
+     * @returns {string} - Age range description
+     */
+    getRealization4AgeRange(output1) {
+        const realization4Ages = {
+            1: "53 ans et plus",
+            2: "52 ans et plus",
+            3: "51 ans et plus",
+            4: "50 ans et plus",
+            5: "49 ans et plus",
+            6: "48 ans et plus",
+            7: "47 ans et plus",
+            8: "46 ans et plus",
+            9: "45 ans et plus"
+        };
+        return realization4Ages[output1] || "53 ans et plus";
+    }
+
+    /**
      * Generates a PDF report with enhanced layout matching the web interface
      */
     generatePDF() {
@@ -262,11 +322,12 @@ class FormHandler {
             const output3 = this.calculator.calculateOutput3(formData, formData.lastName);
             const cycles = this.calculator.calculateCycles(formData.birthDate, output1);
 
-            // Calculate realization data (Réalisation 1, 2, 3)
+            // Calculate realization data (Réalisation 1, 2, 3, 4)
             const realizationData = {
                 output6: { label: 'Réalisation 1', description: this.getRealization1AgeRange(output1), value: this.calculator.calculateRealization1(formData.birthDate) },
-                output7: { label: 'Réalisation 2', description: 'Deuxième élément de réalisation', value: Math.abs(output1 - output3) || 1 },
-                output8: { label: 'Réalisation 3', description: 'Troisième élément de réalisation', value: this.calculator.reduceToSingleDigit(output1 * output3) }
+                output7: { label: 'Réalisation 2', description: this.getRealization2AgeRange(output1), value: this.calculator.calculateRealization2(formData.birthDate) },
+                output8: { label: 'Réalisation 3', description: this.getRealization3AgeRange(output1), value: this.calculator.calculateRealization3(formData.birthDate) },
+                output9: { label: 'Réalisation 4', description: this.getRealization4AgeRange(output1), value: this.calculator.calculateRealization4(formData.birthDate) }
             };
 
             // Add pyramid/eye background (simplified for PDF)
@@ -313,8 +374,9 @@ class FormHandler {
             // Tab 3: Phase de réalisation Section
             this.addTabSection(doc, 'Phase de réalisation', 230);
             this.addRealizationBox(doc, realizationData.output6, 20, 245, 170, 15);
-            this.addRealizationBox(doc, realizationData.output7, 20, 265, 170, 15);
-            this.addRealizationBox(doc, realizationData.output8, 20, 285, 170, 15);
+            this.addRealizationBox(doc, realizationData.output7, 20, 260, 170, 15);
+            this.addRealizationBox(doc, realizationData.output8, 20, 275, 170, 15);
+            this.addRealizationBox(doc, realizationData.output9, 20, 290, 170, 15);
 
             // Footer
             doc.setTextColor(127, 140, 141);

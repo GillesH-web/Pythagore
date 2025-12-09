@@ -179,4 +179,48 @@ class Calculator {
         const sum = day + month;
         return this.reduceToSingleDigit(sum);
     }
+
+    /**
+     * Calculates Réalisation 2 - Second Realization Phase
+     * Based on birth day + birth year, reduced to single digit
+     * @param {string} birthDate - Birth date in YYYY-MM-DD format
+     * @returns {number} - Realization 2 number (1-9)
+     */
+    calculateRealization2(birthDate) {
+        const date = new Date(birthDate);
+        const day = date.getDate();
+        const year = date.getFullYear();
+        
+        const sum = day + year;
+        return this.reduceToSingleDigit(sum);
+    }
+
+    /**
+     * Calculates Réalisation 3 - Third Realization Phase
+     * Based on Réalisation 1 + Réalisation 2, reduced to single digit
+     * @param {string} birthDate - Birth date in YYYY-MM-DD format
+     * @returns {number} - Realization 3 number (1-9)
+     */
+    calculateRealization3(birthDate) {
+        const realization1 = this.calculateRealization1(birthDate);
+        const realization2 = this.calculateRealization2(birthDate);
+        
+        const sum = realization1 + realization2;
+        return this.reduceToSingleDigit(sum);
+    }
+
+    /**
+     * Calculates Réalisation 4 - Fourth Realization Phase
+     * Based on birth year + birth month, reduced to single digit
+     * @param {string} birthDate - Birth date in YYYY-MM-DD format
+     * @returns {number} - Realization 4 number (1-9)
+     */
+    calculateRealization4(birthDate) {
+        const date = new Date(birthDate);
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        
+        const sum = year + month;
+        return this.reduceToSingleDigit(sum);
+    }
 }

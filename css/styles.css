@@ -572,16 +572,9 @@ header h1 {
         padding: 8px;
     }
     
+    /* Hide PDF and Print buttons on mobile */
     .panel-actions {
-        margin: 0 5px;
-        padding: 10px;
-    }
-    
-    .panel-actions .action-btn {
-        flex: 1;
-        min-width: 120px;
-        font-size: 0.8rem;
-        padding: 8px 12px;
+        display: none !important;
     }
 }
 
@@ -609,11 +602,38 @@ header h1 {
     .main-content {
         height: calc(100vh - 80px);
         height: calc(-webkit-fill-available - 80px);
+        grid-template-columns: 1fr !important; /* Force single column on mobile */
     }
     
     .left-panel, .right-panel {
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+    
+    /* CRITICAL: Ensure only one frame is visible at a time on mobile */
+    /* Frame 1 (form) is shown by default, Frame 2 (results) is hidden */
+    /* JavaScript will toggle these when Calculate button is clicked */
+    .left-panel {
+        display: flex !important;
+    }
+    
+    .right-panel {
+        display: none !important;
+    }
+    
+    /* When mobile frame switching is active */
+    .mobile-frame-switching .main-content {
+        grid-template-columns: 1fr !important;
+    }
+    
+    /* Ensure frames take full width when visible */
+    .mobile-frame-switching .left-panel,
+    .mobile-frame-switching .right-panel {
+        width: 100vw !important;
+        max-width: 100vw !important;
+        grid-column: 1 / -1 !important;
     }
     
     .form-group input {
@@ -636,6 +656,11 @@ header h1 {
     
     .realization-grid {
         grid-template-columns: 1fr;
+    }
+    
+    /* Hide PDF and Print buttons on iPhone */
+    .panel-actions {
+        display: none !important;
     }
 }
 
