@@ -223,9 +223,33 @@ class FormHandler {
         });
 
         this.resultsDisplay.clearResults();
+        
+        // Disable ALL calculate buttons (desktop and mobile)
         document.getElementById('submit-btn').disabled = true;
+        
+        // Disable mobile FAB button
+        const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
+        if (mobileSubmitBtn) {
+            mobileSubmitBtn.disabled = true;
+        }
+        
+        // Disable super simple mobile button
+        const simpleCalculateBtn = document.getElementById('simple-calculate');
+        if (simpleCalculateBtn) {
+            simpleCalculateBtn.disabled = true;
+            simpleCalculateBtn.style.background = '#95a5a6';
+            simpleCalculateBtn.style.opacity = '0.7';
+        }
+        
+        // Disable nuclear mobile button
+        const nuclearCalculateBtn = document.getElementById('nuclear-calculate');
+        if (nuclearCalculateBtn) {
+            nuclearCalculateBtn.disabled = true;
+            nuclearCalculateBtn.style.background = '#95a5a6 !important';
+            nuclearCalculateBtn.style.opacity = '0.7 !important';
+        }
 
-        console.log('🔄 Form reset completed');
+        console.log('🔄 Form reset completed - all calculate buttons disabled');
     }
 
     /**
