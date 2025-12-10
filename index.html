@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v2.1.4</title>
-    <!-- Updated: 2025-12-10 14:00 - Fix: Mobile PDF Button HTML Syntax Error -->
+    <title>Numérologie de Pythagore v2.1.5</title>
+    <!-- Updated: 2025-12-10 15:00 - Fix: Mobile Button JavaScript Syntax and Visibility -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.1.4</span> <span class="build-info" id="build-info">Build: 2025-12-10 14:00</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.1.5</span> <span class="build-info" id="build-info">Build: 2025-12-10 15:00</span></h1>
         </header>
 
         <div class="main-content">
@@ -288,7 +288,12 @@
                 const container = document.getElementById('super-simple-mobile-buttons');
                 if (container) {
                     container.style.display = 'block';
+                    container.style.visibility = 'visible';
+                    container.style.opacity = '1';
                     console.log('✅ Super simple buttons container shown');
+                    console.log('📱 Container styles:', container.style.cssText);
+                } else {
+                    console.error('❌ Super simple buttons container not found!');
                 }
                 
                 const calculateBtn = document.getElementById('simple-calculate');
@@ -303,21 +308,39 @@
                     
                     if (!leftPanel || !rightPanel || !calculateBtn || !pdfBtn) return;
                     
-                    // Check which frame is visible
-                    const isFrame1Visible = leftPanel.style.display !== 'none' && 
-                                           window.getComputedStyle(leftPanel).display !== 'none';
-                    const isFrame2Visible = rightPanel.style.display !== 'none' && 
-                                           window.getComputedStyle(rightPanel).display !== 'none';
+                    // Check which frame is visible - improved logic for initial load
+                    const leftStyle = window.getComputedStyle(leftPanel);
+                    const rightStyle = window.getComputedStyle(rightPanel);
                     
-                    // Calculate button: Only visible on Frame 1
-                    if (isFrame1Visible && !isFrame2Visible) {
+                    const isFrame1Visible = leftStyle.display !== 'none' && leftStyle.visibility !== 'hidden';
+                    const isFrame2Visible = rightStyle.display !== 'none' && rightStyle.visibility !== 'hidden';
+                    
+                    console.log('📱 Frame visibility check:', { isFrame1Visible, isFrame2Visible });
+                    
+                    // On mobile, default to Frame 1 if both or neither are visible
+                    const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                    
+                    if (isMobile) {
+                        // Mobile logic: show calculate button on Frame 1, PDF button on Frame 2
+                        if (isFrame1Visible && !isFrame2Visible) {
+                            calculateBtn.style.display = 'flex';
+                            pdfBtn.style.display = 'none';
+                            console.log('📱 Frame 1 active - Calculate button visible, PDF button hidden');
+                        } else if (isFrame2Visible && !isFrame1Visible) {
+                            calculateBtn.style.display = 'none';
+                            pdfBtn.style.display = 'flex';
+                            console.log('📱 Frame 2 active - Calculate button hidden, PDF button visible');
+                        } else {
+                            // Default to Frame 1 state on mobile
+                            calculateBtn.style.display = 'flex';
+                            pdfBtn.style.display = 'none';
+                            console.log('📱 Default to Frame 1 - Calculate button visible, PDF button hidden');
+                        }
+                    } else {
+                        // Desktop: always show calculate button, hide PDF button
                         calculateBtn.style.display = 'flex';
                         pdfBtn.style.display = 'none';
-                        console.log('📱 Frame 1 active - Calculate button visible, PDF button hidden');
-                    } else if (isFrame2Visible) {
-                        calculateBtn.style.display = 'none';
-                        pdfBtn.style.display = 'flex';
-                        console.log('📱 Frame 2 active - Calculate button hidden, PDF button visible');
+                        console.log('🖥️ Desktop mode - Calculate button visible, PDF button hidden');
                     }
                     
                     // Reset button is always visible (no change needed)
@@ -398,8 +421,8 @@
                         
                         const isValid = firstName1 && lastName && birthDate;
                         calculateBtn.disabled = !isValid;
-                        calculateBtn.style.background = isValid  '#27ae60' : '#95a5a6';
-                        calculateBtn.style.opacity = isValid  '1' : '0.7';
+                        calculateBtn.style.background = isValid ? '#27ae60' : '#95a5a6';
+                        calculateBtn.style.opacity = isValid ? '1' : '0.7';
                     }
                     
                     form.querySelectorAll('input').forEach(input => {
@@ -535,8 +558,11 @@
                     setTimeout(updateButtonVisibility, 100);
                 });
                 
-                // Initial visibility update
-                setTimeout(updateButtonVisibility, 500);
+                // Initial visibility update - multiple attempts to ensure it works
+                updateButtonVisibility(); // Immediate
+                setTimeout(updateButtonVisibility, 100); // Quick retry
+                setTimeout(updateButtonVisibility, 500); // Delayed retry
+                setTimeout(updateButtonVisibility, 1000); // Final retry
                 
                 // Hide all other button systems
                 const fabContainer = document.getElementById('mobile-fab-container');
