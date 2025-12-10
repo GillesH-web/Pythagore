@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v2.0.0</title>
-    <!-- Updated: 2025-12-09 18:15 - Simplified: 2 Buttons Only - Calculate (Frame 1) + Reset (Always) -->
+    <title>Numérologie de Pythagore v2.0.3</title>
+    <!-- Updated: 2025-12-10 09:30 - Feature: Bold Labels for Mandatory Fields -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.0.0</span> <span class="build-info" id="build-info">Build: 2025-12-09 18:15</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.0.3</span> <span class="build-info" id="build-info">Build: 2025-12-10 09:30</span></h1>
         </header>
 
         <div class="main-content">
@@ -127,13 +127,8 @@
                     <button type="button" id="print-results-btn" class="action-btn print-btn">🖨️ Imprimer les résultats</button>
                 </div>
                 
-                <!-- Mobile Reset Button for Frame 2 (Results) -->
-                <div class="mobile-frame2-reset-container" id="mobile-frame2-reset-container" style="display: none;">
-                    <button type="button" id="mobile-frame2-reset-btn" class="mobile-frame2-reset-btn" onclick="if(window.mobileFrameSwitcher){window.mobileFrameSwitcher.showFrame1();} console.log('Button clicked!');">
-                        <span class="reset-icon">🔄</span>
-                        <span class="reset-text">Nouveau<br>Calcul</span>
-                    </button>
-                </div>
+                <!-- Mobile Reset Button for Frame 2 (Results) - REMOVED -->
+                <!-- The "Nouveau Calcul" button has been deleted as requested -->
             </div>
         </div>
     </div>
@@ -213,6 +208,54 @@
                                 if (window.mobileFrameSwitcher) {
                                     window.mobileFrameSwitcher.showFrame2();
                                     updateButtonVisibility();
+                                    
+                                    // ALWAYS open Tab 1 (Piliers) first when showing Frame 2
+                                    setTimeout(() => {
+                                        console.log('📱 Ensuring Tab 1 (Piliers) is active on Frame 2');
+                                        
+                                        // Activate Tab 1 button
+                                        const tab1Btn = document.getElementById('tab1-btn');
+                                        const tab2Btn = document.getElementById('tab2-btn');
+                                        const tab3Btn = document.getElementById('tab3-btn');
+                                        
+                                        if (tab1Btn) {
+                                            tab1Btn.classList.add('active');
+                                            console.log('✅ Tab 1 button activated');
+                                        }
+                                        if (tab2Btn) {
+                                            tab2Btn.classList.remove('active');
+                                        }
+                                        if (tab3Btn) {
+                                            tab3Btn.classList.remove('active');
+                                        }
+                                        
+                                        // Show Tab 1 panel, hide others
+                                        const tab1Panel = document.getElementById('tab1-panel');
+                                        const tab2Panel = document.getElementById('tab2-panel');
+                                        const tab3Panel = document.getElementById('tab3-panel');
+                                        
+                                        if (tab1Panel) {
+                                            tab1Panel.classList.add('active');
+                                            tab1Panel.style.display = 'block';
+                                            console.log('✅ Tab 1 panel shown');
+                                        }
+                                        if (tab2Panel) {
+                                            tab2Panel.classList.remove('active');
+                                            tab2Panel.style.display = 'none';
+                                        }
+                                        if (tab3Panel) {
+                                            tab3Panel.classList.remove('active');
+                                            tab3Panel.style.display = 'none';
+                                        }
+                                        
+                                        // Call switchTab function if it exists
+                                        if (typeof switchTab === 'function') {
+                                            switchTab('tab1');
+                                            console.log('✅ switchTab(tab1) called');
+                                        }
+                                        
+                                        console.log('✅ Frame 2 opened with Tab 1 (Piliers) active');
+                                    }, 100);
                                 }
                             }, 300);
                         }
@@ -265,6 +308,51 @@
                         if (window.mobileFrameSwitcher) {
                             window.mobileFrameSwitcher.showFrame1();
                             updateButtonVisibility();
+                            
+                            // Ensure Tab 1 is active when returning to Frame 1
+                            setTimeout(() => {
+                                console.log('📱 Ensuring Tab 1 (Piliers) is active on Frame 1 return');
+                                
+                                // Activate Tab 1 button
+                                const tab1Btn = document.getElementById('tab1-btn');
+                                const tab2Btn = document.getElementById('tab2-btn');
+                                const tab3Btn = document.getElementById('tab3-btn');
+                                
+                                if (tab1Btn) {
+                                    tab1Btn.classList.add('active');
+                                }
+                                if (tab2Btn) {
+                                    tab2Btn.classList.remove('active');
+                                }
+                                if (tab3Btn) {
+                                    tab3Btn.classList.remove('active');
+                                }
+                                
+                                // Show Tab 1 panel, hide others
+                                const tab1Panel = document.getElementById('tab1-panel');
+                                const tab2Panel = document.getElementById('tab2-panel');
+                                const tab3Panel = document.getElementById('tab3-panel');
+                                
+                                if (tab1Panel) {
+                                    tab1Panel.classList.add('active');
+                                    tab1Panel.style.display = 'block';
+                                }
+                                if (tab2Panel) {
+                                    tab2Panel.classList.remove('active');
+                                    tab2Panel.style.display = 'none';
+                                }
+                                if (tab3Panel) {
+                                    tab3Panel.classList.remove('active');
+                                    tab3Panel.style.display = 'none';
+                                }
+                                
+                                // Call switchTab function if it exists
+                                if (typeof switchTab === 'function') {
+                                    switchTab('tab1');
+                                }
+                                
+                                console.log('✅ Tab 1 (Piliers) activated on Frame 1');
+                            }, 100);
                         }
                         
                         console.log('✅ Form reset and Frame 1 displayed');
@@ -282,14 +370,14 @@
                 
                 // Hide all other button systems
                 const fabContainer = document.getElementById('mobile-fab-container');
-                const frame2Container = document.getElementById('mobile-frame2-reset-container');
                 const nuclearContainer = document.getElementById('nuclear-buttons');
                 const formActions = document.querySelector('.form-actions');
                 
                 if (fabContainer) fabContainer.style.display = 'none';
-                if (frame2Container) frame2Container.style.display = 'none';
                 if (nuclearContainer) nuclearContainer.style.display = 'none';
                 if (formActions) formActions.style.display = 'none';
+                
+                // Note: mobile-frame2-reset-container has been removed as requested
                 
                 console.log('✅ SUPER SIMPLE MOBILE BUTTONS FULLY ACTIVATED');
                 console.log('   - Calculate: Frame 1 only, performs calculation → Frame 2');
