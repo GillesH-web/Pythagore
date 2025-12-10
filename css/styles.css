@@ -1016,6 +1016,11 @@ label[for="birthDate"] {
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         padding: 10px 5px !important;
+        display: none !important; /* Ensure inactive tabs are hidden */
+    }
+    
+    .tab-panel.active {
+        display: block !important; /* Show only active tab */
     }
     
     .results-area, .cycles-area, .realization-area {
