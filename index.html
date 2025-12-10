@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v2.1.2</title>
-    <!-- Updated: 2025-12-10 12:45 - Enhancement: Mobile PDF Button for Frame 2 -->
+    <title>Numérologie de Pythagore v2.1.4</title>
+    <!-- Updated: 2025-12-10 14:00 - Fix: Mobile PDF Button HTML Syntax Error -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.1.2</span> <span class="build-info" id="build-info">Build: 2025-12-10 12:45</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.1.4</span> <span class="build-info" id="build-info">Build: 2025-12-10 14:00</span></h1>
         </header>
 
         <div class="main-content">
@@ -142,7 +142,7 @@
         </button>
         <!-- PDF button - Only visible on Frame 2 -->
         <button id="simple-pdf" style="position: fixed; bottom: 30px; right: 20px; width: 80px; height: 80px; border-radius: 50%; background: #3498db; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: none; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
-            <span style="font-size: 28px;">�</sspan>
+            <span style="font-size: 24px;">📄</span>
             <span style="font-size: 11px;">PDF</span>
         </button>
         <!-- RESET button - Always visible on both frames -->
@@ -398,8 +398,8 @@
                         
                         const isValid = firstName1 && lastName && birthDate;
                         calculateBtn.disabled = !isValid;
-                        calculateBtn.style.background = isValid ? '#27ae60' : '#95a5a6';
-                        calculateBtn.style.opacity = isValid ? '1' : '0.7';
+                        calculateBtn.style.background = isValid  '#27ae60' : '#95a5a6';
+                        calculateBtn.style.opacity = isValid  '1' : '0.7';
                     }
                     
                     form.querySelectorAll('input').forEach(input => {
@@ -418,17 +418,29 @@
                         console.log('📱 PDF button clicked - generating PDF report');
                         
                         // Trigger PDF generation using the same functionality as desktop
-                        if (window.formHandler) {
+                        if (window.formHandler && typeof window.formHandler.generatePDF === 'function') {
+                            console.log('📱 Using FormHandler.generatePDF()');
                             window.formHandler.generatePDF();
                         } else {
-                            // Fallback: trigger the PDF generation event
-                            const pdfEvent = new Event('click');
+                            console.log('📱 FormHandler not available, trying fallback methods');
+                            
+                            // Fallback 1: Try to trigger desktop PDF button click event
                             const desktopPdfBtn = document.getElementById('generate-pdf-btn');
                             if (desktopPdfBtn) {
-                                desktopPdfBtn.dispatchEvent(pdfEvent);
+                                console.log('📱 Triggering desktop PDF button click');
+                                desktopPdfBtn.click();
                             } else {
-                                console.error('❌ PDF generation not available');
-                                alert('Erreur: Génération PDF non disponible');
+                                // Fallback 2: Try to find FormHandler in DOM ready event
+                                console.log('📱 Waiting for FormHandler to be available...');
+                                setTimeout(() => {
+                                    if (window.formHandler && typeof window.formHandler.generatePDF === 'function') {
+                                        console.log('📱 FormHandler now available, generating PDF');
+                                        window.formHandler.generatePDF();
+                                    } else {
+                                        console.error('❌ PDF generation not available after timeout');
+                                        alert('Erreur: Génération PDF non disponible. Veuillez réessayer dans quelques secondes.');
+                                    }
+                                }, 1000);
                             }
                         }
                     });
@@ -977,7 +989,7 @@
                         -webkit-overflow-scrolling: touch !important;
                         padding: 20px !important;
                         background: white !important;
-                        display: ${panel.classList.contains('active') ? 'block' : 'none'} !important;
+                        display: ${panel.classList.contains('active')  'block' : 'none'} !important;
                     `;
                 });
                 
@@ -1118,8 +1130,8 @@
                         flex: 1 !important;
                         padding: 15px 10px !important;
                         border: none !important;
-                        background: ${tab.active ? '#3498db' : '#f8f9fa'} !important;
-                        color: ${tab.active ? 'white' : '#7f8c8d'} !important;
+                        background: ${tab.active  '#3498db' : '#f8f9fa'} !important;
+                        color: ${tab.active  'white' : '#7f8c8d'} !important;
                         font-size: 16px !important;
                         font-weight: 700 !important;
                         border-radius: 8px !important;
@@ -1280,7 +1292,7 @@
                     contents.forEach(contentId => {
                         const content = document.getElementById(contentId);
                         if (content) {
-                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content' ? 'block' : 'none';
+                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content'  'block' : 'none';
                         }
                     });
                 };
@@ -1349,8 +1361,8 @@
                         flex: 1 !important;
                         padding: 15px 10px !important;
                         border: none !important;
-                        background: ${tab.active ? '#3498db' : '#f8f9fa'} !important;
-                        color: ${tab.active ? 'white' : '#7f8c8d'} !important;
+                        background: ${tab.active  '#3498db' : '#f8f9fa'} !important;
+                        color: ${tab.active  'white' : '#7f8c8d'} !important;
                         font-size: 16px !important;
                         font-weight: 700 !important;
                         border-radius: 8px !important;
@@ -1511,7 +1523,7 @@
                     contents.forEach(contentId => {
                         const content = document.getElementById(contentId);
                         if (content) {
-                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content' ? 'block' : 'none';
+                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content'  'block' : 'none';
                         }
                     });
                 };

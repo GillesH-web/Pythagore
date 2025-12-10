@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeCleanPageState();
     
     // Initialize the main form handler which coordinates all other modules
-    new FormHandler();
+    window.formHandler = new FormHandler();
     
     console.log('✅ Application initialized successfully with clean state');
 });
