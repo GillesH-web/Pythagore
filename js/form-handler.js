@@ -444,9 +444,50 @@ class FormHandler {
             doc.setFont('helvetica', 'normal');
             doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 280, { align: 'center' });
 
-            // Save PDF
+            // Mobile PDF Generation with Safari Tab Opening
             const fileName = `numerologie_${fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
-            doc.save(fileName);
+            
+            // Detect mobile devices (iPhone, iPad, Android)
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent) || 
+                            (window.innerWidth <= 768 && 'ontouchstart' in window);
+            
+            if (isMobile) {
+                try {
+                    console.log('📱 Mobile device detected - opening PDF in Safari tab');
+                    
+                    // Create PDF blob for mobile
+                    const pdfBlob = doc.output('blob');
+                    const pdfUrl = URL.createObjectURL(pdfBlob);
+                    
+                    // Open PDF in new Safari tab
+                    const newTab = window.open(pdfUrl, '_blank');
+                    
+                    if (newTab) {
+                        console.log('✅ PDF opened in new Safari tab successfully');
+                        
+                        // Clean up the blob URL after a delay to allow the tab to load
+                        setTimeout(() => {
+                            URL.revokeObjectURL(pdfUrl);
+                            console.log('🧹 PDF blob URL cleaned up');
+                        }, 5000);
+                    } else {
+                        // Fallback if popup is blocked
+                        console.warn('⚠️ Popup blocked - falling back to download');
+                        throw new Error('Popup blocked');
+                    }
+                } catch (error) {
+                    console.error('❌ Mobile PDF tab opening failed:', error);
+                    console.log('📱 Falling back to download method');
+                    
+                    // Fallback to download on mobile if tab opening fails
+                    doc.save(fileName);
+                    alert('PDF généré avec succès ! Vérifiez vos téléchargements.');
+                }
+            } else {
+                // Desktop: use traditional download method
+                console.log('🖥️ Desktop device detected - downloading PDF');
+                doc.save(fileName);
+            }
 
             console.log('📄 Enhanced PDF generated successfully:', fileName);
         } catch (error) {
