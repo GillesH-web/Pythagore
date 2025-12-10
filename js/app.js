@@ -84,19 +84,23 @@ function initializeCleanPageState() {
     if (tab1Btn) tab1Btn.classList.add('active');
     if (tab1Panel) tab1Panel.classList.add('active');
     
-    // 8. For mobile: ensure Frame 1 is visible, Frame 2 is hidden
+    // 8. For mobile: ensure Frame 1 is visible, Frame 2 is hidden; For desktop: ensure both frames are visible
     const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (isMobile) {
-        const leftPanel = document.querySelector('.left-panel');
-        const rightPanel = document.querySelector('.right-panel');
-        
-        if (leftPanel) {
-            leftPanel.style.display = 'flex';
-            console.log('📱 Frame 1 (form) forced visible');
-        }
-        if (rightPanel) {
+    const leftPanel = document.querySelector('.left-panel');
+    const rightPanel = document.querySelector('.right-panel');
+    
+    if (leftPanel) {
+        leftPanel.style.display = 'flex';
+        console.log('📱 Frame 1 (form) forced visible');
+    }
+    
+    if (rightPanel) {
+        if (isMobile) {
             rightPanel.style.display = 'none';
-            console.log('📱 Frame 2 (results) forced hidden');
+            console.log('📱 Frame 2 (results) forced hidden on mobile');
+        } else {
+            rightPanel.style.display = 'flex';
+            console.log('🖥️ Frame 2 (results) forced visible on desktop');
         }
     }
     
@@ -133,12 +137,22 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('✅ Application initialized successfully with clean state');
 });
 
-// Also run on page show (handles back/forward navigation in Safari)
+// Enhanced Safari refresh handling - run on ALL pageshow events
 window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        console.log('🔄 Page restored from cache - reinitializing clean state');
-        initializeCleanPageState();
-    }
+    console.log('🔄 Pageshow event detected - reinitializing clean state (persisted:', event.persisted, ')');
+    // Always run clean state initialization, not just when persisted
+    initializeCleanPageState();
+});
+
+// Additional Safari refresh event handlers
+window.addEventListener('focus', () => {
+    console.log('🔄 Window focus detected - ensuring clean state');
+    setTimeout(initializeCleanPageState, 100);
+});
+
+window.addEventListener('popstate', () => {
+    console.log('🔄 Popstate detected - ensuring clean state');
+    initializeCleanPageState();
 });
 
 // Make switchTab function globally available for onclick handlers

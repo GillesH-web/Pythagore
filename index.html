@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v2.0.7</title>
-    <!-- Updated: 2025-12-10 10:45 - Fix: Safari Refresh Bug - Always Show Frame 1 -->
+    <title>Numérologie de Pythagore v2.1.2</title>
+    <!-- Updated: 2025-12-10 12:45 - Enhancement: Mobile PDF Button for Frame 2 -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.0.7</span> <span class="build-info" id="build-info">Build: 2025-12-10 10:45</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.1.2</span> <span class="build-info" id="build-info">Build: 2025-12-10 12:45</span></h1>
         </header>
 
         <div class="main-content">
@@ -133,12 +133,17 @@
         </div>
     </div>
 
-    <!-- SUPER SIMPLE MOBILE BUTTONS - 2 BUTTONS ONLY -->
+    <!-- SUPER SIMPLE MOBILE BUTTONS - 3 BUTTONS TOTAL -->
     <div id="super-simple-mobile-buttons" style="display: none;">
         <!-- CALCULATE button - Only visible on Frame 1 -->
         <button id="simple-calculate" style="position: fixed; bottom: 30px; right: 20px; width: 80px; height: 80px; border-radius: 50%; background: #27ae60; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;" disabled>
             <span style="font-size: 28px;">⚙️</span>
             <span style="font-size: 11px;">CALCULER</span>
+        </button>
+        <!-- PDF button - Only visible on Frame 2 -->
+        <button id="simple-pdf" style="position: fixed; bottom: 30px; right: 20px; width: 80px; height: 80px; border-radius: 50%; background: #3498db; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: none; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
+            <span style="font-size: 28px;">�</sspan>
+            <span style="font-size: 11px;">PDF</span>
         </button>
         <!-- RESET button - Always visible on both frames -->
         <button id="simple-reset" style="position: fixed; bottom: 30px; left: 20px; width: 80px; height: 80px; border-radius: 50%; background: #e74c3c; color: white; border: 4px solid white; font-size: 14px; font-weight: 900; z-index: 999999999; box-shadow: 0 8px 24px rgba(0,0,0,0.8); cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.2;">
@@ -150,45 +155,124 @@
     <!-- External JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     
-    <!-- SAFARI REFRESH BUG FIX: Ensure clean page state -->
+    <!-- ENHANCED SAFARI REFRESH BUG FIX: Aggressive clean page state management -->
     <script>
-        // Immediate execution to handle Safari page refresh bug
+        // ENHANCED: Comprehensive Safari refresh bug fix with aggressive state management
         (function() {
-            console.log('🔄 Safari refresh bug fix - ensuring clean page state');
+            console.log('🔄 ENHANCED Safari refresh bug fix - ensuring clean page state');
             
-            // Clear any cached form data
-            if (window.performance && window.performance.navigation.type === 1) {
-                console.log('📱 Page refresh detected - clearing cached data');
+            // Function to aggressively reset page state
+            function aggressivePageStateReset() {
+                console.log('� Pegrforming aggressive page state reset');
                 
-                // Clear localStorage if it contains form data
+                // 1. Clear ALL storage
                 try {
-                    localStorage.removeItem('numerologie-form-data');
+                    localStorage.clear();
                     sessionStorage.clear();
+                    console.log('✅ All storage cleared');
                 } catch (e) {
                     console.log('Storage clear failed:', e);
                 }
+                
+                // 2. Force Frame 1 visible, Frame 2 hidden (immediate) - ONLY ON MOBILE
+                const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+                const leftPanel = document.querySelector('.left-panel');
+                const rightPanel = document.querySelector('.right-panel');
+                
+                if (leftPanel) {
+                    leftPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important;';
+                    console.log('✅ Frame 1 (form) forced visible');
+                }
+                if (rightPanel) {
+                    if (isMobile) {
+                        rightPanel.style.cssText = 'display: none !important; visibility: hidden !important; opacity: 0 !important;';
+                        console.log('✅ Frame 2 (results) forced hidden on mobile');
+                    } else {
+                        // On desktop, ensure Frame 2 is visible
+                        rightPanel.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important;';
+                        console.log('✅ Frame 2 (results) forced visible on desktop');
+                    }
+                }
+                
+                // 3. Clear form data immediately
+                const form = document.getElementById('client-form');
+                if (form) {
+                    form.reset();
+                    console.log('✅ Form reset');
+                }
+                
+                // 4. Hide all result containers
+                const resultContainers = ['results-container', 'cycles-container', 'realization-container'];
+                resultContainers.forEach(containerId => {
+                    const container = document.getElementById(containerId);
+                    if (container) {
+                        container.style.display = 'none';
+                        container.innerHTML = '';
+                    }
+                });
+                
+                // 5. Show empty states
+                const emptyStates = ['empty-state', 'cycles-empty-state', 'realization-empty-state'];
+                emptyStates.forEach(stateId => {
+                    const state = document.getElementById(stateId);
+                    if (state) {
+                        state.style.display = 'block';
+                    }
+                });
+                
+                // 6. Ensure Tab 1 is active
+                setTimeout(() => {
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+                    
+                    const tab1Btn = document.getElementById('tab1-btn');
+                    const tab1Panel = document.getElementById('tab1-panel');
+                    if (tab1Btn) tab1Btn.classList.add('active');
+                    if (tab1Panel) tab1Panel.classList.add('active');
+                    
+                    console.log('✅ Tab 1 activated');
+                }, 50);
+                
+                console.log('✅ Aggressive page state reset completed');
             }
             
-            // Ensure mobile frames are properly initialized
-            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            if (isMobile) {
-                // Force Frame 1 visible, Frame 2 hidden immediately
-                document.addEventListener('DOMContentLoaded', function() {
-                    const leftPanel = document.querySelector('.left-panel');
-                    const rightPanel = document.querySelector('.right-panel');
-                    
-                    if (leftPanel) {
-                        leftPanel.style.display = 'flex';
-                        leftPanel.style.visibility = 'visible';
-                    }
-                    if (rightPanel) {
-                        rightPanel.style.display = 'none';
-                        rightPanel.style.visibility = 'hidden';
-                    }
-                    
-                    console.log('📱 Mobile frames reset for clean page state');
-                });
+            // Run immediately for all page loads
+            aggressivePageStateReset();
+            
+            // Also run on DOM ready
+            document.addEventListener('DOMContentLoaded', aggressivePageStateReset);
+            
+            // Enhanced detection for various refresh scenarios
+            if (window.performance) {
+                const navType = window.performance.navigation.type;
+                if (navType === 1) { // TYPE_RELOAD
+                    console.log('📱 Standard refresh detected');
+                    aggressivePageStateReset();
+                } else if (navType === 2) { // TYPE_BACK_FORWARD
+                    console.log('📱 Back/forward navigation detected');
+                    aggressivePageStateReset();
+                }
             }
+            
+            // Handle Safari's pageshow event for cache restoration
+            window.addEventListener('pageshow', function(event) {
+                console.log('📱 Pageshow event detected, persisted:', event.persisted);
+                aggressivePageStateReset();
+            });
+            
+            // Handle popstate for browser navigation
+            window.addEventListener('popstate', function() {
+                console.log('📱 Popstate event detected');
+                aggressivePageStateReset();
+            });
+            
+            // Handle focus events (when returning to tab)
+            window.addEventListener('focus', function() {
+                console.log('📱 Window focus detected');
+                setTimeout(aggressivePageStateReset, 100);
+            });
+            
+            console.log('✅ Enhanced Safari refresh bug fix initialized');
         })();
     </script>
     
@@ -199,7 +283,7 @@
             const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
             if (isMobile) {
-                console.log('📱 ACTIVATING SUPER SIMPLE MOBILE BUTTONS (2 buttons only)');
+                console.log('📱 ACTIVATING SUPER SIMPLE MOBILE BUTTONS (3 buttons: Calculate, PDF, Reset)');
                 
                 const container = document.getElementById('super-simple-mobile-buttons');
                 if (container) {
@@ -208,6 +292,7 @@
                 }
                 
                 const calculateBtn = document.getElementById('simple-calculate');
+                const pdfBtn = document.getElementById('simple-pdf');
                 const resetBtn = document.getElementById('simple-reset');
                 const form = document.getElementById('client-form');
                 
@@ -216,7 +301,7 @@
                     const leftPanel = document.querySelector('.left-panel');
                     const rightPanel = document.querySelector('.right-panel');
                     
-                    if (!leftPanel || !rightPanel || !calculateBtn) return;
+                    if (!leftPanel || !rightPanel || !calculateBtn || !pdfBtn) return;
                     
                     // Check which frame is visible
                     const isFrame1Visible = leftPanel.style.display !== 'none' && 
@@ -227,10 +312,12 @@
                     // Calculate button: Only visible on Frame 1
                     if (isFrame1Visible && !isFrame2Visible) {
                         calculateBtn.style.display = 'flex';
-                        console.log('📱 Frame 1 active - Calculate button visible');
-                    } else {
+                        pdfBtn.style.display = 'none';
+                        console.log('📱 Frame 1 active - Calculate button visible, PDF button hidden');
+                    } else if (isFrame2Visible) {
                         calculateBtn.style.display = 'none';
-                        console.log('📱 Frame 2 active - Calculate button hidden');
+                        pdfBtn.style.display = 'flex';
+                        console.log('📱 Frame 2 active - Calculate button hidden, PDF button visible');
                     }
                     
                     // Reset button is always visible (no change needed)
@@ -322,6 +409,30 @@
                     
                     updateCalculateBtn();
                     console.log('✅ Calculate button activated (Frame 1 only)');
+                }
+                
+                // PDF button - Only visible on Frame 2, generates PDF report
+                if (pdfBtn) {
+                    pdfBtn.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        console.log('📱 PDF button clicked - generating PDF report');
+                        
+                        // Trigger PDF generation using the same functionality as desktop
+                        if (window.formHandler) {
+                            window.formHandler.generatePDF();
+                        } else {
+                            // Fallback: trigger the PDF generation event
+                            const pdfEvent = new Event('click');
+                            const desktopPdfBtn = document.getElementById('generate-pdf-btn');
+                            if (desktopPdfBtn) {
+                                desktopPdfBtn.dispatchEvent(pdfEvent);
+                            } else {
+                                console.error('❌ PDF generation not available');
+                                alert('Erreur: Génération PDF non disponible');
+                            }
+                        }
+                    });
+                    console.log('✅ PDF button activated (Frame 2 only)');
                 }
                 
                 // Reset button - Always visible, resets form and shows Frame 1
@@ -428,6 +539,7 @@
                 
                 console.log('✅ SUPER SIMPLE MOBILE BUTTONS FULLY ACTIVATED');
                 console.log('   - Calculate: Frame 1 only, performs calculation → Frame 2');
+                console.log('   - PDF: Frame 2 only, generates PDF report');
                 console.log('   - Reset: Always visible, clears form → Frame 1');
             }
         })();
@@ -624,63 +736,75 @@
         window.addEventListener('load', createNuclearButtons);
         window.addEventListener('resize', createNuclearButtons);
         
-        // ULTRA FORCE: Make ALL buttons visible on iPhone
-        function forceAllButtonsVisible() {
+        // SMART FORCE: Ensure active button system is visible while respecting exclusivity
+        function ensureActiveButtonSystemVisible() {
             const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
             
             if (isMobile) {
-                console.log('🚨 ULTRA FORCE: Making all buttons visible on iPhone');
+                console.log('�  SMART FORCE: Ensuring active button system is visible on iPhone');
                 
-                // Force FAB container visible
-                const fabContainer = document.getElementById('mobile-fab-container');
-                if (fabContainer) {
-                    fabContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 2147483647 !important; pointer-events: none !important;';
-                    console.log('✅ FAB container forced visible');
-                }
+                // Check if Super Simple buttons are active (they should be the primary system)
+                const superSimpleContainer = document.getElementById('super-simple-mobile-buttons');
+                const isSupSimpleActive = superSimpleContainer && superSimpleContainer.style.display !== 'none';
                 
-                // Force FAB buttons visible
-                const fabPrimary = document.getElementById('mobile-submit-btn');
-                const fabSecondary = document.getElementById('mobile-reset-btn');
-                if (fabPrimary) {
-                    fabPrimary.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
-                    console.log('✅ FAB primary button forced visible');
+                if (isSupSimpleActive) {
+                    console.log('📱 Super Simple buttons are active - ensuring they are visible');
+                    
+                    // Ensure Super Simple buttons are visible
+                    if (superSimpleContainer) {
+                        superSimpleContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important;';
+                    }
+                    
+                    // Ensure other systems remain hidden to prevent duplicates
+                    const fabContainer = document.getElementById('mobile-fab-container');
+                    const nuclearContainer = document.getElementById('nuclear-buttons');
+                    const formActions = document.querySelector('.form-actions');
+                    
+                    if (fabContainer) {
+                        fabContainer.style.display = 'none !important';
+                        console.log('✅ FAB container kept hidden (Super Simple active)');
+                    }
+                    if (nuclearContainer) {
+                        nuclearContainer.style.display = 'none !important';
+                        console.log('✅ Nuclear container kept hidden (Super Simple active)');
+                    }
+                    if (formActions) {
+                        formActions.style.display = 'none !important';
+                        console.log('✅ Form actions kept hidden (Super Simple active)');
+                    }
+                    
+                    console.log('✅ SMART FORCE: Super Simple button system maintained exclusively');
+                } else {
+                    console.log('📱 Super Simple buttons not active - checking fallback systems');
+                    
+                    // Fallback to FAB system if Super Simple is not active
+                    const fabContainer = document.getElementById('mobile-fab-container');
+                    if (fabContainer) {
+                        fabContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 2147483647 !important; pointer-events: none !important;';
+                        console.log('✅ FAB container activated as fallback');
+                        
+                        // Ensure FAB buttons are visible
+                        const fabPrimary = document.getElementById('mobile-submit-btn');
+                        const fabSecondary = document.getElementById('mobile-reset-btn');
+                        if (fabPrimary) {
+                            fabPrimary.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
+                        }
+                        if (fabSecondary) {
+                            fabSecondary.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
+                        }
+                    }
                 }
-                if (fabSecondary) {
-                    fabSecondary.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important;';
-                    console.log('✅ FAB secondary button forced visible');
-                }
-                
-                // Force Frame 2 Reset button visible
-                const frame2Container = document.getElementById('mobile-frame2-reset-container');
-                const frame2Btn = document.getElementById('mobile-frame2-reset-btn');
-                if (frame2Container) {
-                    frame2Container.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0 !important; left: 0 !important; right: 0 !important; z-index: 2147483646 !important; pointer-events: none !important; height: 140px !important;';
-                    console.log('✅ Frame 2 container forced visible');
-                }
-                if (frame2Btn) {
-                    frame2Btn.style.cssText = 'display: flex !important; visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; position: absolute !important; bottom: calc(env(safe-area-inset-bottom, 20px) + 30px) !important; left: 50% !important; transform: translateX(-50%) !important;';
-                    console.log('✅ Frame 2 button forced visible');
-                }
-                
-                // Force Nuclear buttons visible
-                const nuclearContainer = document.getElementById('nuclear-buttons');
-                if (nuclearContainer) {
-                    nuclearContainer.style.cssText = 'display: block !important; visibility: visible !important; opacity: 1 !important; position: fixed !important; bottom: 0px !important; left: 0px !important; right: 0px !important; width: 100vw !important; height: 120px !important; z-index: 2147483647 !important; pointer-events: none !important; background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.9) 100%) !important;';
-                    console.log('✅ Nuclear container forced visible');
-                }
-                
-                console.log('✅ ULTRA FORCE: All buttons visibility forced');
             }
         }
         
-        // Run force visibility multiple times to ensure it works
-        forceAllButtonsVisible();
-        setTimeout(forceAllButtonsVisible, 100);
-        setTimeout(forceAllButtonsVisible, 500);
-        setTimeout(forceAllButtonsVisible, 1000);
-        document.addEventListener('DOMContentLoaded', forceAllButtonsVisible);
-        window.addEventListener('load', forceAllButtonsVisible);
-        window.addEventListener('resize', forceAllButtonsVisible);
+        // Run smart button visibility management
+        ensureActiveButtonSystemVisible();
+        setTimeout(ensureActiveButtonSystemVisible, 100);
+        setTimeout(ensureActiveButtonSystemVisible, 500);
+        setTimeout(ensureActiveButtonSystemVisible, 1000);
+        document.addEventListener('DOMContentLoaded', ensureActiveButtonSystemVisible);
+        window.addEventListener('load', ensureActiveButtonSystemVisible);
+        window.addEventListener('resize', ensureActiveButtonSystemVisible);
         
         // ULTRA NUCLEAR MOBILE LAYOUT FIX
         function createUltraMobileLayout() {

@@ -506,18 +506,30 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📱 Mobile Frame Switcher initialized');
 });
 
-// Handle page refresh/reload - always show Frame 1 (Safari bug fix)
+// Enhanced Safari refresh handling - always show Frame 1
 window.addEventListener('pageshow', (event) => {
     const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     
     if (isMobile && window.mobileFrameSwitcher) {
-        console.log('📱 Page refresh detected - forcing Frame 1 display');
+        console.log('📱 Pageshow detected - forcing Frame 1 display (persisted:', event.persisted, ')');
         
-        // Force Frame 1 to be visible
+        // Always force Frame 1, regardless of persisted state
         setTimeout(() => {
             window.mobileFrameSwitcher.showFrame1();
-            console.log('📱 Frame 1 forced visible after page refresh');
+            console.log('📱 Frame 1 forced visible after pageshow');
         }, 50);
+    }
+});
+
+// Additional Safari refresh event handlers for mobile
+window.addEventListener('focus', () => {
+    const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile && window.mobileFrameSwitcher) {
+        console.log('📱 Window focus detected - ensuring Frame 1 display');
+        setTimeout(() => {
+            window.mobileFrameSwitcher.showFrame1();
+        }, 100);
     }
 });
 

@@ -387,59 +387,62 @@ class FormHandler {
                 output9: { label: 'Réalisation 4', description: this.getRealization4AgeRange(output1), value: this.calculator.calculateRealization4(formData.birthDate) }
             };
 
-            // Add pyramid/eye background (simplified for PDF)
-            this.addPyramidBackground(doc);
+            // Pyramid background removed for cleaner, more compact PDF
 
-            // PDF Header with enhanced styling
+            // Compact PDF Header
             doc.setFillColor(44, 62, 80);
-            doc.rect(0, 0, 210, 25, 'F');
+            doc.rect(0, 0, 210, 20, 'F');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(18);
+            doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
-            doc.text('Numérologie de Pythagore v1.8.0', 105, 16, { align: 'center' });
+            doc.text('Numérologie de Pythagore v2.1.1', 105, 13, { align: 'center' });
 
-            // Client Information Header
+            // Compact Client Information
             const names = [formData.firstName1, formData.firstName2, formData.firstName3].filter(Boolean).join(' ');
             const fullName = `${names} ${formData.lastName}`;
             const formattedDate = new Date(formData.birthDate).toLocaleDateString('fr-FR');
             
             doc.setFillColor(232, 244, 253);
-            doc.rect(15, 30, 180, 15, 'F');
+            doc.rect(10, 25, 190, 12, 'F');
             doc.setTextColor(44, 62, 80);
-            doc.setFontSize(12);
+            doc.setFontSize(11);
             doc.setFont('helvetica', 'bold');
-            doc.text(`${fullName} - Né(e) le ${formattedDate}`, 105, 40, { align: 'center' });
+            doc.text(`${fullName} - Né(e) le ${formattedDate}`, 105, 33, { align: 'center' });
 
-            // Tab 1: Piliers Section
-            this.addTabSection(doc, 'Piliers', 55);
-            this.addResultBox(doc, 'Chemin de vie', output1, 20, 70, 80, 25);
-            this.addResultBox(doc, 'Nombre d\'expression', output3, 110, 70, 80, 25);
-            this.addInclusionGrid(doc, output2, 20, 100);
-
-            // Tab 2: Cycles Section
-            this.addTabSection(doc, 'Cycles', 140);
-            this.addCycleBox(doc, cycles.cycle1, 20, 155, 170, 15);
-            this.addCycleBox(doc, cycles.cycle2, 20, 175, 170, 15);
-            this.addCycleBox(doc, cycles.cycle3, 20, 195, 170, 15);
+            // COMPACT LAYOUT - All sections on one page
             
-            // Add cycle caption
+            // Section 1: Piliers (Top Left & Right)
+            this.addCompactTabSection(doc, 'Piliers', 45);
+            this.addCompactResultBox(doc, 'Chemin de vie', output1, 15, 55, 85, 20);
+            this.addCompactResultBox(doc, 'Nombre d\'expression', output3, 110, 55, 85, 20);
+            
+            // Section 2: Grille d'inclusion (Top Center, Compact)
+            this.addCompactInclusionGrid(doc, output2, 15, 80);
+
+            // Section 3: Cycles (Middle, Horizontal Layout)
+            this.addCompactTabSection(doc, 'Cycles', 130);
+            this.addCompactCycleBox(doc, cycles.cycle1, 15, 140, 60, 12);
+            this.addCompactCycleBox(doc, cycles.cycle2, 80, 140, 60, 12);
+            this.addCompactCycleBox(doc, cycles.cycle3, 145, 140, 50, 12);
+            
+            // Cycle caption
             doc.setTextColor(231, 76, 60);
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'italic');
-            doc.text('Attention +/- 2 ans', 25, 220);
-
-            // Tab 3: Phase de réalisation Section
-            this.addTabSection(doc, 'Phase de réalisation', 230);
-            this.addRealizationBox(doc, realizationData.output6, 20, 245, 170, 15);
-            this.addRealizationBox(doc, realizationData.output7, 20, 260, 170, 15);
-            this.addRealizationBox(doc, realizationData.output8, 20, 275, 170, 15);
-            this.addRealizationBox(doc, realizationData.output9, 20, 290, 170, 15);
-
-            // Footer
-            doc.setTextColor(127, 140, 141);
             doc.setFontSize(8);
+            doc.setFont('helvetica', 'italic');
+            doc.text('Attention +/- 2 ans', 20, 158);
+
+            // Section 4: Phase de réalisation (Bottom, 2x2 Grid)
+            this.addCompactTabSection(doc, 'Phase de réalisation', 170);
+            this.addCompactRealizationBox(doc, realizationData.output6, 15, 180, 90, 12);
+            this.addCompactRealizationBox(doc, realizationData.output7, 110, 180, 90, 12);
+            this.addCompactRealizationBox(doc, realizationData.output8, 15, 195, 90, 12);
+            this.addCompactRealizationBox(doc, realizationData.output9, 110, 195, 90, 12);
+
+            // Compact Footer
+            doc.setTextColor(127, 140, 141);
+            doc.setFontSize(7);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 290, { align: 'center' });
+            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 280, { align: 'center' });
 
             // Save PDF
             const fileName = `numerologie_${fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
@@ -580,5 +583,131 @@ class FormHandler {
         doc.setFontSize(14);
         doc.setFont('helvetica', 'bold');
         doc.text(realization.value.toString(), x + width - 15, y + 10, { align: 'center' });
+    }
+
+    // ===== COMPACT PDF LAYOUT FUNCTIONS =====
+
+    /**
+     * Adds a compact tab section header
+     */
+    addCompactTabSection(doc, title, y) {
+        doc.setFillColor(52, 152, 219);
+        doc.rect(10, y, 190, 8, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, 15, y + 6);
+    }
+
+    /**
+     * Adds a compact result box (for Piliers)
+     */
+    addCompactResultBox(doc, title, value, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + width/2, y + 6, { align: 'center' });
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(value.toString(), x + width/2, y + 16, { align: 'center' });
+    }
+
+    /**
+     * Adds compact inclusion grid table
+     */
+    addCompactInclusionGrid(doc, output2, x, y) {
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Grille d\'inclusion', x, y + 4);
+        
+        // Compact table - 5 columns x 2 rows
+        const colWidth = 38;
+        const rowHeight = 10;
+        
+        // Table header
+        doc.setFillColor(52, 152, 219);
+        doc.rect(x, y + 6, 190, 6, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(8);
+        doc.text('Nombre', x + 5, y + 10);
+        doc.text('Occurrences', x + 100, y + 10);
+        
+        // Table rows - display in 2 columns to save space
+        const itemsPerRow = 5;
+        output2.forEach((item, index) => {
+            const row = Math.floor(index / itemsPerRow);
+            const col = index % itemsPerRow;
+            const cellX = x + (col * colWidth);
+            const cellY = y + 12 + (row * 8);
+            
+            if (row < 2) { // Only show first 2 rows to fit on page
+                const bgColor = index % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+                doc.setFillColor(...bgColor);
+                doc.rect(cellX, cellY, colWidth, 8, 'F');
+                
+                // Display number in black
+                doc.setTextColor(44, 62, 80);
+                doc.setFontSize(7);
+                doc.text(`${item.number}:`, cellX + 2, cellY + 5);
+                
+                // Display occurrence value in green
+                doc.setTextColor(39, 174, 96); // Green color
+                doc.setFontSize(7);
+                doc.text(item.display, cellX + 12, cellY + 5);
+            }
+        });
+    }
+
+    /**
+     * Adds a compact cycle box
+     */
+    addCompactCycleBox(doc, cycle, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cycle.label, x + 2, y + 4);
+        
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        doc.text(cycle.ageRange, x + 2, y + 8);
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cycle.value.toString(), x + width - 8, y + 8, { align: 'center' });
+    }
+
+    /**
+     * Adds a compact realization box
+     */
+    addCompactRealizationBox(doc, realization, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(realization.label, x + 2, y + 4);
+        
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'normal');
+        doc.text(realization.description, x + 2, y + 8);
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(realization.value.toString(), x + width - 8, y + 8, { align: 'center' });
     }
 }
