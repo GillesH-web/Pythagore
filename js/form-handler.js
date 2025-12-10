@@ -387,7 +387,8 @@ class FormHandler {
                 output9: { label: 'Réalisation 4', description: this.getRealization4AgeRange(output1), value: this.calculator.calculateRealization4(formData.birthDate) }
             };
 
-            // Pyramid background removed for cleaner, more compact PDF
+            // Add pyramid background with stars at the bottom
+            this.addPyramidBackground(doc);
 
             // Compact PDF Header
             doc.setFillColor(44, 62, 80);
@@ -395,7 +396,7 @@ class FormHandler {
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
-            doc.text('Numérologie de Pythagore v2.1.1', 105, 13, { align: 'center' });
+            doc.text('Numérologie de Pythagore v2.1.7', 105, 13, { align: 'center' });
 
             // Compact Client Information
             const names = [formData.firstName1, formData.firstName2, formData.firstName3].filter(Boolean).join(' ');
@@ -514,8 +515,57 @@ class FormHandler {
         doc.setFillColor(0, 0, 0);
         doc.circle(105, 75, 3, 'F');
         
+        // Stars at the bottom of pyramid with soft blue outlines
+        doc.setGState(new doc.GState({opacity: 0.6}));
+        doc.setDrawColor(135, 206, 235); // Soft blue color (Sky Blue)
+        doc.setLineWidth(0.5);
+        
+        // Draw multiple stars at the bottom of the pyramid
+        const starPositions = [
+            { x: 80, y: 135 },   // Left star
+            { x: 105, y: 140 },  // Center star (slightly lower)
+            { x: 130, y: 135 }   // Right star
+        ];
+        
+        starPositions.forEach(pos => {
+            this.drawStar(doc, pos.x, pos.y, 3, 5); // radius=3, points=5
+        });
+        
         // Reset opacity
         doc.setGState(new doc.GState({opacity: 1}));
+    }
+
+    /**
+     * Draws a star shape with soft blue outline
+     * @param {Object} doc - jsPDF document
+     * @param {number} centerX - X coordinate of star center
+     * @param {number} centerY - Y coordinate of star center
+     * @param {number} radius - Radius of the star
+     * @param {number} points - Number of star points (default 5)
+     */
+    drawStar(doc, centerX, centerY, radius, points = 5) {
+        const outerRadius = radius;
+        const innerRadius = radius * 0.4;
+        const angleStep = (Math.PI * 2) / points;
+        
+        let starPath = '';
+        
+        for (let i = 0; i < points * 2; i++) {
+            const angle = i * angleStep / 2 - Math.PI / 2;
+            const currentRadius = i % 2 === 0 ? outerRadius : innerRadius;
+            const x = centerX + Math.cos(angle) * currentRadius;
+            const y = centerY + Math.sin(angle) * currentRadius;
+            
+            if (i === 0) {
+                starPath = `M ${x} ${y}`;
+            } else {
+                starPath += ` L ${x} ${y}`;
+            }
+        }
+        starPath += ' Z'; // Close the path
+        
+        // Draw the star outline only (no fill)
+        doc.path(starPath).stroke();
     }
 
     /**
