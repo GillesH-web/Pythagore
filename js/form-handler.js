@@ -187,6 +187,15 @@ class FormHandler {
             };
             this.resultsDisplay.displayRealization(realizationData, formData);
 
+            // Switch to Tab 1 (Piliers) after calculation is complete
+            if (typeof switchTab === 'function') {
+                switchTab('tab1');
+                console.log('📊 Switched to Tab 1 (Piliers) after calculation');
+            } else {
+                // Fallback: manually switch to tab 1
+                this.switchToTab1();
+            }
+
             console.log('📊 All calculations completed:', { output1, output2, output3, cycles, realizationData });
         } catch (error) {
             console.error('❌ Calculation error:', error);
@@ -250,6 +259,30 @@ class FormHandler {
         }
 
         console.log('🔄 Form reset completed - all calculate buttons disabled');
+    }
+
+    /**
+     * Manually switches to Tab 1 (Piliers) - fallback method
+     */
+    switchToTab1() {
+        // Remove active class from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        // Remove active class from all tab panels
+        document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+        
+        // Activate Tab 1 button
+        const tab1Btn = document.getElementById('tab1-btn');
+        if (tab1Btn) {
+            tab1Btn.classList.add('active');
+        }
+        
+        // Show Tab 1 panel
+        const tab1Panel = document.getElementById('tab1-panel');
+        if (tab1Panel) {
+            tab1Panel.classList.add('active');
+        }
+        
+        console.log('📊 Manually switched to Tab 1 (Piliers)');
     }
 
     /**

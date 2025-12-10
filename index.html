@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v2.0.5</title>
-    <!-- Updated: 2025-12-10 10:15 - Fix: Reset Button Disables Calculate Button -->
+    <title>Numérologie de Pythagore v2.0.7</title>
+    <!-- Updated: 2025-12-10 10:45 - Fix: Safari Refresh Bug - Always Show Frame 1 -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.0.5</span> <span class="build-info" id="build-info">Build: 2025-12-10 10:15</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.0.7</span> <span class="build-info" id="build-info">Build: 2025-12-10 10:45</span></h1>
         </header>
 
         <div class="main-content">
@@ -149,6 +149,48 @@
 
     <!-- External JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- SAFARI REFRESH BUG FIX: Ensure clean page state -->
+    <script>
+        // Immediate execution to handle Safari page refresh bug
+        (function() {
+            console.log('🔄 Safari refresh bug fix - ensuring clean page state');
+            
+            // Clear any cached form data
+            if (window.performance && window.performance.navigation.type === 1) {
+                console.log('📱 Page refresh detected - clearing cached data');
+                
+                // Clear localStorage if it contains form data
+                try {
+                    localStorage.removeItem('numerologie-form-data');
+                    sessionStorage.clear();
+                } catch (e) {
+                    console.log('Storage clear failed:', e);
+                }
+            }
+            
+            // Ensure mobile frames are properly initialized
+            const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            if (isMobile) {
+                // Force Frame 1 visible, Frame 2 hidden immediately
+                document.addEventListener('DOMContentLoaded', function() {
+                    const leftPanel = document.querySelector('.left-panel');
+                    const rightPanel = document.querySelector('.right-panel');
+                    
+                    if (leftPanel) {
+                        leftPanel.style.display = 'flex';
+                        leftPanel.style.visibility = 'visible';
+                    }
+                    if (rightPanel) {
+                        rightPanel.style.display = 'none';
+                        rightPanel.style.visibility = 'hidden';
+                    }
+                    
+                    console.log('📱 Mobile frames reset for clean page state');
+                });
+            }
+        })();
+    </script>
     
     <!-- SUPER SIMPLE MOBILE BUTTONS ACTIVATION -->
     <script>

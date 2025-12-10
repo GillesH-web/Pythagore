@@ -506,6 +506,31 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('📱 Mobile Frame Switcher initialized');
 });
 
+// Handle page refresh/reload - always show Frame 1 (Safari bug fix)
+window.addEventListener('pageshow', (event) => {
+    const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile && window.mobileFrameSwitcher) {
+        console.log('📱 Page refresh detected - forcing Frame 1 display');
+        
+        // Force Frame 1 to be visible
+        setTimeout(() => {
+            window.mobileFrameSwitcher.showFrame1();
+            console.log('📱 Frame 1 forced visible after page refresh');
+        }, 50);
+    }
+});
+
+// Handle browser back/forward navigation
+window.addEventListener('popstate', () => {
+    const isMobile = window.innerWidth <= 480 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    
+    if (isMobile && window.mobileFrameSwitcher) {
+        console.log('📱 Navigation detected - ensuring Frame 1 display');
+        window.mobileFrameSwitcher.showFrame1();
+    }
+});
+
 // Export for testing
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = MobileFrameSwitcher;
