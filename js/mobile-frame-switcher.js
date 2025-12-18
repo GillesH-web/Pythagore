@@ -77,6 +77,14 @@ class MobileFrameSwitcher {
         document.addEventListener('click', (event) => {
             const resetBtn = event.target.closest('#reset-btn, #mobile-reset-btn, #nuclear-reset, #mobile-frame2-reset-btn');
             if (resetBtn) {
+                // FRAME STATE PRESERVATION: Skip reset if PDF generation is in progress
+                if (window.pdfGenerationInProgress) {
+                    console.log('🔒 Reset blocked - PDF generation in progress');
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                
                 console.log('📱 Reset clicked - switching to form frame and cleaning up');
                 
                 // Clean up the form

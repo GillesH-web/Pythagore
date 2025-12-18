@@ -139,6 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Enhanced Safari refresh handling - run on ALL pageshow events
 window.addEventListener('pageshow', (event) => {
+    // FRAME STATE PRESERVATION: Skip clean state if PDF generation is in progress
+    if (window.pdfGenerationInProgress) {
+        console.log('🔒 Pageshow event blocked - PDF generation in progress');
+        return;
+    }
+    
     console.log('🔄 Pageshow event detected - reinitializing clean state (persisted:', event.persisted, ')');
     // Always run clean state initialization, not just when persisted
     initializeCleanPageState();
@@ -146,11 +152,23 @@ window.addEventListener('pageshow', (event) => {
 
 // Additional Safari refresh event handlers
 window.addEventListener('focus', () => {
+    // FRAME STATE PRESERVATION: Skip clean state if PDF generation is in progress
+    if (window.pdfGenerationInProgress) {
+        console.log('🔒 Focus event blocked - PDF generation in progress');
+        return;
+    }
+    
     console.log('🔄 Window focus detected - ensuring clean state');
     setTimeout(initializeCleanPageState, 100);
 });
 
 window.addEventListener('popstate', () => {
+    // FRAME STATE PRESERVATION: Skip clean state if PDF generation is in progress
+    if (window.pdfGenerationInProgress) {
+        console.log('🔒 Popstate event blocked - PDF generation in progress');
+        return;
+    }
+    
     console.log('🔄 Popstate detected - ensuring clean state');
     initializeCleanPageState();
 });

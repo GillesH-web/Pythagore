@@ -54,6 +54,14 @@ class MobileFrameController {
         document.addEventListener('click', (event) => {
             const resetBtn = event.target.closest('#reset-btn, #mobile-reset-btn, #nuclear-reset');
             if (resetBtn) {
+                // FRAME STATE PRESERVATION: Skip reset if PDF generation is in progress
+                if (window.pdfGenerationInProgress) {
+                    console.log('🔒 Reset blocked - PDF generation in progress');
+                    event.preventDefault();
+                    event.stopPropagation();
+                    return;
+                }
+                
                 console.log('📱 Reset button clicked - switching to form frame');
                 this.showFormFrame();
             }

@@ -275,24 +275,32 @@ class Calculator {
     /**
      * Calculates feelings number based on firstName2 and firstName3
      * @param {Object} formData - Form data
-     * @returns {number} - Feelings number (1-9)
+     * @returns {number} - Feelings number (0 if no input, 1-9 otherwise)
      */
     calculateFeelingsNumber(formData) {
         let firstName2Sum = 0;
         let firstName3Sum = 0;
+        let hasInput = false;
         
-        if (formData.firstName2) {
+        if (formData.firstName2 && formData.firstName2.trim()) {
             const firstName2 = formData.firstName2.toUpperCase();
             for (let char of firstName2) {
                 firstName2Sum += this.letterToNumber(char);
             }
+            hasInput = true;
         }
         
-        if (formData.firstName3) {
+        if (formData.firstName3 && formData.firstName3.trim()) {
             const firstName3 = formData.firstName3.toUpperCase();
             for (let char of firstName3) {
                 firstName3Sum += this.letterToNumber(char);
             }
+            hasInput = true;
+        }
+        
+        // If no input values, return "ô"
+        if (!hasInput) {
+            return "ô";
         }
         
         const totalSum = firstName2Sum + firstName3Sum;
@@ -382,6 +390,8 @@ class Calculator {
      */
     getFeelingsTendencies(number) {
         const tendencies = {
+            "ô": "Aucune influence sentimentale spécifique - neutralité émotionnelle",
+            0: "Aucune influence sentimentale spécifique - neutralité émotionnelle",
             1: "Leadership émotionnel, indépendance affective, passion intense",
             2: "Sensibilité extrême, besoin d'harmonie, coopération naturelle",
             3: "Expression émotionnelle créative, optimisme, sociabilité",
@@ -402,6 +412,8 @@ class Calculator {
      */
     getFeelingsAdvice(number) {
         const advice = {
+            "ô": "Développez votre vie émotionnelle en explorant vos sentiments profonds",
+            0: "Développez votre vie émotionnelle en explorant vos sentiments profonds",
             1: "Cultivez la patience, apprenez à écouter, tempérez votre ego",
             2: "Affirmez-vous davantage, fixez des limites, cultivez la confiance",
             3: "Canalisez votre énergie, évitez la superficialité, soyez authentique",
@@ -422,6 +434,8 @@ class Calculator {
      */
     getFeelingsAttention(number) {
         const attention = {
+            "ô": "Attention à la fermeture émotionnelle, cultivez l'ouverture du cœur",
+            0: "Attention à la fermeture émotionnelle, cultivez l'ouverture du cœur",
             1: "Attention à l'égocentrisme, évitez l'impatience en amour",
             2: "Évitez la dépendance affective, attention à la manipulation",
             3: "Attention à l'inconstance, évitez les relations superficielles",

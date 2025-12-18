@@ -379,6 +379,10 @@ class FormHandler {
      * Generates a PDF report with enhanced layout matching the web interface
      */
     generatePDF() {
+        // FRAME STATE PRESERVATION: Set global flag to prevent interference
+        window.pdfGenerationInProgress = true;
+        console.log('🔒 PDF generation started - blocking frame events');
+        
         // FRAME STATE PRESERVATION: Capture current state before PDF generation (outside try block for scope)
         const preservedState = this.captureFrameState();
         console.log('📄 Frame state captured before PDF generation:', preservedState);
@@ -405,8 +409,7 @@ class FormHandler {
             // Calculate health analysis data (4th Tab)
             const healthData = this.calculator.calculateHealthAnalysis(formData);
 
-            // Add pyramid background with stars at the bottom
-            this.addPyramidBackground(doc);
+
 
             // Compact PDF Header
             doc.setFillColor(44, 62, 80);
@@ -428,36 +431,38 @@ class FormHandler {
             doc.setFont('helvetica', 'bold');
             doc.text(`${fullName} - Né(e) le ${formattedDate}`, 105, 33, { align: 'center' });
 
-            // ULTRA-COMPACT LAYOUT - All 5 sections on one page
+            // SINGLE-PAGE LAYOUT - All content including full health analysis on one page
             
-            // Section 1: Piliers (Top Left & Right) - Reduced height
+            // Section 1: Piliers (Top Left & Right) - Ultra-compact
             this.addCompactTabSection(doc, 'Piliers', 42);
-            this.addCompactResultBox(doc, 'Chemin de vie', output1, 15, 50, 85, 16);
-            this.addCompactResultBox(doc, 'Nombre d\'expression', output3, 110, 50, 85, 16);
+            this.addCompactResultBox(doc, 'Chemin de vie', output1, 15, 50, 85, 12);
+            this.addCompactResultBox(doc, 'Nombre d\'expression', output3, 110, 50, 85, 12);
             
-            // Section 2: Grille d'inclusion (Top Center, Ultra-Compact)
-            this.addUltraCompactInclusionGrid(doc, output2, 15, 70);
+            // Section 2: Grille d'inclusion (Ultra-Compact)
+            this.addUltraCompactInclusionGrid(doc, output2, 15, 65);
 
             // Section 3: Cycles (Horizontal Layout) - Reduced height
-            this.addCompactTabSection(doc, 'Cycles', 100);
-            this.addCompactCycleBox(doc, cycles.cycle1, 15, 108, 60, 10);
-            this.addCompactCycleBox(doc, cycles.cycle2, 80, 108, 60, 10);
-            this.addCompactCycleBox(doc, cycles.cycle3, 145, 108, 50, 10);
+            this.addCompactTabSection(doc, 'Cycles', 85);
+            this.addCompactCycleBox(doc, cycles.cycle1, 15, 93, 60, 8);
+            this.addCompactCycleBox(doc, cycles.cycle2, 80, 93, 60, 8);
+            this.addCompactCycleBox(doc, cycles.cycle3, 145, 93, 50, 8);
 
             // Section 4: Phase de réalisation (2x2 Grid) - Reduced height
-            this.addCompactTabSection(doc, 'Phase de réalisation', 125);
-            this.addCompactRealizationBox(doc, realizationData.output6, 15, 133, 90, 10);
-            this.addCompactRealizationBox(doc, realizationData.output7, 110, 133, 90, 10);
-            this.addCompactRealizationBox(doc, realizationData.output8, 15, 146, 90, 10);
-            this.addCompactRealizationBox(doc, realizationData.output9, 110, 146, 90, 10);
+            this.addCompactTabSection(doc, 'Phase de réalisation', 105);
+            this.addCompactRealizationBox(doc, realizationData.output6, 15, 113, 90, 8);
+            this.addCompactRealizationBox(doc, realizationData.output7, 110, 113, 90, 8);
+            this.addCompactRealizationBox(doc, realizationData.output8, 15, 124, 90, 8);
+            this.addCompactRealizationBox(doc, realizationData.output9, 110, 124, 90, 8);
 
-            // Section 5: Santé - Sentiments - Hérédité (4th Tab) - NEW
-            this.addCompactTabSection(doc, 'Santé - Sentiments - Hérédité', 165);
-            this.addCompactHealthBox(doc, 'Santé', healthData.health, 15, 173, 60, 25);
-            this.addCompactHealthBox(doc, 'Sentiments', healthData.feelings, 80, 173, 60, 25);
-            this.addCompactHealthBox(doc, 'Hérédité', healthData.heredity, 145, 173, 50, 25);
+            // Section 5: Santé - Sentiments - Hérédité (FULL CONTENT - SINGLE PAGE)
+            this.addCompactTabSection(doc, 'Santé - Sentiments - Hérédité', 135);
+            
+            // Horizontal layout for full content on single page
+            this.addSinglePageHealthBox(doc, 'Santé', healthData.health, 15, 143, 60, 35);
+            this.addSinglePageHealthBox(doc, 'Sentiments', healthData.feelings, 80, 143, 60, 35);
+            this.addSinglePageHealthBox(doc, 'Hérédité', healthData.heredity, 145, 143, 50, 35);
 
-            // Compact Footer
+            // Single page footer
             doc.setTextColor(127, 140, 141);
             doc.setFontSize(7);
             doc.setFont('helvetica', 'normal');
@@ -513,7 +518,9 @@ class FormHandler {
             // FRAME STATE PRESERVATION: Restore state after PDF generation
             setTimeout(() => {
                 this.restoreFrameState(preservedState);
+                window.pdfGenerationInProgress = false;
                 console.log('📄 Frame state restored after PDF generation');
+                console.log('🔓 PDF generation completed - frame events unblocked');
             }, 100);
             
         } catch (error) {
@@ -522,83 +529,16 @@ class FormHandler {
             // FRAME STATE PRESERVATION: Restore state even on error
             setTimeout(() => {
                 this.restoreFrameState(preservedState);
+                window.pdfGenerationInProgress = false;
                 console.log('📄 Frame state restored after PDF error');
+                console.log('🔓 PDF generation error handled - frame events unblocked');
             }, 100);
             
             alert('Erreur lors de la génération du PDF. Veuillez réessayer.');
         }
     }
 
-    /**
-     * Adds pyramid/eye background to PDF
-     */
-    addPyramidBackground(doc) {
-        // Simplified pyramid outline
-        doc.setDrawColor(212, 175, 55);
-        doc.setLineWidth(0.3);
-        doc.setGState(new doc.GState({opacity: 0.15}));
-        
-        // Pyramid triangle
-        doc.triangle(105, 60, 160, 130, 50, 130);
-        
-        // Eye circle (simplified)
-        doc.setFillColor(255, 215, 0);
-        doc.circle(105, 75, 8, 'F');
-        doc.setFillColor(0, 0, 0);
-        doc.circle(105, 75, 3, 'F');
-        
-        // Stars at the bottom of pyramid with soft blue outlines
-        doc.setGState(new doc.GState({opacity: 0.6}));
-        doc.setDrawColor(135, 206, 235); // Soft blue color (Sky Blue)
-        doc.setLineWidth(0.5);
-        
-        // Draw multiple stars at the bottom of the pyramid
-        const starPositions = [
-            { x: 80, y: 135 },   // Left star
-            { x: 105, y: 140 },  // Center star (slightly lower)
-            { x: 130, y: 135 }   // Right star
-        ];
-        
-        starPositions.forEach(pos => {
-            this.drawStar(doc, pos.x, pos.y, 3, 5); // radius=3, points=5
-        });
-        
-        // Reset opacity
-        doc.setGState(new doc.GState({opacity: 1}));
-    }
 
-    /**
-     * Draws a star shape with soft blue outline
-     * @param {Object} doc - jsPDF document
-     * @param {number} centerX - X coordinate of star center
-     * @param {number} centerY - Y coordinate of star center
-     * @param {number} radius - Radius of the star
-     * @param {number} points - Number of star points (default 5)
-     */
-    drawStar(doc, centerX, centerY, radius, points = 5) {
-        const outerRadius = radius;
-        const innerRadius = radius * 0.4;
-        const angleStep = (Math.PI * 2) / points;
-        
-        let starPath = '';
-        
-        for (let i = 0; i < points * 2; i++) {
-            const angle = i * angleStep / 2 - Math.PI / 2;
-            const currentRadius = i % 2 === 0 ? outerRadius : innerRadius;
-            const x = centerX + Math.cos(angle) * currentRadius;
-            const y = centerY + Math.sin(angle) * currentRadius;
-            
-            if (i === 0) {
-                starPath = `M ${x} ${y}`;
-            } else {
-                starPath += ` L ${x} ${y}`;
-            }
-        }
-        starPath += ' Z'; // Close the path
-        
-        // Draw the star outline only (no fill)
-        doc.path(starPath).stroke();
-    }
 
     /**
      * Adds a tab section header
@@ -870,7 +810,7 @@ class FormHandler {
     }
 
     /**
-     * Adds a compact health analysis box
+     * Adds a compact health analysis box (DEPRECATED - kept for compatibility)
      */
     addCompactHealthBox(doc, title, healthData, x, y, width, height) {
         // Set border color based on category
@@ -912,6 +852,108 @@ class FormHandler {
         doc.setTextColor(231, 76, 60);
         const attention = healthData.attention.substring(0, 45) + '...';
         doc.text(attention, x + 2, y + 20, { maxWidth: width - 4 });
+    }
+
+    /**
+     * Adds a full health analysis box with complete content (NO TRUNCATION)
+     */
+    addFullHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 4);
+        
+        // Number
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 8, y + 6, { align: 'center' });
+        
+        let currentY = y + 10;
+        
+        // Tendencies (FULL CONTENT)
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(5);
+        doc.setFont('helvetica', 'normal');
+        const tendenciesLines = doc.splitTextToSize(healthData.tendencies, width - 4);
+        doc.text(tendenciesLines, x + 2, currentY);
+        currentY += tendenciesLines.length * 2;
+        
+        // Advice (FULL CONTENT)
+        doc.setFontSize(5);
+        doc.setFont('helvetica', 'normal');
+        const adviceLines = doc.splitTextToSize(healthData.advice, width - 4);
+        doc.text(adviceLines, x + 2, currentY);
+        currentY += adviceLines.length * 2;
+        
+        // Attention (FULL CONTENT)
+        doc.setTextColor(231, 76, 60);
+        doc.setFontSize(5);
+        doc.setFont('helvetica', 'normal');
+        const attentionLines = doc.splitTextToSize(healthData.attention, width - 4);
+        doc.text(attentionLines, x + 2, currentY);
+    }
+
+    /**
+     * Adds a single-page health analysis box with complete content optimized for single page layout
+     */
+    addSinglePageHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title with number on same line
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 4);
+        
+        // Number (smaller, inline)
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 6, y + 4, { align: 'center' });
+        
+        let currentY = y + 8;
+        
+        // All content with ultra-compact font (FULL CONTENT)
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(4);
+        doc.setFont('helvetica', 'normal');
+        
+        // Combine all text with separators
+        const fullText = `${healthData.tendencies} | ${healthData.advice} | ${healthData.attention}`;
+        const textLines = doc.splitTextToSize(fullText, width - 4);
+        
+        // Display all lines within the available height
+        const lineHeight = 1.5;
+        const maxLines = Math.floor((height - 10) / lineHeight);
+        const displayLines = textLines.slice(0, maxLines);
+        
+        displayLines.forEach((line, index) => {
+            if (currentY + (index * lineHeight) < y + height - 2) {
+                doc.text(line, x + 2, currentY + (index * lineHeight));
+            }
+        });
     }
 
     // ===== FRAME STATE PRESERVATION METHODS =====

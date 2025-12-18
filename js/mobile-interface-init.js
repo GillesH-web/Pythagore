@@ -110,6 +110,14 @@ function setupGlobalEventListeners() {
     document.addEventListener('click', (event) => {
         const resetBtn = event.target.closest('#reset-btn, #mobile-reset-btn, #nuclear-reset');
         if (resetBtn) {
+            // FRAME STATE PRESERVATION: Skip reset if PDF generation is in progress
+            if (window.pdfGenerationInProgress) {
+                console.log('🔒 Reset blocked - PDF generation in progress');
+                event.preventDefault();
+                event.stopPropagation();
+                return;
+            }
+            
             console.log('🔄 Reset button clicked - clearing state');
             if (window.mobileInterfaceSystem.stateSyncManager) {
                 // Don't clear state immediately, just capture current empty state
