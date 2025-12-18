@@ -379,7 +379,12 @@ class FormHandler {
      * Generates a PDF report with enhanced layout matching the web interface
      */
     generatePDF() {
+        // FRAME STATE PRESERVATION: Capture current state before PDF generation (outside try block for scope)
+        const preservedState = this.captureFrameState();
+        console.log('📄 Frame state captured before PDF generation:', preservedState);
+        
         try {
+
             const { jsPDF } = window.jspdf;
             const doc = new jsPDF('p', 'mm', 'a4');
 
@@ -448,9 +453,9 @@ class FormHandler {
 
             // Section 5: Santé - Sentiments - Hérédité (4th Tab) - NEW
             this.addCompactTabSection(doc, 'Santé - Sentiments - Hérédité', 165);
-            this.addCompactHealthBox(doc, '🏥 Santé', healthData.health, 15, 173, 60, 25);
-            this.addCompactHealthBox(doc, '💝 Sentiments', healthData.feelings, 80, 173, 60, 25);
-            this.addCompactHealthBox(doc, '🧬 Hérédité', healthData.heredity, 145, 173, 50, 25);
+            this.addCompactHealthBox(doc, 'Santé', healthData.health, 15, 173, 60, 25);
+            this.addCompactHealthBox(doc, 'Sentiments', healthData.feelings, 80, 173, 60, 25);
+            this.addCompactHealthBox(doc, 'Hérédité', healthData.heredity, 145, 173, 50, 25);
 
             // Compact Footer
             doc.setTextColor(127, 140, 141);
@@ -504,8 +509,22 @@ class FormHandler {
             }
 
             console.log('📄 Enhanced PDF generated successfully:', fileName);
+            
+            // FRAME STATE PRESERVATION: Restore state after PDF generation
+            setTimeout(() => {
+                this.restoreFrameState(preservedState);
+                console.log('📄 Frame state restored after PDF generation');
+            }, 100);
+            
         } catch (error) {
             console.error('❌ PDF generation error:', error);
+            
+            // FRAME STATE PRESERVATION: Restore state even on error
+            setTimeout(() => {
+                this.restoreFrameState(preservedState);
+                console.log('📄 Frame state restored after PDF error');
+            }, 100);
+            
             alert('Erreur lors de la génération du PDF. Veuillez réessayer.');
         }
     }
@@ -865,7 +884,7 @@ class FormHandler {
         doc.setLineWidth(0.5);
         doc.rect(x, y, width, height, 'FD');
         
-        // Title with emoji
+        // Title
         doc.setTextColor(44, 62, 80);
         doc.setFontSize(8);
         doc.setFont('helvetica', 'bold');
@@ -893,5 +912,139 @@ class FormHandler {
         doc.setTextColor(231, 76, 60);
         const attention = healthData.attention.substring(0, 45) + '...';
         doc.text(attention, x + 2, y + 20, { maxWidth: width - 4 });
+    }
+
+    // ===== FRAME STATE PRESERVATION METHODS =====
+
+    /**
+     * Captures the current frame state before PDF generation
+     * @returns {Object} - Captured state object
+     */
+    captureFrameState() {
+        try {
+            // Capture form data
+            const formData = this.getFormData();
+            
+            // Capture results content
+            const resultsContainer = document.getElementById('results-container');
+            const resultsHTML = resultsContainer ? resultsContainer.innerHTML : '';
+            
+            // Capture frame visibility
+            const leftPanel = document.querySelector('.left-panel');
+            const rightPanel = document.querySelector('.right-panel');
+            
+            // Capture active tab
+            const activeTab = document.querySelector('.tab-btn.active');
+            const activeTabId = activeTab ? activeTab.id : null;
+            
+            // Capture button states
+            const submitBtn = document.getElementById('submit-btn');
+            const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
+            
+            const state = {
+                formData: formData,
+                resultsHTML: resultsHTML,
+                frameVisibility: {
+                    leftPanelDisplay: leftPanel ? leftPanel.style.display : '',
+                    rightPanelDisplay: rightPanel ? rightPanel.style.display : '',
+                    leftPanelVisible: leftPanel ? !leftPanel.classList.contains('hidden') : true,
+                    rightPanelVisible: rightPanel ? !rightPanel.classList.contains('hidden') : true
+                },
+                activeTabId: activeTabId,
+                buttonStates: {
+                    submitDisabled: submitBtn ? submitBtn.disabled : true,
+                    mobileSubmitDisabled: mobileSubmitBtn ? mobileSubmitBtn.disabled : true
+                },
+                timestamp: Date.now()
+            };
+            
+            return state;
+        } catch (error) {
+            console.error('❌ Error capturing frame state:', error);
+            return null;
+        }
+    }
+
+    /**
+     * Restores the frame state after PDF generation
+     * @param {Object} state - Previously captured state object
+     */
+    restoreFrameState(state) {
+        try {
+            if (!state) {
+                console.warn('⚠️ No state to restore');
+                return;
+            }
+            
+            // Restore form data
+            if (state.formData) {
+                const form = document.getElementById('client-form');
+                if (form) {
+                    Object.keys(state.formData).forEach(fieldName => {
+                        const field = document.getElementById(fieldName);
+                        if (field && state.formData[fieldName]) {
+                            field.value = state.formData[fieldName];
+                        }
+                    });
+                }
+            }
+            
+            // Restore results content
+            if (state.resultsHTML) {
+                const resultsContainer = document.getElementById('results-container');
+                if (resultsContainer) {
+                    resultsContainer.innerHTML = state.resultsHTML;
+                }
+            }
+            
+            // Restore frame visibility
+            if (state.frameVisibility) {
+                const leftPanel = document.querySelector('.left-panel');
+                const rightPanel = document.querySelector('.right-panel');
+                
+                if (leftPanel && state.frameVisibility.leftPanelDisplay !== undefined) {
+                    leftPanel.style.display = state.frameVisibility.leftPanelDisplay;
+                }
+                if (rightPanel && state.frameVisibility.rightPanelDisplay !== undefined) {
+                    rightPanel.style.display = state.frameVisibility.rightPanelDisplay;
+                }
+            }
+            
+            // Restore active tab
+            if (state.activeTabId) {
+                const activeTab = document.getElementById(state.activeTabId);
+                if (activeTab) {
+                    // Remove active from all tabs
+                    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-panel').forEach(panel => panel.classList.remove('active'));
+                    
+                    // Restore active tab
+                    activeTab.classList.add('active');
+                    const tabNumber = state.activeTabId.replace('tab', '').replace('-btn', '');
+                    const activePanel = document.getElementById(`tab${tabNumber}-panel`);
+                    if (activePanel) {
+                        activePanel.classList.add('active');
+                    }
+                }
+            }
+            
+            // Restore button states
+            if (state.buttonStates) {
+                const submitBtn = document.getElementById('submit-btn');
+                const mobileSubmitBtn = document.getElementById('mobile-submit-btn');
+                
+                if (submitBtn) {
+                    submitBtn.disabled = state.buttonStates.submitDisabled;
+                }
+                if (mobileSubmitBtn) {
+                    mobileSubmitBtn.disabled = state.buttonStates.mobileSubmitDisabled;
+                }
+            }
+            
+            console.log('✅ Frame state restored successfully');
+            
+        } catch (error) {
+            console.error('❌ Error restoring frame state:', error);
+        }
     }
 }
