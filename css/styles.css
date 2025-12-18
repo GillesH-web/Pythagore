@@ -1098,3 +1098,173 @@ label[for="birthDate"] {
         padding-bottom: calc(env(safe-area-inset-bottom, 20px) + 140px) !important;
     }
 }
+
+/* ===== HEALTH TAB STYLES ===== */
+.health-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px;
+    height: 100%;
+    overflow-y: auto;
+}
+
+.health-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    border-left: 4px solid #3498db;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.health-section:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.health-section.health-icon {
+    border-left-color: #e74c3c;
+}
+
+.health-section.feelings-icon {
+    border-left-color: #e91e63;
+}
+
+.health-section.heredity-icon {
+    border-left-color: #9c27b0;
+}
+
+.health-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.health-header .health-icon {
+    font-size: 24px;
+    margin-right: 12px;
+}
+
+.health-header h3 {
+    color: #2c3e50;
+    font-size: 18px;
+    margin: 0;
+}
+
+.health-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.health-number {
+    text-align: center;
+    padding: 15px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 8px;
+    border: 2px solid #dee2e6;
+}
+
+.health-value {
+    display: block;
+    font-size: 32px;
+    font-weight: bold;
+    color: #3498db;
+    line-height: 1;
+}
+
+.health-label {
+    display: block;
+    font-size: 12px;
+    color: #6c757d;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 5px;
+}
+
+.health-description {
+    line-height: 1.6;
+}
+
+.health-description p {
+    margin-bottom: 12px;
+    color: #495057;
+}
+
+.health-description strong {
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+/* Mobile responsiveness for health tab */
+@media (max-width: 768px) {
+    .health-grid {
+        padding: 15px;
+        gap: 15px;
+    }
+    
+    .health-section {
+        padding: 15px;
+    }
+    
+    .health-header h3 {
+        font-size: 16px;
+    }
+    
+    .health-value {
+        font-size: 28px;
+    }
+    
+    .health-description {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .health-grid {
+        padding: 10px;
+        gap: 10px;
+    }
+    
+    .health-section {
+        padding: 12px;
+    }
+    
+    .health-header .health-icon {
+        font-size: 20px;
+        margin-right: 8px;
+    }
+    
+    .health-header h3 {
+        font-size: 14px;
+    }
+    
+    .health-value {
+        font-size: 24px;
+    }
+    
+    .health-description {
+        font-size: 13px;
+    }
+}
+
+/* Tab button adjustments for 4 tabs */
+@media (max-width: 768px) {
+    .tab-btn {
+        font-size: 0.7rem;
+        padding: 8px 6px;
+        min-height: 40px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tab-btn {
+        font-size: 0.6rem;
+        padding: 6px 4px;
+        min-height: 36px;
+        line-height: 1.2;
+    }
+}

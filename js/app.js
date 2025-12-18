@@ -7,7 +7,7 @@ console.log('🚀 Numérologie de Pythagore v1.8.0 - Starting with Output 4 & 5'
 
 /**
  * Switches between tabs in the results panel
- * @param {string} tabName - Name of the tab to switch to ('tab1', 'tab2', or 'tab3')
+ * @param {string} tabName - Name of the tab to switch to ('tab1', 'tab2', 'tab3', or 'tab4')
  */
 function switchTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
@@ -45,7 +45,7 @@ function initializeCleanPageState() {
     });
     
     // 3. Hide all results containers
-    const resultContainers = ['results-container', 'cycles-container', 'realization-container'];
+    const resultContainers = ['results-container', 'cycles-container', 'realization-container', 'health-container'];
     resultContainers.forEach(containerId => {
         const container = document.getElementById(containerId);
         if (container) {
@@ -55,7 +55,7 @@ function initializeCleanPageState() {
     });
     
     // 4. Show empty states
-    const emptyStates = ['empty-state', 'cycles-empty-state', 'realization-empty-state'];
+    const emptyStates = ['empty-state', 'cycles-empty-state', 'realization-empty-state', 'health-empty-state'];
     emptyStates.forEach(stateId => {
         const state = document.getElementById(stateId);
         if (state) {

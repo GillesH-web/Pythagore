@@ -11,8 +11,8 @@
     <meta name="description" content="Application de Numérologie de Pythagore - Calculez votre chemin de vie, nombre d'expression et cycles de vie">
     <meta name="keywords" content="numérologie, pythagore, chemin de vie, cycles, expression">
     <meta name="author" content="Numérologie de Pythagore">
-    <title>Numérologie de Pythagore v2.1.7</title>
-    <!-- Updated: 2025-12-10 16:45 - Enhancement: Added Stars at Bottom of Pyramid with Soft Blue Outlines -->
+    <title>Numérologie de Pythagore v2.2.0</title>
+    <!-- Updated: 2025-12-18 17:30 - Enhancement: Added 4th Tab "Santé - Sentiments - Hérédité" -->
     
     <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
@@ -20,7 +20,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.1.7</span> <span class="build-info" id="build-info">Build: 2025-12-10 16:45</span></h1>
+            <h1>Numérologie de Pythagore <span class="version" id="app-version">v2.2.0</span> <span class="build-info" id="build-info">Build: 2025-12-18 17:30</span></h1>
         </header>
 
         <div class="main-content">
@@ -91,6 +91,7 @@
                     <button class="tab-btn active" id="tab1-btn" onclick="switchTab('tab1')">Piliers</button>
                     <button class="tab-btn" id="tab2-btn" onclick="switchTab('tab2')">Cycles</button>
                     <button class="tab-btn" id="tab3-btn" onclick="switchTab('tab3')">Phase de réalisation</button>
+                    <button class="tab-btn" id="tab4-btn" onclick="switchTab('tab4')">Santé - Sentiments - Hérédité</button>
                 </div>
                 
                 <div class="tab-content">
@@ -118,6 +119,15 @@
                                 Remplissez les champs obligatoires et cliquez sur "Calculer les résultats" pour voir la phase de réalisation ici.
                             </div>
                             <div class="realization-grid" id="realization-container" style="display: none;"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-panel" id="tab4-panel">
+                        <div class="results-area" id="health-area">
+                            <div class="empty-state" id="health-empty-state">
+                                Remplissez les champs obligatoires et cliquez sur "Calculer les résultats" pour voir l'analyse santé, sentiments et hérédité ici.
+                            </div>
+                            <div class="health-grid" id="health-container" style="display: none;"></div>
                         </div>
                     </div>
                 </div>
@@ -1015,7 +1025,7 @@
                         -webkit-overflow-scrolling: touch !important;
                         padding: 20px !important;
                         background: white !important;
-                        display: ${panel.classList.contains('active')  'block' : 'none'} !important;
+                        display: ${panel.classList.contains('active') ? 'block' : 'none'} !important;
                     `;
                 });
                 
@@ -1145,7 +1155,8 @@
                 const tabs = [
                     { id: 'mobile-tab1', label: 'Piliers', active: true },
                     { id: 'mobile-tab2', label: 'Cycles', active: false },
-                    { id: 'mobile-tab3', label: 'Réalisation', active: false }
+                    { id: 'mobile-tab3', label: 'Réalisation', active: false },
+                    { id: 'mobile-tab4', label: 'Santé', active: false }
                 ];
                 
                 tabs.forEach(tab => {
@@ -1314,11 +1325,11 @@
                 
                 // STEP 8: Create tab switching function
                 window.showMobileTabContent = function(activeTabId) {
-                    const contents = ['mobile-tab1-content', 'mobile-tab2-content', 'mobile-tab3-content'];
+                    const contents = ['mobile-tab1-content', 'mobile-tab2-content', 'mobile-tab3-content', 'mobile-tab4-content'];
                     contents.forEach(contentId => {
                         const content = document.getElementById(contentId);
                         if (content) {
-                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content'  'block' : 'none';
+                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content' ? 'block' : 'none';
                         }
                     });
                 };
@@ -1376,7 +1387,8 @@
                 const tabs = [
                     { id: 'mobile-tab1', label: 'Piliers', active: true },
                     { id: 'mobile-tab2', label: 'Cycles', active: false },
-                    { id: 'mobile-tab3', label: 'Réalisation', active: false }
+                    { id: 'mobile-tab3', label: 'Réalisation', active: false },
+                    { id: 'mobile-tab4', label: 'Santé', active: false }
                 ];
                 
                 tabs.forEach(tab => {
@@ -1545,11 +1557,11 @@
                 
                 // STEP 8: Create tab switching function
                 window.showMobileTabContent = function(activeTabId) {
-                    const contents = ['mobile-tab1-content', 'mobile-tab2-content', 'mobile-tab3-content'];
+                    const contents = ['mobile-tab1-content', 'mobile-tab2-content', 'mobile-tab3-content', 'mobile-tab4-content'];
                     contents.forEach(contentId => {
                         const content = document.getElementById(contentId);
                         if (content) {
-                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content'  'block' : 'none';
+                            content.style.display = contentId === activeTabId.replace('mobile-tab', 'mobile-tab') + '-content' ? 'block' : 'none';
                         }
                     });
                 };

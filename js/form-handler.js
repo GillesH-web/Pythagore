@@ -61,10 +61,16 @@ class FormHandler {
         // Action buttons (PDF and Print)
         document.addEventListener('click', (e) => {
             if (e.target.id === 'generate-pdf-btn') {
+                e.preventDefault();
+                e.stopPropagation();
                 this.generatePDF();
+                console.log('📄 PDF generation triggered - page data preserved');
             }
             if (e.target.id === 'print-results-btn') {
+                e.preventDefault();
+                e.stopPropagation();
                 window.print();
+                console.log('🖨️ Print triggered - page data preserved');
             }
         });
     }
@@ -186,6 +192,10 @@ class FormHandler {
                 }
             };
             this.resultsDisplay.displayRealization(realizationData, formData);
+            
+            // Calculate and display health analysis in Tab 4
+            const healthData = this.calculator.calculateHealthAnalysis(formData);
+            this.resultsDisplay.displayHealthAnalysis(healthData, formData);
 
             // Switch to Tab 1 (Piliers) after calculation is complete
             if (typeof switchTab === 'function') {
@@ -196,7 +206,7 @@ class FormHandler {
                 this.switchToTab1();
             }
 
-            console.log('📊 All calculations completed:', { output1, output2, output3, cycles, realizationData });
+            console.log('📊 All calculations completed:', { output1, output2, output3, cycles, realizationData, healthData });
         } catch (error) {
             console.error('❌ Calculation error:', error);
             alert('Une erreur est survenue lors du calcul. Veuillez réessayer.');
@@ -387,6 +397,9 @@ class FormHandler {
                 output9: { label: 'Réalisation 4', description: this.getRealization4AgeRange(output1), value: this.calculator.calculateRealization4(formData.birthDate) }
             };
 
+            // Calculate health analysis data (4th Tab)
+            const healthData = this.calculator.calculateHealthAnalysis(formData);
+
             // Add pyramid background with stars at the bottom
             this.addPyramidBackground(doc);
 
@@ -396,7 +409,7 @@ class FormHandler {
             doc.setTextColor(255, 255, 255);
             doc.setFontSize(14);
             doc.setFont('helvetica', 'bold');
-            doc.text('Numérologie de Pythagore v2.1.7', 105, 13, { align: 'center' });
+            doc.text('Numérologie de Pythagore v2.3.0', 105, 13, { align: 'center' });
 
             // Compact Client Information
             const names = [formData.firstName1, formData.firstName2, formData.firstName3].filter(Boolean).join(' ');
@@ -410,40 +423,40 @@ class FormHandler {
             doc.setFont('helvetica', 'bold');
             doc.text(`${fullName} - Né(e) le ${formattedDate}`, 105, 33, { align: 'center' });
 
-            // COMPACT LAYOUT - All sections on one page
+            // ULTRA-COMPACT LAYOUT - All 5 sections on one page
             
-            // Section 1: Piliers (Top Left & Right)
-            this.addCompactTabSection(doc, 'Piliers', 45);
-            this.addCompactResultBox(doc, 'Chemin de vie', output1, 15, 55, 85, 20);
-            this.addCompactResultBox(doc, 'Nombre d\'expression', output3, 110, 55, 85, 20);
+            // Section 1: Piliers (Top Left & Right) - Reduced height
+            this.addCompactTabSection(doc, 'Piliers', 42);
+            this.addCompactResultBox(doc, 'Chemin de vie', output1, 15, 50, 85, 16);
+            this.addCompactResultBox(doc, 'Nombre d\'expression', output3, 110, 50, 85, 16);
             
-            // Section 2: Grille d'inclusion (Top Center, Compact)
-            this.addCompactInclusionGrid(doc, output2, 15, 80);
+            // Section 2: Grille d'inclusion (Top Center, Ultra-Compact)
+            this.addUltraCompactInclusionGrid(doc, output2, 15, 70);
 
-            // Section 3: Cycles (Middle, Horizontal Layout)
-            this.addCompactTabSection(doc, 'Cycles', 130);
-            this.addCompactCycleBox(doc, cycles.cycle1, 15, 140, 60, 12);
-            this.addCompactCycleBox(doc, cycles.cycle2, 80, 140, 60, 12);
-            this.addCompactCycleBox(doc, cycles.cycle3, 145, 140, 50, 12);
-            
-            // Cycle caption
-            doc.setTextColor(231, 76, 60);
-            doc.setFontSize(8);
-            doc.setFont('helvetica', 'italic');
-            doc.text('Attention +/- 2 ans', 20, 158);
+            // Section 3: Cycles (Horizontal Layout) - Reduced height
+            this.addCompactTabSection(doc, 'Cycles', 100);
+            this.addCompactCycleBox(doc, cycles.cycle1, 15, 108, 60, 10);
+            this.addCompactCycleBox(doc, cycles.cycle2, 80, 108, 60, 10);
+            this.addCompactCycleBox(doc, cycles.cycle3, 145, 108, 50, 10);
 
-            // Section 4: Phase de réalisation (Bottom, 2x2 Grid)
-            this.addCompactTabSection(doc, 'Phase de réalisation', 170);
-            this.addCompactRealizationBox(doc, realizationData.output6, 15, 180, 90, 12);
-            this.addCompactRealizationBox(doc, realizationData.output7, 110, 180, 90, 12);
-            this.addCompactRealizationBox(doc, realizationData.output8, 15, 195, 90, 12);
-            this.addCompactRealizationBox(doc, realizationData.output9, 110, 195, 90, 12);
+            // Section 4: Phase de réalisation (2x2 Grid) - Reduced height
+            this.addCompactTabSection(doc, 'Phase de réalisation', 125);
+            this.addCompactRealizationBox(doc, realizationData.output6, 15, 133, 90, 10);
+            this.addCompactRealizationBox(doc, realizationData.output7, 110, 133, 90, 10);
+            this.addCompactRealizationBox(doc, realizationData.output8, 15, 146, 90, 10);
+            this.addCompactRealizationBox(doc, realizationData.output9, 110, 146, 90, 10);
+
+            // Section 5: Santé - Sentiments - Hérédité (4th Tab) - NEW
+            this.addCompactTabSection(doc, 'Santé - Sentiments - Hérédité', 165);
+            this.addCompactHealthBox(doc, '🏥 Santé', healthData.health, 15, 173, 60, 25);
+            this.addCompactHealthBox(doc, '💝 Sentiments', healthData.feelings, 80, 173, 60, 25);
+            this.addCompactHealthBox(doc, '🧬 Hérédité', healthData.heredity, 145, 173, 50, 25);
 
             // Compact Footer
             doc.setTextColor(127, 140, 141);
             doc.setFontSize(7);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 280, { align: 'center' });
+            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 285, { align: 'center' });
 
             // Mobile PDF Generation with Safari Tab Opening
             const fileName = `numerologie_${fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
@@ -800,5 +813,85 @@ class FormHandler {
         doc.setFontSize(12);
         doc.setFont('helvetica', 'bold');
         doc.text(realization.value.toString(), x + width - 8, y + 8, { align: 'center' });
+    }
+
+    /**
+     * Adds ultra-compact inclusion grid table (more compact than regular compact)
+     */
+    addUltraCompactInclusionGrid(doc, output2, x, y) {
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Grille d\'inclusion', x, y + 3);
+        
+        // Ultra-compact table - 9 columns x 1 row
+        const colWidth = 20;
+        
+        // Display all 9 numbers in a single row
+        output2.forEach((item, index) => {
+            const cellX = x + (index * colWidth);
+            const cellY = y + 6;
+            
+            // Alternating background colors
+            const bgColor = index % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+            doc.setFillColor(...bgColor);
+            doc.rect(cellX, cellY, colWidth, 12, 'F');
+            
+            // Display number
+            doc.setTextColor(44, 62, 80);
+            doc.setFontSize(6);
+            doc.text(`${item.number}:`, cellX + 1, cellY + 4);
+            
+            // Display occurrence value
+            doc.setTextColor(39, 174, 96);
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'bold');
+            doc.text(item.display, cellX + 10, cellY + 8, { align: 'center' });
+        });
+    }
+
+    /**
+     * Adds a compact health analysis box
+     */
+    addCompactHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title with emoji
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 4);
+        
+        // Number
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 8, y + 6, { align: 'center' });
+        
+        // Tendencies (truncated)
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(6);
+        doc.setFont('helvetica', 'normal');
+        const tendencies = healthData.tendencies.substring(0, 60) + '...';
+        doc.text(tendencies, x + 2, y + 10, { maxWidth: width - 4 });
+        
+        // Advice (truncated)
+        doc.setFontSize(5);
+        const advice = healthData.advice.substring(0, 50) + '...';
+        doc.text(advice, x + 2, y + 15, { maxWidth: width - 4 });
+        
+        // Attention (truncated)
+        doc.setTextColor(231, 76, 60);
+        const attention = healthData.attention.substring(0, 45) + '...';
+        doc.text(attention, x + 2, y + 20, { maxWidth: width - 4 });
     }
 }

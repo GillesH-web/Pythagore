@@ -246,10 +246,75 @@ class ResultsDisplay {
         realizationContainer.innerHTML = '';
         realizationContainer.style.display = 'none';
         
+        const healthContainer = document.getElementById('health-container');
+        healthContainer.innerHTML = '';
+        healthContainer.style.display = 'none';
+        
         document.getElementById('empty-state').style.display = 'block';
         document.getElementById('cycles-empty-state').style.display = 'block';
         document.getElementById('realization-empty-state').style.display = 'block';
+        document.getElementById('health-empty-state').style.display = 'block';
         document.getElementById('client-info-header').style.display = 'none';
         document.getElementById('panel-actions').style.display = 'none';
+    }
+
+    /**
+     * Displays health, feelings and heredity analysis in Tab 4
+     * @param {Object} healthData - Health analysis data
+     * @param {Object} clientData - Client information
+     */
+    displayHealthAnalysis(healthData, clientData) {
+        console.log('🏥 Displaying health analysis:', { healthData, clientData });
+        
+        const healthContainer = document.getElementById('health-container');
+        healthContainer.innerHTML = '';
+        
+        // Create health analysis sections
+        const healthSection = this.createHealthSection('Santé', healthData.health, 'health-icon', '🏥');
+        healthContainer.appendChild(healthSection);
+        
+        const feelingsSection = this.createHealthSection('Sentiments', healthData.feelings, 'feelings-icon', '💝');
+        healthContainer.appendChild(feelingsSection);
+        
+        const hereditySection = this.createHealthSection('Hérédité', healthData.heredity, 'heredity-icon', '🧬');
+        healthContainer.appendChild(hereditySection);
+        
+        document.getElementById('health-empty-state').style.display = 'none';
+        healthContainer.style.display = 'grid';
+        
+        console.log('✅ Health analysis displayed successfully');
+    }
+
+    /**
+     * Creates a health analysis section
+     * @param {string} title - Section title
+     * @param {Object} data - Section data
+     * @param {string} className - CSS class name
+     * @param {string} icon - Emoji icon
+     * @returns {HTMLElement} - Section element
+     */
+    createHealthSection(title, data, className, icon) {
+        const section = document.createElement('div');
+        section.className = `health-section ${className}`;
+        
+        section.innerHTML = `
+            <div class="health-header">
+                <span class="health-icon">${icon}</span>
+                <h3>${title}</h3>
+            </div>
+            <div class="health-content">
+                <div class="health-number">
+                    <span class="health-value">${data.number}</span>
+                    <span class="health-label">Nombre dominant</span>
+                </div>
+                <div class="health-description">
+                    <p><strong>Tendances:</strong> ${data.tendencies}</p>
+                    <p><strong>Conseils:</strong> ${data.advice}</p>
+                    <p><strong>Points d'attention:</strong> ${data.attention}</p>
+                </div>
+            </div>
+        `;
+        
+        return section;
     }
 }
