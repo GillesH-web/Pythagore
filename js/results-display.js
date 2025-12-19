@@ -282,7 +282,10 @@ class ResultsDisplay {
         document.getElementById('health-empty-state').style.display = 'none';
         healthContainer.style.display = 'grid';
         
-        console.log('✅ Health analysis displayed successfully');
+        // Apply 30% space optimization automatically
+        this.applyOptimization();
+        
+        console.log('✅ Health analysis displayed successfully with 30% space optimization');
     }
 
     /**
@@ -316,5 +319,46 @@ class ResultsDisplay {
         `;
         
         return section;
+    }
+
+    /**
+     * Applies 30% space optimization to the health analysis display
+     * Reduces padding, margins, and gaps while preserving content and readability
+     */
+    applyOptimization() {
+        console.log('🔧 Applying 30% space optimization to Tab 4');
+        
+        const healthContainer = document.getElementById('health-container');
+        if (!healthContainer) {
+            console.warn('⚠️ Health container not found for optimization');
+            return;
+        }
+        
+        // Apply optimization to main container
+        healthContainer.classList.add('optimized');
+        
+        // Apply optimization to all sections and their components
+        const sections = healthContainer.querySelectorAll('.health-section');
+        sections.forEach(section => {
+            section.classList.add('optimized');
+            
+            // Optimize header
+            const header = section.querySelector('.health-header');
+            if (header) header.classList.add('optimized');
+            
+            // Optimize content
+            const content = section.querySelector('.health-content');
+            if (content) content.classList.add('optimized');
+            
+            // Optimize number display
+            const number = section.querySelector('.health-number');
+            if (number) number.classList.add('optimized');
+            
+            // Optimize description
+            const description = section.querySelector('.health-description');
+            if (description) description.classList.add('optimized');
+        });
+        
+        console.log('✅ 30% space optimization applied successfully');
     }
 }

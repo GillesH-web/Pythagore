@@ -1199,6 +1199,69 @@ label[for="birthDate"] {
     font-weight: 600;
 }
 
+/* ===== OPTIMIZED HEALTH TAB STYLES (30% SPACE REDUCTION) ===== */
+.health-grid.optimized {
+    gap: 14px;           /* Reduced from 20px (-30%) */
+    padding: 14px;       /* Reduced from 20px (-30%) */
+}
+
+.health-section.optimized {
+    padding: 14px;       /* Reduced from 20px (-30%) */
+}
+
+.health-header.optimized {
+    margin-bottom: 10px; /* Reduced from 15px (-33%) */
+    padding-bottom: 7px; /* Reduced from 10px (-30%) */
+}
+
+.health-content.optimized {
+    gap: 10px;           /* Reduced from 15px (-33%) */
+}
+
+.health-number.optimized {
+    padding: 10px;       /* Reduced from 15px (-33%) */
+}
+
+.health-description.optimized p {
+    margin-bottom: 8px;  /* Reduced from 12px (-33%) */
+}
+
+/* ===== RESPONSIVE OPTIMIZATIONS ===== */
+@media (max-width: 1024px) {
+    .health-grid.optimized {
+        gap: 12px;           /* Additional reduction for tablet (-40%) */
+        padding: 12px;
+    }
+    
+    .health-section.optimized {
+        padding: 12px;
+    }
+}
+
+@media (max-width: 768px) {
+    .health-grid.optimized {
+        gap: 10px;           /* Maximum reduction for mobile (-50%) */
+        padding: 10px;
+    }
+    
+    .health-section.optimized {
+        padding: 10px;
+    }
+    
+    .health-header.optimized {
+        margin-bottom: 8px;  /* Further reduced for mobile */
+        padding-bottom: 5px;
+    }
+    
+    .health-content.optimized {
+        gap: 8px;            /* Tighter spacing on mobile */
+    }
+    
+    .health-number.optimized {
+        padding: 8px;        /* Minimal padding for mobile */
+    }
+}
+
 /* Mobile responsiveness for health tab */
 @media (max-width: 768px) {
     .health-grid {

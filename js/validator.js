@@ -80,7 +80,7 @@ class Validator {
 
         // Validate last name (required)
         if (!formData.lastName || formData.lastName.trim() === '') {
-            errors.lastName = 'Le nom de famille est obligatoire';
+            errors.lastName = 'Le nom de famille (naissance) est obligatoire';
             isValid = false;
         } else {
             const nameValidation = this.validateName(formData.lastName);

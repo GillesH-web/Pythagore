@@ -91,7 +91,7 @@ class FormHandler {
             if (!value.trim()) {
                 validation = { 
                     isValid: false, 
-                    message: fieldName === 'firstName1' ? 'Le premier prénom est obligatoire' : 'Le nom de famille est obligatoire' 
+                    message: fieldName === 'firstName1' ? 'Le premier prénom est obligatoire' : 'Le nom de famille (naissance) est obligatoire' 
                 };
             } else {
                 validation = this.validator.validateName(value);
@@ -411,62 +411,62 @@ class FormHandler {
 
 
 
-            // Compact PDF Header
+            // RESTRUCTURED FULL-PAGE LAYOUT - Maximum space utilization
+            
+            // Ultra-compact header (minimal height)
             doc.setFillColor(44, 62, 80);
-            doc.rect(0, 0, 210, 20, 'F');
+            doc.rect(0, 0, 210, 12, 'F');
             doc.setTextColor(255, 255, 255);
-            doc.setFontSize(14);
+            doc.setFontSize(10);
             doc.setFont('helvetica', 'bold');
-            doc.text('Numérologie de Pythagore v2.3.0', 105, 13, { align: 'center' });
+            doc.text('Numérologie de Pythagore v2.3.0', 105, 8, { align: 'center' });
 
-            // Compact Client Information
+            // Client info integrated in header
             const names = [formData.firstName1, formData.firstName2, formData.firstName3].filter(Boolean).join(' ');
             const fullName = `${names} ${formData.lastName}`;
             const formattedDate = new Date(formData.birthDate).toLocaleDateString('fr-FR');
             
-            doc.setFillColor(232, 244, 253);
-            doc.rect(10, 25, 190, 12, 'F');
-            doc.setTextColor(44, 62, 80);
-            doc.setFontSize(11);
-            doc.setFont('helvetica', 'bold');
-            doc.text(`${fullName} - Né(e) le ${formattedDate}`, 105, 33, { align: 'center' });
-
-            // SINGLE-PAGE LAYOUT - All content including full health analysis on one page
-            
-            // Section 1: Piliers (Top Left & Right) - Ultra-compact
-            this.addCompactTabSection(doc, 'Piliers', 42);
-            this.addCompactResultBox(doc, 'Chemin de vie', output1, 15, 50, 85, 12);
-            this.addCompactResultBox(doc, 'Nombre d\'expression', output3, 110, 50, 85, 12);
-            
-            // Section 2: Grille d'inclusion (Ultra-Compact)
-            this.addUltraCompactInclusionGrid(doc, output2, 15, 65);
-
-            // Section 3: Cycles (Horizontal Layout) - Reduced height
-            this.addCompactTabSection(doc, 'Cycles', 85);
-            this.addCompactCycleBox(doc, cycles.cycle1, 15, 93, 60, 8);
-            this.addCompactCycleBox(doc, cycles.cycle2, 80, 93, 60, 8);
-            this.addCompactCycleBox(doc, cycles.cycle3, 145, 93, 50, 8);
-
-            // Section 4: Phase de réalisation (2x2 Grid) - Reduced height
-            this.addCompactTabSection(doc, 'Phase de réalisation', 105);
-            this.addCompactRealizationBox(doc, realizationData.output6, 15, 113, 90, 8);
-            this.addCompactRealizationBox(doc, realizationData.output7, 110, 113, 90, 8);
-            this.addCompactRealizationBox(doc, realizationData.output8, 15, 124, 90, 8);
-            this.addCompactRealizationBox(doc, realizationData.output9, 110, 124, 90, 8);
-
-            // Section 5: Santé - Sentiments - Hérédité (FULL CONTENT - SINGLE PAGE)
-            this.addCompactTabSection(doc, 'Santé - Sentiments - Hérédité', 135);
-            
-            // Horizontal layout for full content on single page
-            this.addSinglePageHealthBox(doc, 'Santé', healthData.health, 15, 143, 60, 35);
-            this.addSinglePageHealthBox(doc, 'Sentiments', healthData.feelings, 80, 143, 60, 35);
-            this.addSinglePageHealthBox(doc, 'Hérédité', healthData.heredity, 145, 143, 50, 35);
-
-            // Single page footer
-            doc.setTextColor(127, 140, 141);
-            doc.setFontSize(7);
+            doc.setFontSize(8);
             doc.setFont('helvetica', 'normal');
-            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 285, { align: 'center' });
+            doc.text(`${fullName} - ${formattedDate}`, 105, 18, { align: 'center' });
+
+            // OPTIMIZED LAYOUT - Extended Tab 1 for complete grid, reduced Tab 4 for space efficiency
+            
+            // Row 1: Piliers + Grille (EXTENDED SPACE) - 60mm total for complete grid visibility
+            this.addFullWidthSection(doc, 'Piliers & Grille d\'inclusion', 25);
+            this.addBalancedResultBox(doc, 'Chemin de vie', output1, 3, 30, 48, 30);
+            this.addBalancedResultBox(doc, 'Nombre d\'expression', output3, 54, 30, 48, 30);
+            this.addExtendedInclusionGrid(doc, output2, 105, 30); // NEW: Extended grid with guaranteed 3 lines
+
+            // Row 2: Cycles (repositioned) - Moved down to accommodate extended Tab 1
+            this.addFullWidthSection(doc, 'Cycles de Vie', 90);
+            this.addLargeCycleBox(doc, cycles.cycle1, 3, 95, 68, 25);
+            this.addLargeCycleBox(doc, cycles.cycle2, 73, 95, 68, 25);
+            this.addLargeCycleBox(doc, cycles.cycle3, 143, 95, 64, 25);
+
+            // Row 3: Réalisations (compacted) - Reduced height to make room
+            this.addFullWidthSection(doc, 'Phases de Réalisation', 125);
+            this.addLargeRealizationBox(doc, realizationData.output6, 3, 130, 102, 20);
+            this.addLargeRealizationBox(doc, realizationData.output7, 108, 130, 99, 20);
+            this.addLargeRealizationBox(doc, realizationData.output8, 3, 152, 102, 20);
+            this.addLargeRealizationBox(doc, realizationData.output9, 108, 152, 99, 20);
+
+            // Row 4: Santé-Sentiments-Hérédité (SUPER COMPACT SPACE) - Reduced from 105mm to 80mm
+            this.addFullWidthSection(doc, 'Analyse Santé - Sentiments - Hérédité', 180);
+            
+            // Super compact space for health content (from 185mm to 265mm = 80mm available)
+            const healthStartY = 185;
+            const healthHeight = 80; // Reduced height for health content (-25mm)
+            
+            this.addSuperCompactHealthBox(doc, 'Santé', healthData.health, 3, healthStartY, 68, healthHeight);
+            this.addSuperCompactHealthBox(doc, 'Sentiments', healthData.feelings, 73, healthStartY, 68, healthHeight);
+            this.addSuperCompactHealthBox(doc, 'Hérédité', healthData.heredity, 143, healthStartY, 64, healthHeight);
+
+            // Optimized footer - Bottom of page
+            doc.setTextColor(127, 140, 141);
+            doc.setFontSize(6);
+            doc.setFont('helvetica', 'normal');
+            doc.text(`Généré le ${new Date().toLocaleDateString('fr-FR')} à ${new Date().toLocaleTimeString('fr-FR')}`, 105, 290, { align: 'center' });
 
             // Mobile PDF Generation with Safari Tab Opening
             const fileName = `numerologie_${fullName.replace(/\s+/g, '_')}_${new Date().toISOString().split('T')[0]}.pdf`;
@@ -1087,6 +1087,621 @@ class FormHandler {
             
         } catch (error) {
             console.error('❌ Error restoring frame state:', error);
+        }
+    }
+
+    /**
+     * Adds an expanded health analysis box with maximum content display
+     * Uses full available space for complete text without truncation
+     */
+    addExpandedHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title with number on same line - optimized size
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 5);
+        
+        // Number (inline, optimized)
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 8, y + 5, { align: 'center' });
+        
+        let currentY = y + 10;
+        
+        // All content with optimized font size for maximum readability
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(5);
+        doc.setFont('helvetica', 'normal');
+        
+        // Tendencies (FULL CONTENT)
+        doc.setFont('helvetica', 'bold');
+        doc.text('Tendances:', x + 2, currentY);
+        currentY += 3;
+        doc.setFont('helvetica', 'normal');
+        const tendenciesLines = doc.splitTextToSize(healthData.tendencies, width - 4);
+        doc.text(tendenciesLines, x + 2, currentY);
+        currentY += tendenciesLines.length * 2 + 2;
+        
+        // Advice (FULL CONTENT)
+        doc.setFont('helvetica', 'bold');
+        doc.text('Conseils:', x + 2, currentY);
+        currentY += 3;
+        doc.setFont('helvetica', 'normal');
+        const adviceLines = doc.splitTextToSize(healthData.advice, width - 4);
+        doc.text(adviceLines, x + 2, currentY);
+        currentY += adviceLines.length * 2 + 2;
+        
+        // Attention (FULL CONTENT)
+        doc.setTextColor(231, 76, 60);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Attention:', x + 2, currentY);
+        currentY += 3;
+        doc.setFont('helvetica', 'normal');
+        const attentionLines = doc.splitTextToSize(healthData.attention, width - 4);
+        doc.text(attentionLines, x + 2, currentY);
+    }
+
+    /**
+     * Adds a full-width section header optimized for maximum space usage
+     */
+    addFullWidthSection(doc, title, y) {
+        doc.setFillColor(52, 152, 219);
+        doc.rect(0, y, 210, 5, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, 3, y + 3.5);
+    }
+
+    /**
+     * Adds an expanded result box (for Piliers) - More space than compact version
+     */
+    addExpandedResultBox(doc, title, value, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + width/2, y + 8, { align: 'center' });
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(18);
+        doc.setFont('helvetica', 'bold');
+        doc.text(value.toString(), x + width/2, y + 22, { align: 'center' });
+    }
+
+    /**
+     * Adds expanded inclusion grid table - More detailed than ultra-compact
+     */
+    addExpandedInclusionGrid(doc, output2, x, y) {
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Grille d\'inclusion', x, y + 5);
+        
+        // Expanded table - 3 columns x 3 rows
+        const colWidth = 30;
+        const rowHeight = 12;
+        
+        // Table header
+        doc.setFillColor(52, 152, 219);
+        doc.rect(x, y + 8, 90, 8, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(9);
+        doc.text('Nb', x + 5, y + 13);
+        doc.text('Occ', x + 50, y + 13);
+        
+        // Display in 3x3 grid
+        output2.forEach((item, index) => {
+            const row = Math.floor(index / 3);
+            const col = index % 3;
+            const cellX = x + (col * colWidth);
+            const cellY = y + 16 + (row * 10);
+            
+            if (row < 3) {
+                const bgColor = index % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+                doc.setFillColor(...bgColor);
+                doc.rect(cellX, cellY, colWidth, 10, 'F');
+                
+                // Display number
+                doc.setTextColor(44, 62, 80);
+                doc.setFontSize(8);
+                doc.text(`${item.number}:`, cellX + 2, cellY + 6);
+                
+                // Display occurrence value
+                doc.setTextColor(39, 174, 96);
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.display, cellX + 15, cellY + 6);
+            }
+        });
+    }
+
+    /**
+     * Adds an expanded cycle box - More space than compact version
+     */
+    addExpandedCycleBox(doc, cycle, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cycle.label, x + 5, y + 6);
+        
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text(cycle.ageRange, x + 5, y + 12);
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cycle.value.toString(), x + width - 12, y + 12, { align: 'center' });
+    }
+
+    /**
+     * Adds an expanded realization box - More space than compact version
+     */
+    addExpandedRealizationBox(doc, realization, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(realization.label, x + 5, y + 6);
+        
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'normal');
+        doc.text(realization.description, x + 5, y + 12);
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text(realization.value.toString(), x + width - 12, y + 12, { align: 'center' });
+    }
+
+    /**
+     * Adds a balanced result box (for Piliers) - Moderate size, good visibility
+     */
+    addBalancedResultBox(doc, title, value, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.setLineWidth(1.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + width/2, y + 10, { align: 'center' });
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text(value.toString(), x + width/2, y + 22, { align: 'center' });
+    }
+
+    /**
+     * Adds complete inclusion grid table - Full 9 numbers visible in organized layout
+     */
+    addCompleteInclusionGrid(doc, output2, x, y) {
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Grille d\'inclusion', x, y + 6);
+        
+        // Complete table - 3 columns x 3 rows showing all 9 numbers
+        const colWidth = 32;
+        const rowHeight = 12;
+        
+        // Table header
+        doc.setFillColor(52, 152, 219);
+        doc.rect(x, y + 10, 96, 8, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(9);
+        doc.text('Nombre', x + 8, y + 16);
+        doc.text('Occurrences', x + 55, y + 16);
+        
+        // Display all 9 numbers in 3x3 grid
+        output2.forEach((item, index) => {
+            const row = Math.floor(index / 3);
+            const col = index % 3;
+            const cellX = x + (col * colWidth);
+            const cellY = y + 18 + (row * rowHeight);
+            
+            // Background color alternating
+            const bgColor = index % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+            doc.setFillColor(...bgColor);
+            doc.rect(cellX, cellY, colWidth, rowHeight, 'F');
+            
+            // Display number
+            doc.setTextColor(44, 62, 80);
+            doc.setFontSize(10);
+            doc.text(`${item.number}:`, cellX + 3, cellY + 7);
+            
+            // Display occurrence value with color coding
+            if (item.display === 'ô') {
+                doc.setTextColor(231, 76, 60); // Red for zero
+            } else {
+                doc.setTextColor(39, 174, 96); // Green for values
+            }
+            doc.setFontSize(11);
+            doc.setFont('helvetica', 'bold');
+            doc.text(item.display, cellX + 18, cellY + 8);
+        });
+    }
+
+    /**
+     * Adds a massive result box (for Piliers) - TRIPLED space
+     */
+    addMassiveResultBox(doc, title, value, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.setLineWidth(2);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + width/2, y + 12, { align: 'center' });
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(36);
+        doc.setFont('helvetica', 'bold');
+        doc.text(value.toString(), x + width/2, y + 35, { align: 'center' });
+    }
+
+    /**
+     * Adds massive inclusion grid table - Large format for maximum visibility
+     */
+    addMassiveInclusionGrid(doc, output2, x, y) {
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Grille d\'inclusion', x, y + 8);
+        
+        // Large table - 3 columns x 3 rows with big cells
+        const colWidth = 20;
+        const rowHeight = 15;
+        
+        // Table header
+        doc.setFillColor(52, 152, 219);
+        doc.rect(x, y + 12, 60, 10, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(12);
+        doc.text('Nb', x + 8, y + 19);
+        doc.text('Occ', x + 35, y + 19);
+        
+        // Display in 3x3 grid with large cells
+        output2.forEach((item, index) => {
+            const row = Math.floor(index / 3);
+            const col = index % 3;
+            const cellX = x + (col * colWidth);
+            const cellY = y + 22 + (row * rowHeight);
+            
+            if (row < 3) {
+                const bgColor = index % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+                doc.setFillColor(...bgColor);
+                doc.rect(cellX, cellY, colWidth, rowHeight, 'F');
+                
+                // Display number
+                doc.setTextColor(44, 62, 80);
+                doc.setFontSize(12);
+                doc.text(`${item.number}:`, cellX + 2, cellY + 8);
+                
+                // Display occurrence value
+                doc.setTextColor(39, 174, 96);
+                doc.setFontSize(14);
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.display, cellX + 12, cellY + 10);
+            }
+        });
+    }
+
+    /**
+     * Adds a large cycle box - Expanded version
+     */
+    addLargeCycleBox(doc, cycle, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.setLineWidth(1.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cycle.label, x + 5, y + 8);
+        
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(cycle.ageRange, x + 5, y + 16);
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text(cycle.value.toString(), x + width - 15, y + 18, { align: 'center' });
+    }
+
+    /**
+     * Adds a large realization box - Expanded version
+     */
+    addLargeRealizationBox(doc, realization, x, y, width, height) {
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(233, 236, 239);
+        doc.setLineWidth(1.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(14);
+        doc.setFont('helvetica', 'bold');
+        doc.text(realization.label, x + 5, y + 8);
+        
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'normal');
+        doc.text(realization.description, x + 5, y + 16);
+        
+        doc.setTextColor(39, 174, 96);
+        doc.setFontSize(24);
+        doc.setFont('helvetica', 'bold');
+        doc.text(realization.value.toString(), x + width - 15, y + 18, { align: 'center' });
+    }
+
+    /**
+     * Adds extended inclusion grid table - Full 9 numbers with guaranteed 3 complete lines
+     * Solves the missing line issue by allocating sufficient vertical space
+     */
+    addExtendedInclusionGrid(doc, output2, x, y) {
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(11);
+        doc.setFont('helvetica', 'bold');
+        doc.text('Grille d\'inclusion', x, y + 6);
+        
+        // Extended table - 3 columns x 3 rows with guaranteed space for all lines
+        const colWidth = 32;
+        const rowHeight = 14; // Increased from 12mm to 14mm for better spacing
+        const totalGridHeight = 60; // Guaranteed 60mm total height
+        
+        // Table header
+        doc.setFillColor(52, 152, 219);
+        doc.rect(x, y + 10, 96, 8, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFontSize(9);
+        doc.text('Nombre', x + 8, y + 16);
+        doc.text('Occurrences', x + 55, y + 16);
+        
+        // Display all 9 numbers in 3x3 grid with extended spacing
+        output2.forEach((item, index) => {
+            const row = Math.floor(index / 3);
+            const col = index % 3;
+            const cellX = x + (col * colWidth);
+            const cellY = y + 18 + (row * rowHeight); // Using extended rowHeight
+            
+            // Ensure all 3 rows are within allocated space
+            if (row < 3) {
+                // Background color alternating
+                const bgColor = index % 2 === 0 ? [248, 249, 250] : [255, 255, 255];
+                doc.setFillColor(...bgColor);
+                doc.rect(cellX, cellY, colWidth, rowHeight, 'F');
+                
+                // Display number
+                doc.setTextColor(44, 62, 80);
+                doc.setFontSize(10);
+                doc.text(`${item.number}:`, cellX + 3, cellY + 8); // Adjusted Y position
+                
+                // Display occurrence value with color coding
+                if (item.display === 'ô') {
+                    doc.setTextColor(231, 76, 60); // Red for zero
+                } else {
+                    doc.setTextColor(39, 174, 96); // Green for values
+                }
+                doc.setFontSize(11);
+                doc.setFont('helvetica', 'bold');
+                doc.text(item.display, cellX + 18, cellY + 9); // Adjusted Y position
+            }
+        });
+        
+        // Add debug border to verify allocated space (can be removed in production)
+        doc.setDrawColor(200, 200, 200);
+        doc.setLineWidth(0.2);
+        doc.rect(x, y, 96, totalGridHeight, 'S');
+    }
+
+    /**
+     * Adds an ultra-compact health analysis box - Minimal space usage
+     */
+    addUltraCompactHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title with number on same line - ultra compact
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 5);
+        
+        // Number (small, inline)
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(12);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 8, y + 5, { align: 'center' });
+        
+        let currentY = y + 10;
+        
+        // Ultra-compact content with minimal font (ESSENTIAL CONTENT ONLY)
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(4);
+        doc.setFont('helvetica', 'normal');
+        
+        // Only the most essential information - heavily truncated
+        const essentialText = `${healthData.tendencies.substring(0, 80)}... | ${healthData.advice.substring(0, 60)}...`;
+        const textLines = doc.splitTextToSize(essentialText, width - 4);
+        
+        // Display only what fits in the ultra-compact space
+        const lineHeight = 1.2;
+        const maxLines = Math.floor((height - 12) / lineHeight);
+        const displayLines = textLines.slice(0, maxLines);
+        
+        displayLines.forEach((line, index) => {
+            if (currentY + (index * lineHeight) < y + height - 2) {
+                doc.text(line, x + 2, currentY + (index * lineHeight));
+            }
+        });
+    }
+
+    /**
+     * Adds a super-compact health analysis box - Maximum compression for Tab 4 reduction
+     * Uses minimal space while preserving essential information
+     */
+    addSuperCompactHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title with number on same line - super compact
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(7);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 4);
+        
+        // Number (small, inline)
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(10);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 6, y + 4, { align: 'center' });
+        
+        let currentY = y + 8;
+        
+        // Super-compact content with minimal font (ESSENTIAL CONTENT ONLY)
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(3.5); // Minimum readable size
+        doc.setFont('helvetica', 'normal');
+        
+        // Intelligent text compression - keep only essential words
+        const compressText = (text, maxLength) => {
+            const words = text.split(' ');
+            const essential = words.filter(word => 
+                word.length > 3 && 
+                !['les', 'des', 'une', 'aux', 'dans', 'pour', 'avec', 'sans'].includes(word.toLowerCase())
+            );
+            const compressed = essential.slice(0, Math.floor(maxLength / 8)).join(' ');
+            return compressed.length > maxLength ? compressed.substring(0, maxLength) + '...' : compressed;
+        };
+        
+        // Ultra-compressed essential content
+        const essentialText = `${compressText(healthData.tendencies, 60)} | ${compressText(healthData.advice, 50)} | ${compressText(healthData.attention, 40)}`;
+        const textLines = doc.splitTextToSize(essentialText, width - 4);
+        
+        // Display only what fits in the super-compact space
+        const lineHeight = 1.0; // Minimal line spacing
+        const maxLines = Math.floor((height - 10) / lineHeight);
+        const displayLines = textLines.slice(0, maxLines);
+        
+        displayLines.forEach((line, index) => {
+            if (currentY + (index * lineHeight) < y + height - 2) {
+                doc.text(line, x + 2, currentY + (index * lineHeight));
+            }
+        });
+    }
+
+    /**
+     * Adds a maximized health analysis box using all available vertical space
+     * Designed for the restructured layout with maximum content display
+     */
+    addMaximizedHealthBox(doc, title, healthData, x, y, width, height) {
+        // Set border color based on category
+        let borderColor = [52, 152, 219]; // Default blue
+        if (title.includes('Santé')) borderColor = [231, 76, 60]; // Red
+        else if (title.includes('Sentiments')) borderColor = [233, 30, 99]; // Pink
+        else if (title.includes('Hérédité')) borderColor = [156, 39, 176]; // Purple
+        
+        doc.setFillColor(248, 249, 250);
+        doc.setDrawColor(...borderColor);
+        doc.setLineWidth(0.5);
+        doc.rect(x, y, width, height, 'FD');
+        
+        // Title with number - optimized for maximum space
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.text(title, x + 2, y + 6);
+        
+        // Number (prominent display)
+        doc.setTextColor(...borderColor);
+        doc.setFontSize(16);
+        doc.setFont('helvetica', 'bold');
+        doc.text(healthData.number.toString(), x + width - 10, y + 8, { align: 'center' });
+        
+        let currentY = y + 12;
+        const contentWidth = width - 4;
+        const availableHeight = height - 15;
+        
+        // Optimized font size for maximum readability in large space
+        doc.setTextColor(44, 62, 80);
+        doc.setFontSize(6);
+        
+        // Tendencies section
+        doc.setFont('helvetica', 'bold');
+        doc.text('TENDANCES:', x + 2, currentY);
+        currentY += 4;
+        doc.setFont('helvetica', 'normal');
+        const tendenciesLines = doc.splitTextToSize(healthData.tendencies, contentWidth);
+        doc.text(tendenciesLines, x + 2, currentY);
+        currentY += tendenciesLines.length * 2.5 + 4;
+        
+        // Advice section
+        doc.setFont('helvetica', 'bold');
+        doc.text('CONSEILS:', x + 2, currentY);
+        currentY += 4;
+        doc.setFont('helvetica', 'normal');
+        const adviceLines = doc.splitTextToSize(healthData.advice, contentWidth);
+        doc.text(adviceLines, x + 2, currentY);
+        currentY += adviceLines.length * 2.5 + 4;
+        
+        // Attention section (in red)
+        doc.setTextColor(231, 76, 60);
+        doc.setFont('helvetica', 'bold');
+        doc.text('POINTS D\'ATTENTION:', x + 2, currentY);
+        currentY += 4;
+        doc.setFont('helvetica', 'normal');
+        const attentionLines = doc.splitTextToSize(healthData.attention, contentWidth);
+        doc.text(attentionLines, x + 2, currentY);
+        
+        // Add decorative border at bottom if space allows
+        if (currentY + attentionLines.length * 2.5 + 10 < y + height) {
+            doc.setDrawColor(...borderColor);
+            doc.setLineWidth(0.3);
+            doc.line(x + 2, y + height - 3, x + width - 2, y + height - 3);
         }
     }
 }
