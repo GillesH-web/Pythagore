@@ -200,20 +200,83 @@ class ResultsDisplay {
     }
 
     /**
+     * Calculates INDUITS values for each column using the chaining algorithm.
+     * For each column N (1-9):
+     *   - If BASE[N] = 0, return "/"
+     *   - Otherwise, follow chaining: start at column N, read BASE[N],
+     *     go to column BASE[N], read its BASE, continue writing each BASE
+     *     value separated by "-", stop when a column already visited is
+     *     encountered (cycle detection).
+     * @param {Array} occurrenceData - Array of occurrence objects
+     * @returns {Array} - Array of 9 INDUITS string values
+     */
+    calculateInduits(occurrenceData) {
+        // Build a lookup: column number (1-9) -> BASE count
+        const baseMap = {};
+        occurrenceData.forEach(item => {
+            baseMap[item.number] = item.count;
+        });
+
+        const induits = [];
+        for (let col = 1; col <= 9; col++) {
+            if (baseMap[col] === 0) {
+                induits.push('/');
+                continue;
+            }
+
+            const visited = new Set();
+            visited.add(col); // mark starting column as visited
+            const chain = [];
+            let current = col;
+
+            while (true) {
+                const baseVal = baseMap[current];
+                chain.push(baseVal);
+                // Check if the column pointed to by baseVal was already visited
+                if (visited.has(baseVal)) {
+                    break; // cycle detected, stop
+                }
+                visited.add(baseVal);
+                current = baseVal;
+            }
+
+            induits.push(chain.join('-'));
+        }
+
+        return induits;
+    }
+
+    /**
      * Formats the occurrence data into an HTML table
      * @param {Array} occurrenceData - Array of occurrence objects
      * @returns {string} - HTML table string
      */
     formatOutput2Table(occurrenceData) {
-        let tableHTML = '<table class="occurrence-table"><thead><tr><th>Nombre</th><th>Occurrences</th></tr></thead><tbody>';
-        
+        const induits = this.calculateInduits(occurrenceData);
+
+        // Row 1: INCLUSION — numbers 1-9 with color classes
+        let row1 = '<tr><td class="row-label">INCLUSION</td>';
         occurrenceData.forEach(item => {
-            const displayValue = item.count === 0 ? '<span class="zero-count">ô</span>' : item.display;
-            tableHTML += `<tr><td class="number-${item.number}">${item.number}</td><td>${displayValue}</td></tr>`;
+            row1 += `<td class="number-${item.number}">${item.number}</td>`;
         });
-        
-        tableHTML += '</tbody></table>';
-        return tableHTML;
+        row1 += '</tr>';
+
+        // Row 2: BASE — occurrence values (count or "ô")
+        let row2 = '<tr><td class="row-label">BASE</td>';
+        occurrenceData.forEach(item => {
+            const displayValue = item.count === 0 ? '<span class="zero-count">ô</span>' : item.count;
+            row2 += `<td>${displayValue}</td>`;
+        });
+        row2 += '</tr>';
+
+        // Row 3: INDUITS — chained values
+        let row3 = '<tr><td class="row-label">INDUITS</td>';
+        induits.forEach(val => {
+            row3 += `<td>${val}</td>`;
+        });
+        row3 += '</tr>';
+
+        return `<table class="occurrence-table"><tbody>${row1}${row2}${row3}</tbody></table>`;
     }
 
     /**
